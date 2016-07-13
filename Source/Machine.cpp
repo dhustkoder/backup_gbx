@@ -32,7 +32,7 @@ Machine* CreateMachine(uint8_t* rom, size_t rom_size) {
 		return nullptr;
 	}
 
-	// null all ptrs in machine
+	// null all ptrs in the machine structure
 	// to not have problems with DestroyMachine, if called
 	machine->ram = nullptr;
 
@@ -40,7 +40,7 @@ Machine* CreateMachine(uint8_t* rom, size_t rom_size) {
 			gbx::DestroyMachine(machine);
 	});
 
-	machine->ram = static_cast<uint8_t*>( malloc(sizeof(uint8_t) * ( TOTAL_RAM_SIZE + rom_size )) );
+	machine->ram = static_cast<uint8_t*>( malloc(sizeof(uint8_t) * TOTAL_RAM_SIZE ) );
 	
 	if(!machine->ram) {
 		LogError("can't allocate memory for gb ram");
