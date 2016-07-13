@@ -5,7 +5,7 @@
 namespace gbx {
 
 struct Cpu {
-	uint32_t opcode;
+	uint16_t opcode;
 	uint16_t pc;
 };
 
