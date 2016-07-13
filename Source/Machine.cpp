@@ -73,7 +73,7 @@ bool StepMachine(Machine* mach) {
 
 	mach->cpu.opcode = mach->ram[mach->cpu.pc];
 
-	if(mach->cpu.opcode	>= utix::arr_size(main_instructions)) {
+	if(mach->cpu.opcode >= utix::arr_size(main_instructions)) {
 		utix::LogError("unknown opcode %u\n", mach->cpu.opcode);
 		return false;
 	}
