@@ -12,7 +12,7 @@ namespace gbx {
 
 constexpr const size_t MAIN_RAM_SIZE = 8 * 1024;
 constexpr const size_t VIDEO_RAM_SIZE = 8 * 1024;
-constexpr const size_t MAX_CARTRIDGE_SIZE = (32 * 1024) + 0x100;
+constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
 constexpr const size_t TOTAL_RAM_SIZE = MAIN_RAM_SIZE + VIDEO_RAM_SIZE + MAX_CARTRIDGE_SIZE;
 
 
@@ -71,7 +71,7 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 	const auto rom_size = static_cast<size_t>(ftell(rom_file));
 	fseek(rom_file, 0, SEEK_SET);
 	
-	if(rom_size >= MAX_CARTRIDGE_SIZE) {
+	if(rom_size > MAX_CARTRIDGE_SIZE) {
 		LogError("\'%s\' size is too big", rom_file_name);
 		return false;
 	}
