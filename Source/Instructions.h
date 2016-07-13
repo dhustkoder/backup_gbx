@@ -6,7 +6,7 @@ namespace gbx {
 struct Machine;
 
 using InstructionFunction = void(*)(Machine*);
-extern InstructionFunction main_instructions[0x30];
+extern InstructionFunction main_instructions[0x40];
 
 // Main Instructions:
 // 0x00

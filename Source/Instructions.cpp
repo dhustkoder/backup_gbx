@@ -8,7 +8,7 @@ namespace gbx {
 
 
 
-InstructionFunction main_instructions[0x30] = 
+InstructionFunction main_instructions[0x40] = 
 {
 /*         0      1      2       3       4       5      6        7      8       9      A       B       C       D      E        F  */
 /* 0 */ nop_00, ld_01, ld_02, inc_03, inc_04, dec_05, ld_06, rlca_07, ld_08, add_09, ld_0A, dec_0B, inc_0C, dec_0D, ld_0E, rrca_0F,
