@@ -12,20 +12,14 @@ namespace gbx {
 
 constexpr const size_t MAIN_RAM_SIZE = 8 * 1024;
 constexpr const size_t VIDEO_RAM_SIZE = 8 * 1024;
-constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
+constexpr const size_t MAX_CARTRIDGE_SIZE = (32 * 1024) + 0x100;
 constexpr const size_t TOTAL_RAM_SIZE = MAIN_RAM_SIZE + VIDEO_RAM_SIZE + MAX_CARTRIDGE_SIZE;
 
 
-Machine* CreateMachine(uint8_t* rom, size_t rom_size) {
-	
+Machine* CreateMachine() {	
 	using utix::LogError;
 
-	if(rom_size >= MAX_CARTRIDGE_SIZE) {
-		LogError("rom_size is too big!");
-		return nullptr;
-	}
-
-	auto machine = static_cast<Machine*>( malloc(sizeof(Machine)) );
+	auto* const machine = static_cast<Machine*>( malloc(sizeof(Machine)) );
 
 	if(!machine) {
 		LogError("can't allocate memory for machine");
@@ -47,16 +41,12 @@ Machine* CreateMachine(uint8_t* rom, size_t rom_size) {
 		return nullptr;
 	}
 
-	memcpy(machine->ram, rom, rom_size);
-	machine->rom_size = rom_size;
-	machine->cpu.opcode = 0;
-	machine->cpu.pc = 0;
 	machine_cleanup.Cancel();
 	return machine;
 }
 
 
-void DestroyMachine(Machine* mach) {
+void DestroyMachine(Machine* const mach) {
 	free(mach->ram);
 	free(mach);
 }
@@ -64,9 +54,44 @@ void DestroyMachine(Machine* mach) {
 
 
 
+bool LoadRom(const char* rom_file_name, Machine* const mach) {
+	using utix::LogError;
+
+	FILE* const rom_file = fopen(rom_file_name, "r");
+
+	if(!rom_file) {
+		LogError("Could not open \'%s\'", rom_file_name);
+		return false;
+	}
+	const auto file_cleanup = utix::MakeScopeExit([=]() noexcept {
+		fclose(rom_file);
+	});	
+
+	fseek(rom_file, 0, SEEK_END);
+	const auto rom_size = static_cast<size_t>(ftell(rom_file));
+	fseek(rom_file, 0, SEEK_SET);
+	
+	if(rom_size >= MAX_CARTRIDGE_SIZE) {
+		LogError("\'%s\' size is too big", rom_file_name);
+		return false;
+	}
+
+	fread(mach->ram, sizeof(uint8_t), rom_size, rom_file);
+
+	if(ferror(rom_file)) {
+		LogError("error while reading from \'%s\'", rom_file_name);
+		return false;
+	}
+
+	mach->cpu.pc = 0x100;
+	mach->rom_size = rom_size;
+	return true;
+}
 
 
-bool StepMachine(Machine* mach) {
+
+
+bool StepMachine(Machine* const mach) {
 
 	if(mach->cpu.pc >= mach->rom_size)
 		return false;
@@ -74,7 +99,7 @@ bool StepMachine(Machine* mach) {
 	mach->cpu.opcode = mach->ram[mach->cpu.pc];
 
 	if(mach->cpu.opcode >= utix::arr_size(main_instructions)) {
-		utix::LogError("unknown opcode %u\n", mach->cpu.opcode);
+		utix::LogError("unknown opcode %X\n", mach->cpu.opcode);
 		return false;
 	}
 

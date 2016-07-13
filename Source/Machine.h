@@ -17,9 +17,11 @@ struct Machine {
 	size_t rom_size;
 };
 
-Machine* CreateMachine(uint8_t* rom, size_t rom_size);
-void DestroyMachine(Machine* mach);
-bool StepMachine(Machine* mach);
+
+Machine* CreateMachine();
+void DestroyMachine(Machine* const mach);
+bool LoadRom(const char* rom_file_name, Machine* const mach);
+bool StepMachine(Machine* const mach);
 
 
 
