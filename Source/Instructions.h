@@ -61,6 +61,23 @@ extern void dec_2D(Machine*);
 extern void ld_2E(Machine*);
 extern void cpl_2F(Machine*);
 // 0x30
+extern void jr_30(Machine*);
+extern void ld_31(Machine*);
+extern void ld_32(Machine*);
+extern void inc_33(Machine*);
+extern void inc_34(Machine*);
+extern void dec_35(Machine*);
+extern void ld_36(Machine*);
+extern void scf_37(Machine*);
+extern void jr_38(Machine*);
+extern void add_39(Machine*);
+extern void ld_3A(Machine*);
+extern void dec_3B(Machine*);
+extern void inc_3C(Machine*);
+extern void dec_3D(Machine*);
+extern void ld_3E(Machine*);
+extern void ccf_3F(Machine*);
+// 0x40
 
 
 

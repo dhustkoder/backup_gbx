@@ -28,7 +28,9 @@ int main(int argc, char** argv)
 			std::vector<uint8_t> rom_bytes(rom_size);
 			rom.read(reinterpret_cast<char*>(rom_bytes.data()), rom_size);
 			auto mach = gbx::CreateMachine(rom_bytes.data(), rom_size);
-			if(mach == nullptr) throw std::runtime_error("cannot create machine!");
+			if(mach == nullptr) {
+				throw std::runtime_error("cannot create machine!");
+			}
 			return mach;
 		}();
 
