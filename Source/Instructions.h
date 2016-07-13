@@ -6,7 +6,7 @@ namespace gbx {
 struct Machine;
 
 using InstructionFunction = void(*)(Machine*);
-extern InstructionFunction main_instructions[0x40];
+extern InstructionFunction main_instructions[0x80];
 
 // Main Instructions:
 // 0x00
@@ -78,10 +78,74 @@ extern void dec_3D(Machine*);
 extern void ld_3E(Machine*);
 extern void ccf_3F(Machine*);
 // 0x40
-
-
-
-
+extern void ld_40(Machine*);
+extern void ld_41(Machine*);
+extern void ld_42(Machine*);
+extern void ld_43(Machine*);
+extern void ld_44(Machine*);
+extern void ld_45(Machine*);
+extern void ld_46(Machine*);
+extern void ld_47(Machine*);
+extern void ld_48(Machine*);
+extern void ld_49(Machine*);
+extern void ld_4A(Machine*);
+extern void ld_4B(Machine*);
+extern void ld_4C(Machine*);
+extern void ld_4D(Machine*);
+extern void ld_4E(Machine*);
+extern void ld_4F(Machine*);
+// 0x50
+extern void ld_50(Machine*);
+extern void ld_51(Machine*);
+extern void ld_52(Machine*);
+extern void ld_53(Machine*);
+extern void ld_54(Machine*);
+extern void ld_55(Machine*);
+extern void ld_56(Machine*);
+extern void ld_57(Machine*);
+extern void ld_58(Machine*);
+extern void ld_59(Machine*);
+extern void ld_5A(Machine*);
+extern void ld_5B(Machine*);
+extern void ld_5C(Machine*);
+extern void ld_5D(Machine*);
+extern void ld_5E(Machine*);
+extern void ld_5F(Machine*);
+// 0x60
+extern void ld_60(Machine*);
+extern void ld_61(Machine*);
+extern void ld_62(Machine*);
+extern void ld_63(Machine*);
+extern void ld_64(Machine*);
+extern void ld_65(Machine*);
+extern void ld_66(Machine*);
+extern void ld_67(Machine*);
+extern void ld_68(Machine*);
+extern void ld_69(Machine*);
+extern void ld_6A(Machine*);
+extern void ld_6B(Machine*);
+extern void ld_6C(Machine*);
+extern void ld_6D(Machine*);
+extern void ld_6E(Machine*);
+extern void ld_6F(Machine*);
+// 0x70
+extern void ld_70(Machine*);
+extern void ld_71(Machine*);
+extern void ld_72(Machine*);
+extern void ld_73(Machine*);
+extern void ld_74(Machine*);
+extern void ld_75(Machine*);
+extern void halt_76(Machine*);
+extern void ld_77(Machine*);
+extern void ld_78(Machine*);
+extern void ld_79(Machine*);
+extern void ld_7A(Machine*);
+extern void ld_7B(Machine*);
+extern void ld_7C(Machine*);
+extern void ld_7D(Machine*);
+extern void ld_7E(Machine*);
+extern void ld_7F(Machine*);
+// 0x80
 
 
 
