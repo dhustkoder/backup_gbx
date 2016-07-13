@@ -1,7 +1,9 @@
 #include <stdlib.h>
+#include <string.h>
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <Utix/Alloc.h>
 #include <Utix/Ints.h>
 #include <Utix/ScopeExit.h>
 
@@ -43,8 +45,8 @@ int main(int argc, char** argv)
 			return gbx::CreateMachine(rom_bytes.data(), rom_size);
 		}();
 
-		const auto machine_clean = MakeScopeExit([=] noexcept {
-			gbx::DestroyMachine(machine_clean);	
+		const auto machine_clean = utix::MakeScopeExit([=]() noexcept {
+			gbx::DestroyMachine(machine);	
 		});
 	
 	}
@@ -80,14 +82,14 @@ struct Machine {
 Machine* CreateMachine(Byte* rom, size_t rom_size) {
 	auto machine = static_cast<Machine*>( malloc(sizeof(Machine)) );
 	machine->ram = static_cast<Byte*>( malloc(sizeof(Byte) * ( TOTAL_RAM_SIZE + rom_size )) );
-	memcpy(mechine->ram, rom, rom_size);
+	memcpy(machine->ram, rom, rom_size);
 	return machine;
 }
 
 
 void DestroyMachine(Machine* mach) {
-	free(machine->ram);
-	free(machine);
+	free(mach->ram);
+	free(mach);
 }
 
 
@@ -114,7 +116,6 @@ void ex(Machine*) {
 	cout << "ex";
 }
 
-
 void add(Machine*) {
 	cout << "add";
 }
@@ -126,7 +127,7 @@ void rrca(Machine*) {
 
 
 void DecodeAndExecuteInstruction(Machine* mach) {
-	using IntructionFunction = void(*)(Machine*);
+	using InstructionFunction = void(*)(Machine*);
 	static InstructionFunction instruction_table[] = 
 	{
 	/*       0    1   2   3    4    5    6   7    8    9   10  11   12   13   14  15 */
@@ -134,7 +135,7 @@ void DecodeAndExecuteInstruction(Machine* mach) {
 
 	};
 
-	if(mach->cpu.opcode	>= GetArrSz(instruction_table)) {
+	if(mach->cpu.opcode	>= utix::arr_size(instruction_table)) {
 		cout << "unknown opcode: " << mach->cpu.opcode << '\n';
 	}
 	else {
