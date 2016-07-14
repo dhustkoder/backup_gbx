@@ -14,6 +14,7 @@ struct Cpu {
 struct Machine {
 	Cpu cpu;
 	uint8_t* ram;
+	size_t rom_size;
 };
 
 

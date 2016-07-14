@@ -6,9 +6,10 @@ namespace gbx {
 struct Machine;
 
 using InstructionFunction = void(*)(Machine*);
-extern InstructionFunction main_instructions[0xD0];
+extern InstructionFunction main_instructions[0x100];
 
 // Main Instructions:
+extern void miss_instr(Machine*);
 // 0x00
 extern void nop_00(Machine*);
 extern void ld_01(Machine*);
@@ -230,8 +231,60 @@ extern void call_CC(Machine*);
 extern void call_CD(Machine*);
 extern void adc_CE(Machine*);
 extern void rst_CF(Machine*);
-// 0xD0
 
+// 0xD0
+extern void ret_D0(Machine*);
+extern void pop_D1(Machine*);
+extern void jp_D2(Machine*);
+// MISSING ----
+extern void call_D4(Machine*);
+extern void push_D5(Machine*);
+extern void sub_D6(Machine*);
+extern void rst_D7(Machine*);
+extern void ret_D8(Machine*);
+extern void reti_D9(Machine*);
+extern void jp_DA(Machine*);
+// MISSING -----
+extern void call_DC(Machine*);
+// MISSING -----
+extern void sbc_DE(Machine*);
+extern void rst_DF(Machine*);
+
+// 0xE0
+extern void ldh_E0(Machine*);
+extern void pop_E1(Machine*);
+extern void ld_E2(Machine*);
+// MISSING ----
+// MISSING ----
+extern void push_E5(Machine*);
+extern void and_E6(Machine*);
+extern void rst_E7(Machine*);
+extern void add_E8(Machine*);
+extern void jp_E9(Machine*);
+extern void ld_EA(Machine*);
+// MISSING -----
+// MISSING -----
+// MISSING -----
+extern void xor_EE(Machine*);
+extern void rst_EF(Machine*);
+
+// 0XF0
+extern void ldh_F0(Machine*);
+extern void pop_F1(Machine*);
+extern void ld_F2(Machine*);
+extern void di_F3(Machine*);
+// MISSING ----
+extern void push_F5(Machine*);
+extern void or_F6(Machine*);
+extern void rst_F7(Machine*);
+extern void ld_F8(Machine*);
+extern void ld_F9(Machine*);
+extern void ld_FA(Machine*);
+extern void ei_FB(Machine*);
+// MISSING -----
+// MISSING -----
+extern void cp_FE(Machine*);
+extern void rst_FF(Machine*);
 
 
 

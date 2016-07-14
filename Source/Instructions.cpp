@@ -8,30 +8,32 @@ namespace gbx {
 
 
 
-InstructionFunction main_instructions[0xD0] = 
+InstructionFunction main_instructions[0x100] = 
 {
-/*          0      1      2       3       4       5      6        7      8       9      A       B       C       D      E        F  */
-/* 0 */  nop_00, ld_01, ld_02, inc_03, inc_04, dec_05, ld_06, rlca_07, ld_08, add_09, ld_0A, dec_0B, inc_0C, dec_0D, ld_0E, rrca_0F,
-/* 1 */ stop_10, ld_11, ld_12, inc_13, inc_14, dec_15, ld_16,  rla_17, jr_18, add_19, ld_1A, dec_1B, inc_1C, dec_1D, ld_1E, rra_1F,
-/* 2 */   jr_20, ld_21, ld_22, inc_23, inc_24, dec_25, ld_26,  daa_27, jr_28, add_29, ld_2A, dec_2B, inc_2C, dec_2D, ld_2E, cpl_2F,
-/* 3 */   jr_30, ld_31, ld_32, inc_33, inc_34, dec_35, ld_36,  scf_37, jr_38, add_39, ld_3A, dec_3B, inc_3C, dec_3D, ld_3E, ccf_3F,
-/* 4 */   ld_40, ld_41, ld_42,  ld_43,  ld_44,  ld_45, ld_46,   ld_47, ld_48,  ld_49, ld_4A,  ld_4B,  ld_4C,  ld_4D, ld_4E,  ld_4F,
-/* 5 */   ld_50, ld_51, ld_52,  ld_53,  ld_54,  ld_55, ld_56,   ld_57, ld_58,  ld_59, ld_5A,  ld_5B,  ld_5C,  ld_5D, ld_5E,  ld_5F,
-/* 6 */   ld_60, ld_61, ld_62,  ld_63,  ld_64,  ld_65, ld_66,   ld_67, ld_68,  ld_69, ld_6A,  ld_6B,  ld_6C,  ld_6D, ld_6E,  ld_6F,
-/* 7 */   ld_70, ld_71, ld_72,  ld_73,  ld_74,  ld_75, halt_76, ld_77, ld_78,  ld_79, ld_7A,  ld_7B,  ld_7C,  ld_7D, ld_7E,  ld_7F,
-/* 8 */add_80, add_81, add_82, add_83, add_84, add_85, add_86, add_87, adc_88, adc_89, adc_8A, adc_8B, adc_8C, adc_8D, adc_8E, adc_8F,
-/* 9 */sub_90, sub_91, sub_92, sub_93, sub_94, sub_95, sub_96, sub_97, sbc_99, sbc_99, sbc_9A, sbc_9B, sbc_9C, sbc_9D, sbc_9E, sbc_9F,
-/* A */and_A0, and_A1, and_A2, and_A3, and_A4, and_A5, and_A6, and_A7, xor_A8, xor_A9, xor_AA, xor_AB, xor_AC, xor_AD, xor_AE, xor_AF,
-/* B */  or_B0, or_B1,  or_B2,  or_B3,  or_B4,  or_B5,  or_B6,  or_B7,  cp_B8,  cp_B9,  cp_BA,  cp_BB,  cp_BC,  cp_BD,  cp_BE,  cp_BF,
-/* C */ret_C0, pop_C1, jp_C2, jp_C3, call_C4, push_C5, add_C6, rst_C7, ret_C8, ret_C9, jp_CA, PREFIX_CB,call_CC, call_CD, adc_CE, rst_CF
-
-
+/*        0        1        2        3        4        5        6        7        8        9        A        B        C        D        E        F      */
+/*0*/  nop_00,   ld_01,   ld_02,  inc_03,  inc_04,  dec_05,   ld_06, rlca_07,   ld_08,  add_09,   ld_0A,  dec_0B,  inc_0C,  dec_0D,   ld_0E, rrca_0F,
+/*1*/ stop_10,   ld_11,   ld_12,  inc_13,  inc_14,  dec_15,   ld_16,  rla_17,   jr_18,  add_19,   ld_1A,  dec_1B,  inc_1C,  dec_1D,   ld_1E,  rra_1F,
+/*2*/   jr_20,   ld_21,   ld_22,  inc_23,  inc_24,  dec_25,   ld_26,  daa_27,   jr_28,  add_29,   ld_2A,  dec_2B,  inc_2C,  dec_2D,   ld_2E,  cpl_2F,
+/*3*/   jr_30,   ld_31,   ld_32,  inc_33,  inc_34,  dec_35,   ld_36,  scf_37,   jr_38,  add_39,   ld_3A,  dec_3B,  inc_3C,  dec_3D,   ld_3E,  ccf_3F,
+/*4*/   ld_40,   ld_41,   ld_42,   ld_43,   ld_44,   ld_45,   ld_46,   ld_47,   ld_48,   ld_49,   ld_4A,   ld_4B,   ld_4C,   ld_4D,   ld_4E,   ld_4F,
+/*5*/   ld_50,   ld_51,   ld_52,   ld_53,   ld_54,   ld_55,   ld_56,   ld_57,   ld_58,   ld_59,   ld_5A,   ld_5B,   ld_5C,   ld_5D,   ld_5E,   ld_5F,
+/*6*/   ld_60,   ld_61,   ld_62,   ld_63,   ld_64,   ld_65,   ld_66,   ld_67,   ld_68,   ld_69,   ld_6A,   ld_6B,   ld_6C,   ld_6D,   ld_6E,   ld_6F,
+/*7*/   ld_70,   ld_71,   ld_72,   ld_73,   ld_74,   ld_75, halt_76,   ld_77,   ld_78,   ld_79,   ld_7A,   ld_7B,   ld_7C,   ld_7D,   ld_7E,   ld_7F,
+/*8*/  add_80,  add_81,  add_82,  add_83,  add_84,  add_85,  add_86,  add_87,  adc_88,  adc_89,  adc_8A,  adc_8B,  adc_8C,  adc_8D,  adc_8E,  adc_8F,
+/*9*/  sub_90,  sub_91,  sub_92,  sub_93,  sub_94,  sub_95,  sub_96,  sub_97,  sbc_98,  sbc_99,  sbc_9A,  sbc_9B,  sbc_9C,  sbc_9D,  sbc_9E,  sbc_9F,
+/*A*/  and_A0,  and_A1,  and_A2,  and_A3,  and_A4,  and_A5,  and_A6,  and_A7,  xor_A8,  xor_A9,  xor_AA,  xor_AB,  xor_AC,  xor_AD,  xor_AE,  xor_AF,
+/*B*/   or_B0,   or_B1,   or_B2,   or_B3,   or_B4,   or_B5,   or_B6,   or_B7,   cp_B8,   cp_B9,   cp_BA,   cp_BB,   cp_BC,   cp_BD,   cp_BE,   cp_BF,
+/*C*/  ret_C0,  pop_C1,   jp_C2,   jp_C3, call_C4, push_C5,  add_C6,  rst_C7,  ret_C8,  ret_C9,   jp_CA,PREFIX_CB, call_CC, call_CD, adc_CE,  rst_CF,
+/*D*/  ret_D0,  pop_D1, jp_D2,miss_instr, call_D4, push_D5,  sub_D6,  rst_D7,  ret_D8, reti_D9,   jp_DA,miss_instr,call_DC,miss_instr,sbc_DE, rst_DF,
+/*E*/  ldh_E0,  pop_E1, ld_E2,miss_instr,miss_instr,push_E5, and_E6,  rst_E7,  add_E8,   jp_E9,   ld_EA,miss_instr,miss_instr,miss_instr,xor_EE,rst_EF,
+/*F*/  ldh_F0,  pop_F1, ld_F2, di_F3, miss_instr,  push_F5,   or_F6,  rst_F7,   ld_F8,   ld_F9,   ld_FA,  ei_FB,miss_instr,miss_instr, cp_FE, rst_FF
 };
 
 
 
 // Main instructions implementation:
 
+void miss_instr(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
 // 0x00
 void nop_00(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
 void ld_01(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
@@ -253,6 +255,72 @@ void call_CC(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 3; 
 void call_CD(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
 void adc_CE(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
 void rst_CF(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+
+
+
+// 0xD0
+void ret_D0(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void pop_D1(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void jp_D2(Machine* mach)   { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
+// MISSING ----
+void call_D4(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
+void push_D5(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void sub_D6(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void rst_D7(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void ret_D8(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void reti_D9(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void jp_DA(Machine* mach)   { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
+// MISSING -----
+void call_DC(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
+// MISSING -----
+void sbc_DE(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void rst_DF(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+
+
+// 0xE0
+void ldh_E0(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void pop_E1(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void ld_E2(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+// MISSING ----
+// MISSING ----
+void push_E5(Machine* mach){ std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void and_E6(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void rst_E7(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void add_E8(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void jp_E9(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void ld_EA(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
+// MISSING -----
+// MISSING -----
+// MISSING -----
+void xor_EE(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void rst_EF(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+
+
+
+// 0XF0
+void ldh_F0(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void pop_F1(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void ld_F2(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void di_F3(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+// MISSING ----
+void push_F5(Machine* mach){ std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void or_F6(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void rst_F7(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void ld_F8(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void ld_F9(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+void ld_FA(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 3; }
+void ei_FB(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+// MISSING -----
+// MISSING -----
+void cp_FE(Machine* mach)  { std::cout << __func__ << '\n'; mach->cpu.pc += 2; }
+void rst_FF(Machine* mach) { std::cout << __func__ << '\n'; mach->cpu.pc += 1; }
+
+
+
+
+
+
+
 
 
 

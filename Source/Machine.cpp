@@ -6,9 +6,9 @@
 #include "Instructions.h"
 #include "Machine.h"
 
-
-
 namespace gbx {
+
+
 // based on http://marc.rawer.de/Gameboy/
 /* MEMORY MAP:
 
@@ -100,18 +100,14 @@ Machine* CreateMachine() {
 		return nullptr;
 	}
 
-	// null all ptrs in the machine structure
-	// to not have problems with DestroyMachine, if called
-	machine->ram = nullptr;
-
 	auto machine_cleanup = utix::MakeScopeExitIf([=]() noexcept {
-			gbx::DestroyMachine(machine);
+			free(machine);
 	});
 
 	machine->ram = static_cast<uint8_t*>( malloc(sizeof(uint8_t) * TOTAL_RAM_SIZE ) );
 	
 	if(!machine->ram) {
-		LogError("can't allocate memory for gb ram");
+		LogError("can't allocate memory for Machine's ram");
 		return nullptr;
 	}
 
@@ -161,7 +157,7 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 		LogError("error while reading from \'%s\'", rom_file_name);
 		return false;
 	}
-
+	mach->rom_size = rom_size;
 	mach->cpu.pc = 0x100;
 	return true;
 }
@@ -170,6 +166,9 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 
 
 bool StepMachine(Machine* const mach) {
+
+	if(mach->rom_size < mach->cpu.pc)
+		return false;
 
 	mach->cpu.opcode = mach->ram[mach->cpu.pc];
 
