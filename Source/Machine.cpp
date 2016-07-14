@@ -157,6 +157,7 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 		LogError("error while reading from \'%s\'", rom_file_name);
 		return false;
 	}
+
 	mach->rom_size = rom_size;
 	mach->cpu.pc = 0x100;
 	return true;
@@ -166,19 +167,17 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 
 
 bool StepMachine(Machine* const mach) {
+	
+	const auto pc = mach->cpu.pc;
 
-	if(mach->rom_size < mach->cpu.pc)
+	if(pc > mach->rom_size)
 		return false;
 
-	mach->cpu.opcode = mach->ram[mach->cpu.pc];
-
-	if(mach->cpu.opcode >= utix::arr_size(main_instructions)) {
-		utix::LogError("unknown opcode %X\n", mach->cpu.opcode);
-		return false;
-	}
-
-	main_instructions[mach->cpu.opcode](mach);
+	// uint8_t variable can't overflow main_instruction array
+	const auto op = mach->cpu.op = mach->ram[pc];
+	main_instructions[op](mach);
 	return true;
+
 }
 
 

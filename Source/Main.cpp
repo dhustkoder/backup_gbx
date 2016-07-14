@@ -37,7 +37,6 @@ int main(int argc, char** argv)
 		{
 			
 		}
-	
 	}
 	catch(std::exception& e) {
 		cerr << "Fatal Exception: " << e.what() << '\n';
