@@ -9,11 +9,85 @@
 
 
 namespace gbx {
+// based on http://marc.rawer.de/Gameboy/
+/* MEMORY MAP:
 
-constexpr const size_t MAIN_RAM_SIZE = 8 * 1024;
-constexpr const size_t VIDEO_RAM_SIZE = 8 * 1024;
+		|...............| 0xFFFF
+		|_______________| 0xFFFE
+		|  WORK & STACK |
+		|      AREA     |
+		|_______________| 0xFF80
+		| SOUND CONTROL |
+		|    REGISTER   |
+		|_______________|
+		|  LCDC CONTROL |
+		|   REGISTER    |
+		|_______________|
+		|    PORT/MODE  |
+		|    REGISTER   |
+		|_______________| 0xFF00
+		|     OAM RAM   |
+		|_______________| 0xFE00
+		|       -       |
+		|_______________| 0xF000
+		|       -       |
+		|_______________| 0xE000
+		|               |
+		|    WORK RAM   |
+		|_______________| 0xC000
+		|    EXPANDED   |
+		|    WORK RAM   |
+		|_______________| 0xA000
+		|BKG DISP DATA 2|
+		|_______________| 0x9C00
+		|BKG DISP DATA 1|
+		|_______________| 0x9800
+		|   CHARACTER   |
+		|      DATA     |
+		|_______________| 0x8000
+		|               |
+		|      HOME     |
+		|               |
+		|_______________| 0x4000
+		|               |
+		|   FIXED HOME  |
+		|               |
+		|_______________| 0x0000 
+
+
+fixed home and home goes the cartridge's user program data
+
+
+
+MEMORY AREAS SIZES:
+constexpr const size_t OAM_RAM_SIZE = 256;
+constexpr const size_t WORK_RAM_SIZE = 8 * 1024;
+constexpr const size_t EXPANDED_WORK_RAM_SIZE = 8 * 1024;
+constexpr const size_t BKG_DISP_DATA2_SIZE = 1024;
+constexpr const size_t BKG_DISP_DATA1_SIZE = 1024;
+constexpr const size_t CHAR_DATA_SIZE = 6 * 1024;
+constexpr const size_t HOME_SIZE = 16 * 1024;
+constexpr const size_t FIXED_HOME_SIZE = 16 * 1024;
+
+MEMORY AREAS OFFSETS:
+constexpr const size_t OAM_RAM_OFFSET = 0xFE00;
+constexpr const size_t WORK_RAM_OFFSET = 0xC000;
+constexpr const size_t EXPANDED_WORK_RAM_OFFSET = 0xA000;
+constexpr const size_t BKG_DISP_DATA2_OFFSET = 0x9C00;
+constexpr const size_t BKG_DISP_DATA1_OFFSET = 0x9800;
+constexpr const size_t CHAR_DATA_OFFSET = 0x8000;
+constexpr const size_t HOME_OFFSET = 0x4000;
+constexpr const size_t FIXED_HOME_OFFSET = 0;
+
+*/
+
+constexpr const size_t TOTAL_RAM_SIZE = 0xFFFF;
 constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
-constexpr const size_t TOTAL_RAM_SIZE = MAIN_RAM_SIZE + VIDEO_RAM_SIZE + MAX_CARTRIDGE_SIZE;
+
+
+
+
+
 
 
 Machine* CreateMachine() {	
@@ -84,7 +158,6 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 	}
 
 	mach->cpu.pc = 0x100;
-	mach->rom_size = rom_size;
 	return true;
 }
 
@@ -92,9 +165,6 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 
 
 bool StepMachine(Machine* const mach) {
-
-	if(mach->cpu.pc >= mach->rom_size)
-		return false;
 
 	mach->cpu.opcode = mach->ram[mach->cpu.pc];
 
