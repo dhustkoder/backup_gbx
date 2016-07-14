@@ -120,10 +120,14 @@ Machine* CreateMachine() {
 }
 
 
+
+
 void DestroyMachine(Machine* const mach) {
 	free(mach->ram);
 	free(mach);
 }
+
+
 
 
 
@@ -137,6 +141,7 @@ bool LoadRom(const char* rom_file_name, Machine* const mach) {
 		LogError("Could not open \'%s\'", rom_file_name);
 		return false;
 	}
+
 	const auto file_cleanup = utix::MakeScopeExit([=]() noexcept {
 		fclose(rom_file);
 	});	
@@ -176,6 +181,17 @@ bool StepMachine(Machine* const mach) {
 	main_instructions[mach->cpu.opcode](mach);
 	return true;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

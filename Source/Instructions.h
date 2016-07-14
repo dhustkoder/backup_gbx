@@ -6,7 +6,7 @@ namespace gbx {
 struct Machine;
 
 using InstructionFunction = void(*)(Machine*);
-extern InstructionFunction main_instructions[0x80];
+extern InstructionFunction main_instructions[0xD0];
 
 // Main Instructions:
 // 0x00
@@ -146,9 +146,91 @@ extern void ld_7D(Machine*);
 extern void ld_7E(Machine*);
 extern void ld_7F(Machine*);
 // 0x80
-
-
-
+extern void add_80(Machine*);
+extern void add_81(Machine*);
+extern void add_82(Machine*);
+extern void add_83(Machine*);
+extern void add_84(Machine*);
+extern void add_85(Machine*);
+extern void add_86(Machine*);
+extern void add_87(Machine*);
+extern void adc_88(Machine*);
+extern void adc_89(Machine*);
+extern void adc_8A(Machine*);
+extern void adc_8B(Machine*);
+extern void adc_8C(Machine*);
+extern void adc_8D(Machine*);
+extern void adc_8E(Machine*);
+extern void adc_8F(Machine*);
+// 0x90
+extern void sub_90(Machine*);
+extern void sub_91(Machine*);
+extern void sub_92(Machine*);
+extern void sub_93(Machine*);
+extern void sub_94(Machine*);
+extern void sub_95(Machine*);
+extern void sub_96(Machine*);
+extern void sub_97(Machine*);
+extern void sbc_98(Machine*);
+extern void sbc_99(Machine*);
+extern void sbc_9A(Machine*);
+extern void sbc_9B(Machine*);
+extern void sbc_9C(Machine*);
+extern void sbc_9D(Machine*);
+extern void sbc_9E(Machine*);
+extern void sbc_9F(Machine*);
+// 0xA0
+extern void and_A0(Machine*);
+extern void and_A1(Machine*);
+extern void and_A2(Machine*);
+extern void and_A3(Machine*);
+extern void and_A4(Machine*);
+extern void and_A5(Machine*);
+extern void and_A6(Machine*);
+extern void and_A7(Machine*);
+extern void xor_A8(Machine*);
+extern void xor_A9(Machine*);
+extern void xor_AA(Machine*);
+extern void xor_AB(Machine*);
+extern void xor_AC(Machine*);
+extern void xor_AD(Machine*);
+extern void xor_AE(Machine*);
+extern void xor_AF(Machine*);
+// 0xB0
+extern void or_B0(Machine*);
+extern void or_B1(Machine*);
+extern void or_B2(Machine*);
+extern void or_B3(Machine*);
+extern void or_B4(Machine*);
+extern void or_B5(Machine*);
+extern void or_B6(Machine*);
+extern void or_B7(Machine*);
+extern void cp_B8(Machine*);
+extern void cp_B9(Machine*);
+extern void cp_BA(Machine*);
+extern void cp_BB(Machine*);
+extern void cp_BC(Machine*);
+extern void cp_BD(Machine*);
+extern void cp_BE(Machine*);
+extern void cp_BF(Machine*);
+// 0xC0
+extern void ret_C0(Machine*);
+extern void pop_C1(Machine*);
+extern void jp_C2(Machine*);
+extern void jp_C3(Machine*);
+extern void call_C4(Machine*);
+extern void push_C5(Machine*);
+extern void add_C6(Machine*);
+extern void rst_C7(Machine*);
+extern void ret_C8(Machine*);
+extern void ret_C9(Machine*);
+extern void jp_CA(Machine*);
+extern void PREFIX_CB(Machine*);
+extern void call_CC(Machine*);
+extern void call_CD(Machine*);
+extern void adc_CE(Machine*);
+extern void rst_CF(Machine*);
+// 0xD0
 
 
 
