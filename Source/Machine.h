@@ -5,8 +5,6 @@
 namespace gbx {
 
 
-
-
 struct Cpu {
 	uint16_t pc;
 	uint16_t sp;
@@ -29,10 +27,14 @@ struct Machine {
 };
 
 
+
 Machine* CreateMachine();
 void DestroyMachine(Machine* const mach);
 bool LoadRom(const char* rom_file_name, Machine* const mach);
 bool StepMachine(Machine* const mach);
+
+
+
 
 
 
@@ -45,7 +47,6 @@ inline void Split16(const uint16_t value, uint8_t* const high_byte, uint8_t* con
 	*high_byte = (value & 0xFF00) >> 8;
 	*low_byte = (value & 0x00FF);
 }
-
 
 inline uint16_t Read16(const uint8_t* memory) {
 	return ConcatBytes(memory[1], memory[0]);

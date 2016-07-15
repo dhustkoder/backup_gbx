@@ -63,8 +63,8 @@ void ld_01(Machine* mach) {
 	// load immediate 16 bits value into BC
 	// bytes: 3
 	// clock cyles: 10 or 12 ?
-	const auto value_offset = mach->cpu.pc + 1;
-	SetBC(mach->ram + value_offset, &mach->cpu);
+	const auto d16_offset = mach->cpu.pc + 1;
+	SetBC(mach->ram + d16_offset, &mach->cpu);
 
 	mach->cpu.pc += 3;
 	printf("LD BC, %X\n", GetBC(mach->cpu));
@@ -205,8 +205,8 @@ void ld_3E(Machine* mach) {
 	// loads immediate 8 bit value into A
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	const auto value_location = mach->cpu.pc + 1;
-	mach->cpu.A = mach->ram[value_location];
+	const auto d8_offset = mach->cpu.pc + 1;
+	mach->cpu.A = mach->ram[d8_offset];
 	mach->cpu.pc += 2;
 	printf("LD A, %X\n", mach->cpu.A);
 }
@@ -405,7 +405,23 @@ void cp_BF(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ret_C0(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void pop_C1(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void jp_C2(Machine* mach)   { puts(__func__); mach->cpu.pc += 3; }
-void jp_C3(Machine* mach)   { puts(__func__); mach->cpu.pc += 3; }
+
+
+void jp_C3(Machine* mach)   { 
+	// JP a16
+	// 16 bit address is copied to PC
+	// bytes: 3
+	// clock cycles: 10 or 16 ?
+	const auto a16_offset = mach->cpu.pc + 1;
+	mach->cpu.pc = Read16(mach->ram + a16_offset);
+	printf("JP %X\n", mach->cpu.pc);
+}
+
+
+
+
+
+
 void call_C4(Machine* mach) { puts(__func__); mach->cpu.pc += 3; }
 void push_C5(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void add_C6(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
