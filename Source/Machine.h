@@ -22,7 +22,7 @@ struct Cpu {
 
 struct Machine {
 	Cpu cpu;
-	uint8_t* ram;
+	uint8_t* const ram;
 	size_t rom_size;
 };
 

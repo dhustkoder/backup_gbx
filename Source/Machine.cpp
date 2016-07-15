@@ -103,7 +103,7 @@ Machine* CreateMachine() {
 			free(machine);
 	});
 
-	machine->ram = static_cast<uint8_t*>( malloc(sizeof(uint8_t) * TOTAL_RAM_SIZE ) );
+	const_cast<uint8_t*&>(machine->ram) = static_cast<uint8_t*>( malloc(sizeof(uint8_t) * TOTAL_RAM_SIZE ) );
 	
 	if(!machine->ram) {
 		perror("can't allocate memory for Machine's ram");
