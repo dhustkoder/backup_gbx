@@ -4,8 +4,9 @@
 
 namespace gbx {
 
-// based on http://marc.rawer.de/Gameboy/
-/* MEMORY MAP:
+/*  
+based on http://marc.rawer.de/Gameboy/
+MEMORY MAP:
 
 		|...............| 0xFFFF
 		|_______________| 0xFFFE
@@ -140,28 +141,24 @@ inline void Split16(const uint16_t value, uint8_t* const high_byte, uint8_t* con
 }
 
 
-inline uint8_t Read8(const uint8_t* memory) {
+inline uint8_t Read8(const uint8_t* const memory) {
 	return *memory;
-}
-
-inline void Read8(const uint8_t* memory, uint8_t* byte) {
-	*byte = *memory;
-}
-
-
-inline uint16_t Read16(const uint8_t* memory) {
-	return ConcatBytes(memory[1], memory[0]);
-}
-
-
-inline void Read16(const uint8_t* memory, uint8_t* const high_byte, uint8_t* const low_byte) {
-	*high_byte = *( memory + 1 );
-	*low_byte = *memory;
 }
 
 
 inline void Write8(const uint8_t value, uint8_t* const memory) {
 	*memory = value;
+}
+
+
+inline uint16_t Read16(const uint8_t* const memory) {
+	return ConcatBytes(memory[1], memory[0]);
+}
+
+
+inline void Read16(const uint8_t* const memory, uint8_t* const high_byte, uint8_t* const low_byte) {
+	*high_byte = *( memory + 1 );
+	*low_byte = *memory;
 }
 
 
@@ -176,16 +173,38 @@ inline void Write16(const uint8_t high_byte, const uint8_t low_byte, uint8_t* co
 }
 
 
+inline void Add8(const uint8_t val, uint8_t* const memory) {
+	const uint8_t result = Read8(memory) + val;
+	Write8(result, memory);
+}
+
+inline void Sub8(const uint8_t val, uint8_t* const memory) {
+	const uint8_t result = Read8(memory) - val;
+	Write8(result, memory);
+}
+
+inline void Add16(const uint16_t val, uint8_t* const memory) {
+	const uint16_t result = Read16(memory) + val;
+	Write16(result, memory);
+}
 
 inline void Add16(const uint16_t val, uint8_t* const high_byte, uint8_t* const low_byte) {
 	const uint16_t result = ConcatBytes(*high_byte, *low_byte) + val;
 	Split16(result, high_byte, low_byte);
 }
 
+inline void Sub16(const uint16_t val, uint8_t* const memory) {
+	const uint16_t result = Read16(memory) - val;
+	Write16(result, memory);
+}
+
 inline void Sub16(const uint16_t val, uint8_t* const high_byte, uint8_t* const low_byte) {
 	const uint16_t result = ConcatBytes(*high_byte, *low_byte) - val;
 	Split16(result, high_byte, low_byte);
 }
+
+
+
 
 
 
@@ -202,8 +221,6 @@ inline uint16_t GetDE(const Cpu& cpu) {
 inline uint16_t GetHL(const Cpu& cpu) {
 	return ConcatBytes(cpu.H, cpu.L);
 }
-
-
 
 
 inline bool GetFlags(Cpu::Flags flags, const Cpu& cpu) {

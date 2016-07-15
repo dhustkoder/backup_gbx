@@ -162,7 +162,20 @@ void rra_1F(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 
 // 0x20
 void jr_20(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
-void ld_21(Machine* mach) { puts(__func__); mach->cpu.pc += 3; }
+
+
+void ld_21(Machine* mach) {
+	// LD HL, d16
+	// load immediate 16 bit value into HL
+	// bytes: 3
+	// clock cycles: 10 or 12
+	SetHL(&mach->ram[mach->cpu.pc+1], &mach->cpu);
+	printf("%X: LD HL, %X\n", mach->cpu.pc, GetHL(mach->cpu));
+	mach->cpu.pc += 3; 
+}
+
+
+
 void ld_22(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void inc_23(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void inc_24(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
@@ -185,7 +198,20 @@ void cpl_2F(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 
 // 0x30
 void jr_30(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
-void ld_31(Machine* mach) { puts(__func__); mach->cpu.pc += 3; }
+
+
+
+void ld_31(Machine* mach) {
+	// LD SP, d16
+	// loads immediate 16 bits value into SP
+	// bytes: 3
+	// clock cycles: 10 or 12 ?
+	mach->cpu.sp = Read16(&mach->ram[mach->cpu.pc+1]);
+	printf("%X: LD SP, %X\n", mach->cpu.pc, mach->cpu.sp);
+	mach->cpu.pc += 3; 
+}
+
+
 void ld_32(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void inc_33(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void inc_34(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
