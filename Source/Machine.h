@@ -72,14 +72,12 @@ inline void Write16(const uint8_t high_byte, const uint8_t low_byte, uint8_t* co
 
 inline void Add16(const uint16_t val, uint8_t* const high_byte, uint8_t* const low_byte) {
 	const uint16_t result = ConcatBytes(*high_byte, *low_byte) + val;
-	*high_byte = ( result & 0xFF00 ) >> 8;
-	*low_byte = result & 0x00FF;
+	Split16(result, high_byte, low_byte);
 }
 
 inline void Sub16(const uint16_t val, uint8_t* const high_byte, uint8_t* const low_byte) {
 	const uint16_t result = ConcatBytes(*high_byte, *low_byte) - val;
-	*high_byte = ( result & 0xFF00) >> 8;
-	*low_byte = result & 0x00FF;
+	Split16(result, high_byte, low_byte);
 }
 
 
