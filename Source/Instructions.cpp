@@ -42,7 +42,7 @@ InstructionFunction main_instructions[0x100] =
 
 void miss_instr(Machine* const mach) {
 	// not implemented instruction
-	printf("%X: MISSING INSTRUCTION\n", mach->cpu.pc);
+	printf("%X: MISSING INSTRUCTION %X\n", mach->cpu.pc, mach->cpu.op);
 	++mach->cpu.pc;
 }
 
@@ -52,7 +52,7 @@ void nop_00(Machine* const mach) {
 	// no operation is performed
 	// bytes: 1
 	// clock cyles: 4
-	printf("%X: NOP", mach->cpu.pc);
+	printf("%X: NOP\n", mach->cpu.pc);
 	++mach->cpu.pc;
 }
 
@@ -77,7 +77,7 @@ void ld_02(Machine* const mach) {
 	// clock cycles: 7 or 8 ?
 	const uint16_t BC = GetBC(mach->cpu);
 	const uint8_t A = mach->cpu.A;
-	mach->ram[BC] = A;
+	Write8(A, mach->ram + BC);
 
 	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, BC, A);
 	++mach->cpu.pc;
@@ -104,17 +104,18 @@ void inc_04(Machine* const mach) {
 	// bytes: 1
 	// clock cyles: 4
 	// flags affected Z 0 H -
-	UnsetFlag(Cpu::Flags::N, &mach->cpu);
+	
 
 	if((mach->cpu.B & 0x0F) == 0x0F) {
-		SetFlag(Cpu::Flags::H, &mach->cpu);
+		SetFlags(Cpu::Flags::H, &mach->cpu);
 	}
 	
 	if( ( ++mach->cpu.B ) == 0 ) {
-		SetFlag(Cpu::Flags::Z, &mach->cpu);
+		SetFlags(Cpu::Flags::Z, &mach->cpu);
 	}
 
 	printf("%X: INC B; -> B(%X)\n", mach->cpu.pc, mach->cpu.B);
+	UnsetFlags(Cpu::Flags::N, &mach->cpu);
 	++mach->cpu.pc;
 }
 
@@ -248,7 +249,22 @@ void ld_53(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_54(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_55(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_56(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
-void ld_57(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
+
+
+
+void ld_57(Machine* mach) {
+	// LD D, A
+	// the value in A is loaded into D
+	// bytes: 1
+	// clock cycles: 4
+	mach->cpu.D = mach->cpu.A;
+	printf("%X: LD D, A; -> A(%X)\n", mach->cpu.pc, mach->cpu.A);
+	++mach->cpu.pc;
+}
+
+
+
+
 void ld_58(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_59(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_5A(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
@@ -371,7 +387,23 @@ void xor_AB(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void xor_AC(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void xor_AD(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void xor_AE(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
-void xor_AF(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
+
+
+
+void xor_AF(Machine* mach) {
+	// XOR A
+	// bitwise xor in a with a
+	// bytes: 1
+	// clock cycles: 4
+	// flags affected: Z 0 0 0
+	mach->cpu.A ^= mach->cpu.A;
+	if(mach->cpu.A == 0)
+		SetFlags(Cpu::Flags::Z, &mach->cpu);
+
+	printf("%X: XOR A; -> A(%X)\n", mach->cpu.pc, mach->cpu.A);
+	UnsetFlags(Cpu::Flags::N | Cpu::Flags::H | Cpu::Flags::C, &mach->cpu);
+	++mach->cpu.pc;
+}
 
 
 
@@ -495,7 +527,23 @@ void rst_EF(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ldh_F0(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 void pop_F1(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_F2(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
-void di_F3(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
+
+
+void di_F3(Machine* mach) {
+	// DI
+	// resets both interrupt flip-flops
+	// thus preventing maskable interrupts from triggering
+	// bytes: 1
+	// clock cycles: 4
+	// TODO: back here when interrupts are implemented
+
+	printf("%X: DI\n", mach->cpu.pc);
+	++mach->cpu.pc; 
+}
+
+
+
+
 // MISSING ----
 void push_F5(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void or_F6(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
