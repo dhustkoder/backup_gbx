@@ -43,8 +43,8 @@ InstructionFunction main_instructions[0x100] =
 
 void miss_instr(Machine* mach) {
 	// not implemented instruction
-	mach->cpu.pc += 1;
-	puts("MISSING INSTRUCTION");
+	printf("%X: MISSING INSTRUCTION\n", mach->cpu.pc);
+	++mach->cpu.pc;
 }
 
 
@@ -53,8 +53,8 @@ void nop_00(Machine* mach) {
 	// no operation is performed
 	// bytes: 1
 	// clock cyles: 4
-	mach->cpu.pc += 1;
-	puts("NOP"); 
+	printf("%X: NOP", mach->cpu.pc);
+	++mach->cpu.pc;
 }
 
 
@@ -66,8 +66,8 @@ void ld_01(Machine* mach) {
 	const auto d16_offset = mach->cpu.pc + 1;
 	SetBC(mach->ram + d16_offset, &mach->cpu);
 
+	printf("%X: LD BC, %X\n", mach->cpu.pc, GetBC(mach->cpu));
 	mach->cpu.pc += 3;
-	printf("LD BC, %X\n", GetBC(mach->cpu));
 }
 
 
@@ -80,8 +80,8 @@ void ld_02(Machine* mach) {
 	const auto A = mach->cpu.A;
 	mach->ram[BC] = A;
 
-	mach->cpu.pc += 1;
-	printf("LD (BC), A ; ->  BC = (%X), A = (%X)\n", BC, A);
+	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, BC, A);
+	++mach->cpu.pc;
 }
 
 
@@ -93,8 +93,8 @@ void inc_03(Machine* mach) {
 	// clock cyles: 6 or 8 ?
 	AddBC(1, &mach->cpu);
 
-	mach->cpu.pc += 1;
-	printf("INC BC; -> BC(%X)\n", GetBC(mach->cpu));
+	printf("%X: INC BC; -> BC(%X)\n", mach->cpu.pc, GetBC(mach->cpu));
+	++mach->cpu.pc;
 }
 
 
@@ -115,8 +115,8 @@ void inc_04(Machine* mach) {
 		SetFlag(Cpu::Flags::Z, &mach->cpu);
 	}
 
-	mach->cpu.pc += 1;
-	printf("INC B; -> B(%X)\n", mach->cpu.B);
+	printf("%X: INC B; -> B(%X)\n", mach->cpu.pc, mach->cpu.B);
+	++mach->cpu.pc;
 }
 
 
@@ -207,8 +207,9 @@ void ld_3E(Machine* mach) {
 	// clock cycles: 7 or 8 ?
 	const auto d8_offset = mach->cpu.pc + 1;
 	mach->cpu.A = mach->ram[d8_offset];
+	
+	printf("%X: LD A, %X\n", mach->cpu.pc, mach->cpu.A);
 	mach->cpu.pc += 2;
-	printf("LD A, %X\n", mach->cpu.A);
 }
 
 
@@ -413,8 +414,9 @@ void jp_C3(Machine* mach)   {
 	// bytes: 3
 	// clock cycles: 10 or 16 ?
 	const auto a16_offset = mach->cpu.pc + 1;
-	mach->cpu.pc = Read16(mach->ram + a16_offset);
-	printf("JP %X\n", mach->cpu.pc);
+	const auto a16 = Read16(mach->ram + a16_offset);
+	printf("%X: JP %X\n", mach->cpu.pc, a16);
+	mach->cpu.pc = a16;
 }
 
 
