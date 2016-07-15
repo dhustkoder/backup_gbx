@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <Utix/Restrict.h>
 #include "Machine.h"
 #include "Instructions.h"
 
@@ -41,7 +40,7 @@ InstructionFunction main_instructions[0x100] =
 // Main instructions implementation:
 // 0x00
 
-void miss_instr(Machine* mach) {
+void miss_instr(Machine* const mach) {
 	// not implemented instruction
 	printf("%X: MISSING INSTRUCTION\n", mach->cpu.pc);
 	++mach->cpu.pc;
@@ -49,7 +48,7 @@ void miss_instr(Machine* mach) {
 
 
 
-void nop_00(Machine* mach) {
+void nop_00(Machine* const mach) {
 	// no operation is performed
 	// bytes: 1
 	// clock cyles: 4
@@ -58,12 +57,12 @@ void nop_00(Machine* mach) {
 }
 
 
-void ld_01(Machine* mach) {
+void ld_01(Machine* const mach) {
 	// LD BC, d16
 	// load immediate 16 bits value into BC
 	// bytes: 3
 	// clock cyles: 10 or 12 ?
-	const auto d16_offset = mach->cpu.pc + 1;
+	const uint16_t d16_offset = mach->cpu.pc + 1;
 	SetBC(mach->ram + d16_offset, &mach->cpu);
 
 	printf("%X: LD BC, %X\n", mach->cpu.pc, GetBC(mach->cpu));
@@ -71,13 +70,13 @@ void ld_01(Machine* mach) {
 }
 
 
-void ld_02(Machine* mach) {
+void ld_02(Machine* const mach) {
 	// LD (BC), A
 	// value in register A is stored in memory location pointed by BC
 	// bytes: 1
 	// clock cycles: 7 or 8 ?
-	const auto BC = GetBC(mach->cpu);
-	const auto A = mach->cpu.A;
+	const uint16_t BC = GetBC(mach->cpu);
+	const uint8_t A = mach->cpu.A;
 	mach->ram[BC] = A;
 
 	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, BC, A);
@@ -86,7 +85,7 @@ void ld_02(Machine* mach) {
 
 
 
-void inc_03(Machine* mach) {
+void inc_03(Machine* const mach) {
 	// INC BC
 	// adds one to BC
 	// bytes: 1
@@ -99,7 +98,7 @@ void inc_03(Machine* mach) {
 
 
 
-void inc_04(Machine* mach) { 
+void inc_04(Machine* const mach) { 
 	// INC B
 	// adds one to B
 	// bytes: 1
@@ -200,12 +199,12 @@ void inc_3C(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void dec_3D(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 
 
-void ld_3E(Machine* mach) { 
+void ld_3E(Machine* const mach) { 
 	// LD A, d8
 	// loads immediate 8 bit value into A
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	const auto d8_offset = mach->cpu.pc + 1;
+	const uint16_t d8_offset = mach->cpu.pc + 1;
 	mach->cpu.A = mach->ram[d8_offset];
 	
 	printf("%X: LD A, %X\n", mach->cpu.pc, mach->cpu.A);
@@ -408,13 +407,13 @@ void pop_C1(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void jp_C2(Machine* mach)   { puts(__func__); mach->cpu.pc += 3; }
 
 
-void jp_C3(Machine* mach)   { 
+void jp_C3(Machine* const mach)   { 
 	// JP a16
 	// 16 bit address is copied to PC
 	// bytes: 3
 	// clock cycles: 10 or 16 ?
-	const auto a16_offset = mach->cpu.pc + 1;
-	const auto a16 = Read16(mach->ram + a16_offset);
+	const uint16_t a16_offset = mach->cpu.pc + 1;
+	const uint16_t a16 = Read16(mach->ram + a16_offset);
 	printf("%X: JP %X\n", mach->cpu.pc, a16);
 	mach->cpu.pc = a16;
 }

@@ -80,7 +80,7 @@ constexpr const size_t HOME_OFFSET = 0x4000;
 constexpr const size_t FIXED_HOME_OFFSET = 0;
 
 */
-
+constexpr const size_t CHAR_DATA_OFFSET = 0x8000;
 constexpr const size_t TOTAL_RAM_SIZE = 0xFFFF;
 constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
 
@@ -156,7 +156,7 @@ bool LoadRom(const char* const rom_file_name, Machine* const mach) {
 		return false;
 	}
 
-	mach->rom_size = rom_size;
+	const_cast<size_t&>(mach->rom_size) = rom_size;
 	mach->cpu.pc = 0x100;
 	return true;
 }
@@ -167,10 +167,10 @@ bool LoadRom(const char* const rom_file_name, Machine* const mach) {
 bool StepMachine(Machine* const mach) {
 	// fetch Opcode and execute instruction
 	// uint8_t variable can't overflow main_instruction array
-	const auto pc = mach->cpu.pc;
-	if(pc < mach->rom_size) {
-		const auto op = mach->cpu.op = mach->ram[pc];
-		main_instructions[op](mach);
+	const uint16_t pc = mach->cpu.pc;
+	if(pc < CHAR_DATA_OFFSET) {
+		mach->cpu.op = mach->ram[pc];
+		main_instructions[mach->cpu.op](mach);
 		return true;
 	}
 
