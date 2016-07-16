@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	auto* const machine = gbx::CreateMachine();
+	gbx::Machine* const machine = gbx::CreateMachine();
 	
 	if(!machine)
 		return EXIT_FAILURE;

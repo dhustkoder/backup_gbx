@@ -63,11 +63,13 @@ void ld_01(Machine* const mach) {
 	// bytes: 3
 	// clock cyles: 10 or 12 ?
 	
-	mach->Load16BC(mach->cpu.pc + 1);
+	mach->memory.Read16(mach->cpu.pc + 1, &mach->cpu.B, &mach->cpu.C);
 
 	printf("%X: LD BC, %X\n", mach->cpu.pc, mach->cpu.GetBC());
 	mach->cpu.pc += 3;
 }
+
+
 
 
 void ld_02(Machine* const mach) {
@@ -75,11 +77,12 @@ void ld_02(Machine* const mach) {
 	// value in register A is stored in memory location pointed by BC
 	// bytes: 1
 	// clock cycles: 7 or 8 ?
-	mach->Store8BC(mach->cpu.A);
+	mach->memory.Write8(mach->cpu.GetBC(), mach->cpu.A);
 
 	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, mach->cpu.GetBC(), mach->cpu.A);
 	++mach->cpu.pc;
 }
+
 
 
 
@@ -93,6 +96,8 @@ void inc_03(Machine* const mach) {
 	printf("%X: INC BC; -> BC(%X)\n", mach->cpu.pc, mach->cpu.GetBC());
 	++mach->cpu.pc;
 }
+
+
 
 
 
@@ -119,15 +124,74 @@ void inc_04(Machine* const mach) {
 
 
 
-void dec_05(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
-void ld_06(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
+
+void dec_05(Machine* const mach) {
+	// DEC B
+	// decrement B by 1
+	// bytes: 1
+	// clock cycles: 4
+	// flags affected Z 1 H -
+
+	if(mach->cpu.B == 0) {
+		mach->cpu.SetFlags(Cpu::Flags::H);
+	}
+	else if(mach->cpu.B == 1) {
+		mach->cpu.SetFlags(Cpu::Flags::Z);
+	}
+
+	--mach->cpu.B;
+
+	printf("%X: DEC B; -> B(%X)\n", mach->cpu.pc, mach->cpu.B);
+	mach->cpu.SetFlags(Cpu::Flags::N);
+	mach->cpu.pc += 1;
+}
+
+
+
+void ld_06(Machine* const mach) {
+	// LD B, d8
+	// loads immediate 8 bit value into B
+	// bytes: 2
+	// clock cycles: 7 or 8 ?
+	mach->cpu.B = mach->memory.Read8(mach->cpu.pc + 1);
+	printf("%X: LD B, %X\n", mach->cpu.pc, mach->cpu.B);
+	mach->cpu.pc += 2; 
+}
+
+
+
+
+
+
 void rlca_07(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void ld_08(Machine* mach)  { puts(__func__); mach->cpu.pc += 3; }
 void add_09(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_0A(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void dec_0B(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void inc_0C(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
-void dec_0D(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
+
+
+
+void dec_0D(Machine* const mach) {
+	// DEC C
+	// subtract C by one
+	// bytes: 1
+	// clock cycles: 4
+	// flags affected: Z 1 H
+
+	if( mach->cpu.C == 0 ) {
+		mach->cpu.SetFlags(Cpu::Flags::H);
+	}
+	else if(mach->cpu.C == 1) {
+		mach->cpu.SetFlags(Cpu::Flags::Z);
+	}
+
+	--mach->cpu.C;
+
+	printf("%X: DEC C ; -> C(%X)\n", mach->cpu.pc, mach->cpu.C);
+	mach->cpu.SetFlags(Cpu::Flags::N);
+	mach->cpu.pc += 1; 
+}
 
 
 
@@ -136,7 +200,7 @@ void ld_0E(Machine* const mach) {
 	// loads immediate 8 bit value into C
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	mach->Load8C(mach->cpu.pc + 1);
+	mach->cpu.C = mach->memory.Read8(mach->cpu.pc + 1);
 	printf("%X: LD C, %X\n", mach->cpu.pc, mach->cpu.C);
 	mach->cpu.pc += 2;
 }
@@ -146,6 +210,10 @@ void ld_0E(Machine* const mach) {
 
 
 void rrca_0F(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
+
+
+
+
 
 
 
@@ -174,8 +242,30 @@ void rra_1F(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 
 
 
+
+
+
 // 0x20
-void jr_20(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
+
+
+void jr_20(Machine* const mach) {
+	// JR NZ, r8
+	// jump if Z flags is reset
+	// bytes: 2
+	// clock cycles: 12 if jumps, 8 if not
+
+	const int8_t r8 = static_cast<int8_t>(mach->memory.Read8(mach->cpu.pc + 1));
+
+	printf("%X: JR NZ, %d\n", mach->cpu.pc, r8);
+
+	if(mach->cpu.GetFlags(Cpu::Flags::Z) == 0)
+		mach->cpu.pc += r8;
+	else
+		mach->cpu.pc += 2;
+}
+
+
+
 
 
 void ld_21(Machine* const mach) {
@@ -183,7 +273,7 @@ void ld_21(Machine* const mach) {
 	// load immediate 16 bit value into HL
 	// bytes: 3
 	// clock cycles: 10 or 12
-	mach->Load16HL(mach->cpu.pc + 1);
+	mach->memory.Read16(mach->cpu.pc + 1, &mach->cpu.H, &mach->cpu.L);
 	printf("%X: LD HL, %X\n", mach->cpu.pc, mach->cpu.GetHL());
 	mach->cpu.pc += 3; 
 }
@@ -226,7 +316,22 @@ void ld_31(Machine* const mach) {
 }
 
 
-void ld_32(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
+void ld_32(Machine* const mach) {
+	// LD (HL-), A or LDD (HL), A
+	// store A into memory pointed by HL, Decrements HL
+	// bytes: 1
+	// clock cycles: 8
+	const uint16_t HL = mach->cpu.GetHL();
+	mach->memory.Write8(HL, mach->cpu.A);
+	mach->cpu.SubHL(1);
+	printf("%X: LD (HL-), A ; -> HL(%X) , A(%X)\n", mach->cpu.pc, HL, mach->cpu.A);
+	mach->cpu.pc += 1; 
+}
+
+
+
+
+
 void inc_33(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void inc_34(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void dec_35(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
@@ -245,7 +350,8 @@ void ld_3E(Machine* const mach) {
 	// loads immediate 8 bit value into A
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	mach->Load8A(mach->cpu.pc + 1);
+	
+	mach->cpu.A = mach->memory.Read8(mach->cpu.pc + 1);
 	printf("%X: LD A, %X\n", mach->cpu.pc, mach->cpu.A);
 	mach->cpu.pc += 2;
 }
@@ -350,7 +456,22 @@ void halt_76(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_77(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_78(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_79(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
-void ld_7A(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
+
+
+
+void ld_7A(Machine* mach) {
+	// LD D, A
+	// value A is stored in D
+	// bytes: 1
+	// clock cycles: 4
+
+	mach->cpu.D = mach->cpu.A;
+	printf("%X: LD D, A; -> A(%X)\n", mach->cpu.pc, mach->cpu.A);
+	mach->cpu.pc += 1; 
+}
+
+
+
 void ld_7B(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_7C(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_7D(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
@@ -500,11 +621,45 @@ void push_C5(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void add_C6(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
 void rst_C7(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void ret_C8(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
-void ret_C9(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
+
+void ret_C9(Machine* const mach) {
+	// RET
+	// return from subroutine
+	// pop 2 bytes from stack and jump to that address
+	// bytes: 1
+	// clock cycles: 16
+	const auto address = mach->memory.Read16(++mach->cpu.sp);
+	printf("%X: RET\n", mach->cpu.pc);
+	mach->cpu.pc = address;
+}
+
+
+
 void jp_CA(Machine* mach)   { puts(__func__); mach->cpu.pc += 3; }
 void PREFIX_CB(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 void call_CC(Machine* mach) { puts(__func__); mach->cpu.pc += 3; }
-void call_CD(Machine* mach) { puts(__func__); mach->cpu.pc += 3; }
+
+
+
+void call_CD(Machine* const mach) {
+	// CALL a16
+	// call subroutine at immediate 16 bits address
+	// stack grows backwards ?
+	// bytes: 3
+	// clock cycles: 24
+	const auto address = mach->memory.Read16(mach->cpu.pc + 1);
+
+	// store pc + 3 into stack
+	mach->memory.Write16(mach->cpu.sp--, mach->cpu.pc + 3);
+
+
+	printf("%X: CALL %X\n", mach->cpu.pc, address);
+	mach->cpu.pc = address; 
+}
+
+
+
+
 void adc_CE(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
 void rst_CF(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 
@@ -550,7 +705,22 @@ void and_E6(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 void rst_E7(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void add_E8(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 void jp_E9(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
-void ld_EA(Machine* mach)  { puts(__func__); mach->cpu.pc += 3; }
+
+
+void ld_EA(Machine* const mach) {
+	// LD (a16), A
+	// store value in A into immediate 16 bits address
+	// bytes: 3
+	// clock cycles: 16
+	const auto address = mach->memory.Read16(mach->cpu.pc + 1);
+	mach->memory.Write8(address, mach->cpu.A);
+	printf("%X: LD (a16), A; -> a16(%X), A(%X)\n", mach->cpu.pc, address, mach->cpu.A);
+	mach->cpu.pc += 3; 
+}
+
+
+
+
 // MISSING -----
 // MISSING -----
 // MISSING -----

@@ -20,7 +20,7 @@ struct Cpu {
 	uint16_t GetBC() const;
 	uint16_t GetDE() const;
 	uint16_t GetHL() const;
-	Cpu::Flags GetFlags(Cpu::Flags flags) const;
+	bool GetFlags(Cpu::Flags flags) const;
 
 	void SetBC(uint16_t val);
 	void SetDE(uint16_t val);
@@ -67,8 +67,8 @@ inline uint16_t Cpu::GetHL() const {
 }
 
 
-inline Cpu::Flags Cpu::GetFlags(Cpu::Flags flags) const {
-	return static_cast<Cpu::Flags>(this->F & static_cast<uint8_t>(flags));
+inline bool Cpu::GetFlags(Cpu::Flags flags) const {
+	return (this->F & static_cast<uint8_t>(flags)) != 0;
 }
 
 

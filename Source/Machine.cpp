@@ -82,9 +82,6 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 	const_cast<size_t&>(this->rom_size) = rom_size;
 	this->cpu.pc = CARTRIDGE_ENTRY_POINT;
 
-	printf("ROM TYPE: %X\n", this->memory.Read8(0x147));
-	printf("ROM SIZE: %X\n", this->memory.Read8(0x148));
-
 	return true;
 }
 
