@@ -21,10 +21,10 @@ int main(int argc, char** argv)
 		gbx::DestroyMachine(machine);
 	});
 
-	if(!gbx::LoadRom(argv[1], machine))
+	if(!machine->LoadRom(argv[1]))
 		return EXIT_FAILURE;
 
-	while(gbx::StepMachine(machine)) {
+	while(machine->StepMachine()) {
 		
 	}
 

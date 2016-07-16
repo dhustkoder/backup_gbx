@@ -62,10 +62,10 @@ void ld_01(Machine* const mach) {
 	// load immediate 16 bits value into BC
 	// bytes: 3
 	// clock cyles: 10 or 12 ?
-	const uint16_t d16_offset = mach->cpu.pc + 1;
-	SetBC(mach->ram + d16_offset, &mach->cpu);
+	
+	mach->Load16BC(mach->cpu.pc + 1);
 
-	printf("%X: LD BC, %X\n", mach->cpu.pc, GetBC(mach->cpu));
+	printf("%X: LD BC, %X\n", mach->cpu.pc, mach->cpu.GetBC());
 	mach->cpu.pc += 3;
 }
 
@@ -75,9 +75,9 @@ void ld_02(Machine* const mach) {
 	// value in register A is stored in memory location pointed by BC
 	// bytes: 1
 	// clock cycles: 7 or 8 ?
-	const uint16_t BC = GetBC(mach->cpu);
+	const uint16_t BC = mach->cpu.GetBC();
 	const uint8_t A = mach->cpu.A;
-	Write8(A, mach->ram + BC);
+	mach->memory.Write8(BC, A);
 
 	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, BC, A);
 	++mach->cpu.pc;
@@ -90,9 +90,9 @@ void inc_03(Machine* const mach) {
 	// adds one to BC
 	// bytes: 1
 	// clock cyles: 6 or 8 ?
-	AddBC(1, &mach->cpu);
+	mach->cpu.AddBC(1);
 
-	printf("%X: INC BC; -> BC(%X)\n", mach->cpu.pc, GetBC(mach->cpu));
+	printf("%X: INC BC; -> BC(%X)\n", mach->cpu.pc, mach->cpu.GetBC());
 	++mach->cpu.pc;
 }
 
@@ -107,15 +107,15 @@ void inc_04(Machine* const mach) {
 	
 
 	if((mach->cpu.B & 0x0F) == 0x0F) {
-		SetFlags(Cpu::Flags::H, &mach->cpu);
+		mach->cpu.SetFlags(Cpu::Flags::H);
 	}
 	
 	if( ( ++mach->cpu.B ) == 0 ) {
-		SetFlags(Cpu::Flags::Z, &mach->cpu);
+		mach->cpu.SetFlags(Cpu::Flags::Z);
 	}
 
 	printf("%X: INC B; -> B(%X)\n", mach->cpu.pc, mach->cpu.B);
-	UnsetFlags(Cpu::Flags::N, &mach->cpu);
+	mach->cpu.UnsetFlags(Cpu::Flags::N);
 	++mach->cpu.pc;
 }
 
@@ -130,7 +130,23 @@ void ld_0A(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void dec_0B(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void inc_0C(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void dec_0D(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
-void ld_0E(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
+
+
+typedef Machine GameBoy;
+void ld_0E(GameBoy* const gb) { 
+	// LD C, d8
+	// loads immediate 8 bit value into C
+	// bytes: 2
+	// clock cycles: 7 or 8 ?
+	gb->cpu.C = gb->memory.Read8(gb->cpu.pc + 1);
+	printf("%X: LD C, %X\n", gb->cpu.pc, gb->cpu.C);
+	gb->cpu.pc += 2;
+}
+
+
+
+
+
 void rrca_0F(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 
 
@@ -169,8 +185,8 @@ void ld_21(Machine* mach) {
 	// load immediate 16 bit value into HL
 	// bytes: 3
 	// clock cycles: 10 or 12
-	SetHL(&mach->ram[mach->cpu.pc+1], &mach->cpu);
-	printf("%X: LD HL, %X\n", mach->cpu.pc, GetHL(mach->cpu));
+	mach->Load16HL(mach->cpu.pc + 1);
+	printf("%X: LD HL, %X\n", mach->cpu.pc, mach->cpu.GetHL());
 	mach->cpu.pc += 3; 
 }
 
@@ -206,7 +222,7 @@ void ld_31(Machine* mach) {
 	// loads immediate 16 bits value into SP
 	// bytes: 3
 	// clock cycles: 10 or 12 ?
-	mach->cpu.sp = Read16(&mach->ram[mach->cpu.pc+1]);
+	mach->cpu.sp = mach->memory.Read16(mach->cpu.pc + 1);
 	printf("%X: LD SP, %X\n", mach->cpu.pc, mach->cpu.sp);
 	mach->cpu.pc += 3; 
 }
@@ -231,9 +247,7 @@ void ld_3E(Machine* const mach) {
 	// loads immediate 8 bit value into A
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	const uint16_t d8_offset = mach->cpu.pc + 1;
-	mach->cpu.A = mach->ram[d8_offset];
-	
+	mach->cpu.A = mach->memory.Read8(mach->cpu.pc + 1);
 	printf("%X: LD A, %X\n", mach->cpu.pc, mach->cpu.A);
 	mach->cpu.pc += 2;
 }
@@ -424,10 +438,10 @@ void xor_AF(Machine* mach) {
 	// flags affected: Z 0 0 0
 	mach->cpu.A ^= mach->cpu.A;
 	if(mach->cpu.A == 0)
-		SetFlags(Cpu::Flags::Z, &mach->cpu);
+		mach->cpu.SetFlags(Cpu::Flags::Z);
 
 	printf("%X: XOR A; -> A(%X)\n", mach->cpu.pc, mach->cpu.A);
-	UnsetFlags(Cpu::Flags::N | Cpu::Flags::H | Cpu::Flags::C, &mach->cpu);
+	mach->cpu.UnsetFlags(Cpu::Flags::N | Cpu::Flags::H | Cpu::Flags::C);
 	++mach->cpu.pc;
 }
 
@@ -471,7 +485,7 @@ void jp_C3(Machine* const mach)   {
 	// bytes: 3
 	// clock cycles: 10 or 16 ?
 	const uint16_t a16_offset = mach->cpu.pc + 1;
-	const uint16_t a16 = Read16(mach->ram + a16_offset);
+	const uint16_t a16 = mach->memory.Read16(a16_offset);
 	printf("%X: JP %X\n", mach->cpu.pc, a16);
 	mach->cpu.pc = a16;
 }
