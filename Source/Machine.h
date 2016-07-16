@@ -19,6 +19,11 @@ struct Machine {
 	void Load16BC(const uint16_t pointer);
 	void Load16DE(const uint16_t pointer);
 	void Load16HL(const uint16_t pointer);
+	void Store8BC(const uint8_t value);
+	void Store8DE(const uint8_t value);
+	void Store8HL(const uint8_t value);
+
+
 
 	Cpu cpu;
 	Memory memory;
@@ -44,6 +49,18 @@ inline void Machine::Load16HL(const uint16_t pointer) {
 }
 
 
+
+inline void Machine::Store8BC(const uint8_t value) {
+	memory.Write8(cpu.GetBC(), value);
+}
+
+inline void Machine::Store8DE(const uint8_t value) {
+	memory.Write8(cpu.GetDE(), value);
+}
+
+inline void Machine::Store8HL(const uint8_t value) {
+	memory.Write8(cpu.GetHL(), value);
+}
 
 
 

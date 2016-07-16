@@ -75,11 +75,10 @@ void ld_02(Machine* const mach) {
 	// value in register A is stored in memory location pointed by BC
 	// bytes: 1
 	// clock cycles: 7 or 8 ?
-	const uint16_t BC = mach->cpu.GetBC();
 	const uint8_t A = mach->cpu.A;
-	mach->memory.Write8(BC, A);
+	mach->Store8BC(A);
 
-	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, BC, A);
+	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, mach->cpu.GetBC(), A);
 	++mach->cpu.pc;
 }
 
@@ -132,15 +131,15 @@ void inc_0C(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void dec_0D(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 
 
-typedef Machine GameBoy;
-void ld_0E(GameBoy* const gb) { 
+
+void ld_0E(Machine* const mach) { 
 	// LD C, d8
 	// loads immediate 8 bit value into C
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	gb->cpu.C = gb->memory.Read8(gb->cpu.pc + 1);
-	printf("%X: LD C, %X\n", gb->cpu.pc, gb->cpu.C);
-	gb->cpu.pc += 2;
+	mach->cpu.C = mach->memory.Read8(mach->cpu.pc + 1);
+	printf("%X: LD C, %X\n", mach->cpu.pc, mach->cpu.C);
+	mach->cpu.pc += 2;
 }
 
 
@@ -180,7 +179,7 @@ void rra_1F(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void jr_20(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 
 
-void ld_21(Machine* mach) {
+void ld_21(Machine* const mach) {
 	// LD HL, d16
 	// load immediate 16 bit value into HL
 	// bytes: 3
@@ -217,7 +216,7 @@ void jr_30(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 
 
 
-void ld_31(Machine* mach) {
+void ld_31(Machine* const mach) {
 	// LD SP, d16
 	// loads immediate 16 bits value into SP
 	// bytes: 3
@@ -292,7 +291,7 @@ void ld_56(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 
 
 
-void ld_57(Machine* mach) {
+void ld_57(Machine* const mach) {
 	// LD D, A
 	// the value in A is loaded into D
 	// bytes: 1
@@ -430,7 +429,7 @@ void xor_AE(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 
 
 
-void xor_AF(Machine* mach) {
+void xor_AF(Machine* const mach) {
 	// XOR A
 	// bitwise xor in a with a
 	// bytes: 1
@@ -569,7 +568,7 @@ void pop_F1(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_F2(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
 
 
-void di_F3(Machine* mach) {
+void di_F3(Machine* const mach) {
 	// DI
 	// resets both interrupt flip-flops
 	// thus preventing maskable interrupts from triggering
