@@ -75,10 +75,9 @@ void ld_02(Machine* const mach) {
 	// value in register A is stored in memory location pointed by BC
 	// bytes: 1
 	// clock cycles: 7 or 8 ?
-	const uint8_t A = mach->cpu.A;
-	mach->Store8BC(A);
+	mach->Store8BC(mach->cpu.A);
 
-	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, mach->cpu.GetBC(), A);
+	printf("%X: LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.pc, mach->cpu.GetBC(), mach->cpu.A);
 	++mach->cpu.pc;
 }
 
@@ -105,7 +104,7 @@ void inc_04(Machine* const mach) {
 	// flags affected Z 0 H -
 	
 
-	if((mach->cpu.B & 0x0F) == 0x0F) {
+	if( (mach->cpu.B & 0x0F) == 0x0F) {
 		mach->cpu.SetFlags(Cpu::Flags::H);
 	}
 	
@@ -137,7 +136,7 @@ void ld_0E(Machine* const mach) {
 	// loads immediate 8 bit value into C
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	mach->cpu.C = mach->memory.Read8(mach->cpu.pc + 1);
+	mach->Load8C(mach->cpu.pc + 1);
 	printf("%X: LD C, %X\n", mach->cpu.pc, mach->cpu.C);
 	mach->cpu.pc += 2;
 }
@@ -246,7 +245,7 @@ void ld_3E(Machine* const mach) {
 	// loads immediate 8 bit value into A
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	mach->cpu.A = mach->memory.Read8(mach->cpu.pc + 1);
+	mach->Load8A(mach->cpu.pc + 1);
 	printf("%X: LD A, %X\n", mach->cpu.pc, mach->cpu.A);
 	mach->cpu.pc += 2;
 }
@@ -435,9 +434,12 @@ void xor_AF(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 4
 	// flags affected: Z 0 0 0
+
 	mach->cpu.A ^= mach->cpu.A;
-	if(mach->cpu.A == 0)
+
+	if(mach->cpu.A == 0) {
 		mach->cpu.SetFlags(Cpu::Flags::Z);
+	}
 
 	printf("%X: XOR A; -> A(%X)\n", mach->cpu.pc, mach->cpu.A);
 	mach->cpu.UnsetFlags(Cpu::Flags::N | Cpu::Flags::H | Cpu::Flags::C);
@@ -483,8 +485,7 @@ void jp_C3(Machine* const mach)   {
 	// 16 bit address is copied to PC
 	// bytes: 3
 	// clock cycles: 10 or 16 ?
-	const uint16_t a16_offset = mach->cpu.pc + 1;
-	const uint16_t a16 = mach->memory.Read16(a16_offset);
+	const uint16_t a16 = mach->memory.Read16(mach->cpu.pc + 1);
 	printf("%X: JP %X\n", mach->cpu.pc, a16);
 	mach->cpu.pc = a16;
 }
