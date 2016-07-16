@@ -8,7 +8,7 @@
 int main(int argc, char** argv) 
 {
 	if(argc < 2) {
-		fprintf(stderr, "usage: %s <rom>", argv[0]);
+		fprintf(stderr, "usage: %s <rom>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 
@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 
 	while(machine->StepMachine()) {
-		
+
 	}
 
 	return EXIT_SUCCESS;
