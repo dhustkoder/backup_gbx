@@ -1,6 +1,6 @@
 #ifndef GBX_MEMORY_H_
 #define GBX_MEMORY_H_
-#include "Common.h"
+#include <Utix/Ints.h>
 
 namespace gbx {
 /*  
@@ -105,60 +105,7 @@ struct Memory {
 
 
 
-inline uint8_t Memory::Read8(const uint16_t pointer) const {
-	return ram[pointer];
-}
 
-inline uint16_t Memory::Read16(const uint16_t pointer) const {
-	return ConcatBytes(ram[pointer+1], ram[pointer]);
-}
-
-
-inline void Memory::Read16(const uint16_t pointer, uint8_t* const high_byte, uint8_t* const low_byte) const {
-	*high_byte = ram[pointer+1];
-	*low_byte = ram[pointer];
-}
-
-
-inline void Memory::Write8(const uint16_t pointer, const uint8_t value) {
-	ram[pointer] = value;
-}
-
-
-inline void Memory::Write16(const uint16_t pointer, const uint16_t value) {
-	Split16(value, &ram[pointer+1], &ram[pointer]);
-}
-
-
-inline void Memory::Write16(const uint16_t pointer, const uint8_t high_byte, const uint8_t low_byte) {
-	Write8(pointer+1, high_byte);
-	Write8(pointer, low_byte);
-}
-
-
-
-inline void Memory::Add8(const uint16_t pointer, const uint8_t val) {
-	const auto result = Read8(pointer) + val;
-	Write8(pointer, result);
-}
-
-inline void Memory::Add16(const uint16_t pointer, const uint16_t val) {
-	const auto result = Read16(pointer) + val;
-	Write16(pointer, result);
-}
-
-
-inline void Memory::Sub8(const uint16_t pointer, const uint8_t val) {
-	const auto result = Read8(pointer) - val;
-	Write8(pointer, result);
-}
-
-
-
-inline void Memory::Sub16(const uint16_t pointer, const uint16_t val) {
-	const auto result = Read16(pointer) - val;
-	Write16(pointer, result);
-}
 
 
 
