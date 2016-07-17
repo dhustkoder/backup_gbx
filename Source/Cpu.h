@@ -5,22 +5,23 @@
 namespace gbx {
 
 struct Cpu {
+	Cpu()=delete;
+	Cpu(Cpu&)=delete;
+	Cpu(Cpu&&)=delete;
+	~Cpu()=delete;
+	Cpu&operator=(Cpu&)=delete;
+	Cpu&operator=(Cpu&&)=delete;
 	
 	enum class Flags : uint8_t {
 		Z = 0x80, N = 0x40, H = 0x20, C = 0x10
 	};
-
-	Cpu()=delete;
-	Cpu(Cpu&)=delete;
-	Cpu(Cpu&&)=delete;
-	Cpu&operator=(Cpu&)=delete;
-	Cpu&operator=(Cpu&&)=delete;
 
 
 	uint16_t GetBC() const;
 	uint16_t GetDE() const;
 	uint16_t GetHL() const;
 	bool GetFlags(const Cpu::Flags flags) const;
+	void ShowFlags() const;
 
 	void SetBC(const uint16_t val);
 	void SetDE(const uint16_t val);
@@ -54,77 +55,13 @@ constexpr Cpu::Flags operator&(const Cpu::Flags f1, const Cpu::Flags f2) {
 }
 
 
-inline uint16_t Cpu::GetBC() const {
-	return ConcatBytes(B, C);
+constexpr uint8_t operator|(uint8_t value, Cpu::Flags f) {
+	return value | static_cast<uint8_t>(f);
 }
 
-inline uint16_t Cpu::GetDE() const {
-	return ConcatBytes(D, E);	
+constexpr uint8_t operator&(uint8_t value, Cpu::Flags f) {
+	return value & static_cast<uint8_t>(f);
 }
-
-inline uint16_t Cpu::GetHL() const {
-	return ConcatBytes(H, L);
-}
-
-
-inline bool Cpu::GetFlags(const Cpu::Flags flags) const {
-	return (this->F & static_cast<uint8_t>(flags)) != 0;
-}
-
-
-inline void Cpu::SetFlags(const Cpu::Flags flags) {
-	this->F |= static_cast<uint8_t>(flags);
-}
-
-
-inline void Cpu::UnsetFlags(const Cpu::Flags flags) {
-	this->F ^= static_cast<uint8_t>(flags);
-}
-
-
-
-inline void Cpu::SetBC(const uint16_t value) {
-	Split16(value, &this->B, &this->C);
-}
-
-inline void Cpu::SetDE(const uint16_t value) {
-	Split16(value, &this->D, &this->E);
-}
-
-inline void Cpu::SetHL(const uint16_t value) {
-	Split16(value, &this->H, &this->L);
-}
-
-
-inline void Cpu::AddBC(const uint16_t val) {
-	Add16(val, &this->B, &this->C);
-}
-
-inline void Cpu::AddDE(const uint16_t val) {
-	Add16(val, &this->D, &this->E);
-}
-
-inline void Cpu::AddHL(const uint16_t val) {
-	Add16(val, &this->H, &this->L);
-}
-
-
-
-inline void Cpu::SubBC(const uint16_t val) {
-	Sub16(val, &this->B, &this->C);
-}
-
-inline void Cpu::SubDE(const uint16_t val) {
-	Sub16(val, &this->D, &this->E);
-}
-
-inline void Cpu::SubHL(const uint16_t val) {
-	Sub16(val, &this->H, &this->L);
-}
-
-
-
-
 
 
 

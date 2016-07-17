@@ -25,6 +25,7 @@ Machine* CreateMachine() {
 			free(mach);
 	});
 
+	memset(mach, 0, sizeof(Machine));
 
 	const_cast<uint8_t*&>(mach->memory.ram) = static_cast<uint8_t*>(malloc(sizeof(uint8_t) * TOTAL_RAM_SIZE));
 
@@ -92,6 +93,7 @@ bool Machine::StepMachine() {
 	// fetch Opcode and execute instruction
 	// uint8_t variable can't overflow main_instruction array
 	const uint16_t pc = this->cpu.pc;
+	printf("%X: ", pc);
 	if(pc < CHAR_DATA_OFFSET) {
 		cpu.op = memory.Read8(pc);
 		main_instructions[cpu.op](this);

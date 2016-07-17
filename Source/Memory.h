@@ -80,11 +80,11 @@ constexpr const size_t TOTAL_RAM_SIZE = 0xFFFF;
 constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
 
 
-struct Memory 
-{
+struct Memory {
 	Memory()=delete;
 	Memory(Memory&)=delete;
 	Memory(Memory&&)=delete;
+	~Memory()=delete;
 	Memory&operator=(Memory&)=delete;
 	Memory&operator=(Memory&&)=delete;
 

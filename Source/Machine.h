@@ -11,11 +11,17 @@ struct Machine {
 	Machine()=delete;
 	Machine(Machine&)=delete;
 	Machine(Machine&&)=delete;
+	~Machine()=delete;
 	Machine&operator=(Machine&)=delete;
 	Machine&operator=(Machine&&)=delete;
 
 	bool LoadRom(const char* rom_file_name);
 	bool StepMachine();
+
+	void PushStack8(const uint8_t value);
+	void PushStack16(const uint16_t value);
+	uint8_t PopStack8();
+	uint16_t PopStack16();
 
 	Cpu cpu;
 	Memory memory;
@@ -24,10 +30,29 @@ struct Machine {
 
 
 Machine* CreateMachine();
-void DestroyMachine(Machine* const gb);
+void DestroyMachine(Machine* const mach);
 
 
 
+
+inline void Machine::PushStack8(const uint8_t value) {
+	memory.Write8(cpu.sp--, value);
+}
+
+inline void Machine::PushStack16(const uint16_t value) {
+	memory.Write16(cpu.sp, value);
+	cpu.sp -= 2;
+}
+
+inline uint8_t Machine::PopStack8() {
+	return memory.Read8(++cpu.sp);
+}
+
+
+inline uint16_t Machine::PopStack16() {
+	cpu.sp += 2;
+	return memory.Read16(cpu.sp);
+}
 
 
 
