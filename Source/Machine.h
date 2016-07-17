@@ -36,22 +36,23 @@ void DestroyMachine(Machine* const mach);
 
 
 inline void Machine::PushStack8(const uint8_t value) {
-	memory.Write8(cpu.sp--, value);
+	memory.Write8(--cpu.sp, value);
 }
 
 inline void Machine::PushStack16(const uint16_t value) {
-	memory.Write16(cpu.sp, value);
 	cpu.sp -= 2;
+	memory.Write16(cpu.sp, value);
 }
 
 inline uint8_t Machine::PopStack8() {
-	return memory.Read8(++cpu.sp);
+	return memory.Read8(cpu.sp++);
 }
 
 
 inline uint16_t Machine::PopStack16() {
+	const auto val = memory.Read16(cpu.sp);
 	cpu.sp += 2;
-	return memory.Read16(cpu.sp);
+	return val;
 }
 
 

@@ -69,7 +69,7 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 	fseek(rom_file, 0, SEEK_SET);
 	
 	if(rom_size > MAX_CARTRIDGE_SIZE) {
-		fprintf(stderr, "\'%s\' size is too big", rom_file_name);
+		fprintf(stderr, "\'%s\' size is too big\n", rom_file_name);
 		return false;
 	}
 
@@ -99,6 +99,7 @@ bool Machine::StepMachine() {
 		main_instructions[cpu.op](this);
 	} 
 	else {
+		putchar('\n');
 		fprintf(stderr, "PC overflows program memory\n");
 		return false;
 	}

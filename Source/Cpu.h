@@ -12,15 +12,15 @@ struct Cpu {
 	Cpu&operator=(Cpu&)=delete;
 	Cpu&operator=(Cpu&&)=delete;
 	
-	enum class Flags : uint8_t {
-		Z = 0x80, N = 0x40, H = 0x20, C = 0x10
+	enum Flags : uint8_t {
+		FLAG_Z = 0x80, FLAG_N = 0x40, FLAG_H = 0x20, FLAG_C = 0x10
 	};
 
 
 	uint16_t GetBC() const;
 	uint16_t GetDE() const;
 	uint16_t GetHL() const;
-	bool GetFlags(const Cpu::Flags flags) const;
+	Flags GetFlags(const Cpu::Flags flags) const;
 	void ShowFlags() const;
 
 	void SetBC(const uint16_t val);
@@ -33,6 +33,12 @@ struct Cpu {
 	void SubDE(const uint16_t val);
 	void SubHL(const uint16_t val);
 
+	uint8_t AddWithZNHC(const uint8_t reg, const uint8_t value);
+	uint8_t SubWithZNHC(const uint8_t reg, const uint8_t value);
+
+	uint8_t AddWithZNH(const uint8_t reg, const uint8_t value);
+	uint8_t SubWithZNH(const uint8_t reg, const uint8_t value);
+
 	void SetFlags(const Cpu::Flags flags);
 	void UnsetFlags(const Cpu::Flags flags);
 
@@ -44,29 +50,6 @@ struct Cpu {
 	uint8_t D, E;
 	uint8_t H, L;
 };
-
-
-constexpr Cpu::Flags operator|(const Cpu::Flags f1, const Cpu::Flags f2) {
-	return static_cast<Cpu::Flags>(static_cast<uint8_t>(f1) | static_cast<uint8_t>(f2));
-}
-
-constexpr Cpu::Flags operator&(const Cpu::Flags f1, const Cpu::Flags f2) {
-	return static_cast<Cpu::Flags>(static_cast<uint8_t>(f1) & static_cast<uint8_t>(f2));
-}
-
-
-constexpr uint8_t operator|(uint8_t value, Cpu::Flags f) {
-	return value | static_cast<uint8_t>(f);
-}
-
-constexpr uint8_t operator&(uint8_t value, Cpu::Flags f) {
-	return value & static_cast<uint8_t>(f);
-}
-
-
-
-
-
 
 
 

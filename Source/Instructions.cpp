@@ -108,17 +108,8 @@ void inc_04(Machine* const mach) {
 	// clock cyles: 4
 	// flags affected Z 0 H -
 	
-
-	if( (mach->cpu.B & 0x0F) == 0x0F) {
-		mach->cpu.SetFlags(Cpu::Flags::H);
-	}
-	
-	if( ( ++mach->cpu.B ) == 0 ) {
-		mach->cpu.SetFlags(Cpu::Flags::Z);
-	}
-
+	mach->cpu.B = mach->cpu.AddWithZNH(mach->cpu.B, 1);
 	printf("INC B; -> B(%X)\n", mach->cpu.B);
-	mach->cpu.UnsetFlags(Cpu::Flags::N);
 	++mach->cpu.pc;
 }
 
@@ -132,17 +123,8 @@ void dec_05(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected Z 1 H -
 
-	if(mach->cpu.B == 0) {
-		mach->cpu.SetFlags(Cpu::Flags::H);
-	}
-	else if(mach->cpu.B == 1) {
-		mach->cpu.SetFlags(Cpu::Flags::Z);
-	}
-
-	--mach->cpu.B;
-
+	mach->cpu.B = mach->cpu.SubWithZNH(mach->cpu.B, 1);
 	printf("DEC B; -> B(%X)\n", mach->cpu.B);
-	mach->cpu.SetFlags(Cpu::Flags::N);
 	mach->cpu.pc += 1;
 }
 
@@ -179,17 +161,8 @@ void dec_0D(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected: Z 1 H
 
-	if( mach->cpu.C == 0 ) {
-		mach->cpu.SetFlags(Cpu::Flags::H);
-	}
-	else if(mach->cpu.C == 1) {
-		mach->cpu.SetFlags(Cpu::Flags::Z);
-	}
-
-	--mach->cpu.C;
-
+	mach->cpu.C = mach->cpu.SubWithZNH(mach->cpu.C, 1);
 	printf("DEC C ; -> C(%X)\n", mach->cpu.C);
-	mach->cpu.SetFlags(Cpu::Flags::N);
 	mach->cpu.pc += 1; 
 }
 
@@ -259,10 +232,13 @@ void jr_20(Machine* const mach) {
 
 	printf("JR NZ, %d\n", r8);
 
-	if(mach->cpu.GetFlags(Cpu::Flags::Z) == 0)
+
+	// figured out that we need to add the bytes from this instruction -
+	// to pc even when it jumps...
+	if(mach->cpu.GetFlags(Cpu::FLAG_Z) == 0)
 		mach->cpu.pc += r8;
-	else
-		mach->cpu.pc += 2;
+	
+	mach->cpu.pc += 2;
 }
 
 
@@ -326,7 +302,7 @@ void ld_32(Machine* const mach) {
 	mach->memory.Write8(HL, mach->cpu.A);
 	mach->cpu.SubHL(1);
 	printf("LD (HL-), A ; -> HL(%X) , A(%X)\n", HL, mach->cpu.A);
-	mach->cpu.pc += 1; 
+	++mach->cpu.pc;
 }
 
 
@@ -496,26 +472,15 @@ void add_86(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 
 
 
-void add_87(Machine* mach) {
+void add_87(Machine* const mach) {
 	// ADD A, A
 	// add A into A
 	// bytes: 1
 	// clock cycles: 4
 	// flags affected: Z 0 H C
-	const auto oldA = mach->cpu.A;
-	mach->cpu.A += mach->cpu.A;
-	
-	if(GetHighNibble(mach->cpu.A) != GetHighNibble(oldA))
-		mach->cpu.SetFlags(Cpu::Flags::H);
 
-	if(mach->cpu.A == 0)
-		mach->cpu.SetFlags(Cpu::Flags::Z);
-
-
-
-	mach->cpu.UnsetFlags(Cpu::Flags::N);
-	
-	printf("ADD A, A ; -> A(%X) -> A(%X)\n", oldA, mach->cpu.A);
+	mach->cpu.A = mach->cpu.AddWithZNHC(mach->cpu.A, mach->cpu.A);
+	printf("ADD A, A ; -> A(%X)\n", mach->cpu.A);
 	mach->cpu.pc += 1;
 }
 
@@ -588,12 +553,13 @@ void xor_AF(Machine* const mach) {
 
 	mach->cpu.A ^= mach->cpu.A;
 
-	if(mach->cpu.A == 0) {
-		mach->cpu.SetFlags(Cpu::Flags::Z);
-	}
+	if(mach->cpu.A == 0)
+		mach->cpu.F = Cpu::FLAG_Z;
+	else
+		mach->cpu.F = 0;
 
 	printf("XOR A; -> A(%X)\n", mach->cpu.A);
-	mach->cpu.UnsetFlags(Cpu::Flags::N | Cpu::Flags::H | Cpu::Flags::C);
+	mach->cpu.ShowFlags();
 	++mach->cpu.pc;
 }
 
@@ -652,6 +618,10 @@ void add_C6(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
 void rst_C7(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void ret_C8(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 
+
+
+
+
 void ret_C9(Machine* const mach) {
 	// RET
 	// return from subroutine
@@ -665,9 +635,14 @@ void ret_C9(Machine* const mach) {
 
 
 
+
+
+
 void jp_CA(Machine* mach)   { puts(__func__); mach->cpu.pc += 3; }
 void PREFIX_CB(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 void call_CC(Machine* mach) { puts(__func__); mach->cpu.pc += 3; }
+
+
 
 
 
@@ -690,6 +665,8 @@ void call_CD(Machine* const mach) {
 
 
 
+
+
 void adc_CE(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
 void rst_CF(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 
@@ -706,7 +683,7 @@ void ret_D0(Machine* const mach) {
 	// return if C flag is reset
 	// bytes: 1
 	// clock cycles: 20 if return 8 if not
-	const auto flagC = mach->cpu.GetFlags(Cpu::Flags::C);
+	const auto flagC = mach->cpu.GetFlags(Cpu::FLAG_C);
 	printf("RET NC; -> C(%X)\n", flagC);
 
 	if(flagC)
@@ -714,6 +691,8 @@ void ret_D0(Machine* const mach) {
 	else
 		mach->cpu.pc = mach->PopStack16();
 }
+
+
 
 
 
@@ -752,6 +731,9 @@ void add_E8(Machine* mach) { puts(__func__); mach->cpu.pc += 2; }
 void jp_E9(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 
 
+
+
+
 void ld_EA(Machine* const mach) {
 	// LD (a16), A
 	// store value in A into immediate 16 bits address
@@ -762,6 +744,8 @@ void ld_EA(Machine* const mach) {
 	printf("LD (a16), A; -> a16(%X), A(%X)\n", address, mach->cpu.A);
 	mach->cpu.pc += 3; 
 }
+
+
 
 
 
@@ -800,6 +784,10 @@ void pop_F1(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 void ld_F2(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
 
 
+
+
+
+
 void di_F3(Machine* const mach) {
 	// DI
 	// resets both interrupt flip-flops
@@ -815,6 +803,8 @@ void di_F3(Machine* const mach) {
 
 
 
+
+
 // MISSING ----
 void push_F5(Machine* mach){ puts(__func__); mach->cpu.pc += 1; }
 void or_F6(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
@@ -823,9 +813,35 @@ void ld_F8(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
 void ld_F9(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
 void ld_FA(Machine* mach)  { puts(__func__); mach->cpu.pc += 3; }
 void ei_FB(Machine* mach)  { puts(__func__); mach->cpu.pc += 1; }
-// MISSING -----
-// MISSING -----
-void cp_FE(Machine* mach)  { puts(__func__); mach->cpu.pc += 2; }
+
+
+// FC MISSING -----
+// FD MISSING -----
+
+
+
+
+
+
+void cp_FE(Machine* const mach) {
+	// CP d8
+	// compare A with immediate 8 bits value d8
+	// bytes: 2
+	// clock cycles: 8
+	// flags affected: Z 1 H C
+
+
+	const auto d8 = mach->memory.Read8(mach->cpu.pc + 1);
+	mach->cpu.SubWithZNHC(mach->cpu.A, d8);
+	printf("CP %X\n", d8);
+	mach->cpu.pc += 2;
+}
+
+
+
+
+
+
 void rst_FF(Machine* mach) { puts(__func__); mach->cpu.pc += 1; }
 
 

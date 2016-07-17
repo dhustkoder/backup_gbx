@@ -22,28 +22,28 @@ uint16_t Cpu::GetHL() const {
 }
 
 
-bool Cpu::GetFlags(const Cpu::Flags flags) const {
-	return (this->F & static_cast<uint8_t>(flags)) != 0;
+Cpu::Flags Cpu::GetFlags(const Cpu::Flags flags) const {
+	return static_cast<Flags>(this->F & flags);
 }
 
 
 void Cpu::ShowFlags() const {
-	const auto z = F & Cpu::Flags::Z;
-	const auto n = F & Cpu::Flags::N;
-	const auto h = F & Cpu::Flags::H;
-	const auto c = F & Cpu::Flags::C;
+	const auto z = F & FLAG_Z;
+	const auto n = F & FLAG_N;
+	const auto h = F & FLAG_H;
+	const auto c = F & FLAG_C;
 	printf("CPU FLAGS: Z(%X), N(%X), H(%X), C(%X)\n", z, n, h, c);
 }
 
 
 void Cpu::SetFlags(const Cpu::Flags flags) {
-	this->F |= static_cast<uint8_t>(flags);
+	this->F |= flags;
 	this->ShowFlags();
 }
 
 
 void Cpu::UnsetFlags(const Cpu::Flags flags) {
-	this->F &= ~static_cast<uint8_t>(flags);
+	this->F &= ~flags;
 	this->ShowFlags();
 }
 
@@ -94,6 +94,72 @@ void Cpu::SubHL(const uint16_t val) {
 
 
 
+
+
+uint8_t Cpu::AddWithZNHC(const uint8_t reg, const uint8_t value) {
+	const uint16_t result = reg + value;
+	this->F = 0;
+	
+	if(result == 0)
+		this->F = FLAG_Z;
+	else if(GetHighNibble(result) != GetHighNibble(reg))
+		this->F |= FLAG_H;
+	if(result & 0xff00)
+		this->F |= FLAG_C;
+
+	this->ShowFlags();
+	return result;
+}
+
+
+
+
+
+
+uint8_t Cpu::SubWithZNHC(const uint8_t reg, const uint8_t value) {
+	const uint16_t result = reg - value;
+	this->F = FLAG_N;
+	
+	if(result == 0)
+		this->F |= FLAG_Z;
+	else if(GetHighNibble(result) != GetHighNibble(reg)) 
+		this->F |= FLAG_H;
+	
+	if(result & 0xff00)
+		this->F |= FLAG_C;
+
+	this->ShowFlags();
+	return result;
+}
+
+
+
+uint8_t Cpu::AddWithZNH(const uint8_t reg, const uint8_t value) {
+	const uint8_t result = reg + value;
+	this->F = this->F & FLAG_C;
+	
+	if(result == 0)
+		this->F |= FLAG_Z;
+	else if(GetHighNibble(result) != GetHighNibble(reg)) 
+		this->F |= FLAG_H;
+	
+	this->ShowFlags();
+	return result;
+}
+
+
+uint8_t Cpu::SubWithZNH(const uint8_t reg, const uint8_t value) {
+	const uint8_t result = reg - value;
+	this->F = this->F & FLAG_C;
+	
+	if(result == 0)
+		this->F |= FLAG_Z;
+	if(GetHighNibble(result) != GetHighNibble(reg)) 
+		this->F |= FLAG_H;
+
+	this->ShowFlags();
+	return result;
+}
 
 
 

@@ -1,0 +1,13 @@
+CC=clang
+CXX=clang++
+
+CXX_FLAGS=-std=c++11 -pedantic -pedantic-errors -Wall -Wextra -Werror \
+          -O0 -g3 -D_DEBUG
+
+CXX_INCLUDE=-IDependencies/Utix/Utix/include
+CXX_LINK_LIBS_PATH=
+CXX_LINK_LIBS= -lc
+FILES=Source/*.cpp
+
+compile_objs:
+	$(CXX) $(FILES) $(CXX_LINK_LIBS_PATH) $(CXX_LINK_LIBS) $(CXX_INCLUDE) $(CXX_FLAGS) -ogbx.exe
