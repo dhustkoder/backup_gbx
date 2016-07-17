@@ -20,20 +20,20 @@ struct Cpu {
 	uint16_t GetBC() const;
 	uint16_t GetDE() const;
 	uint16_t GetHL() const;
-	bool GetFlags(Cpu::Flags flags) const;
+	bool GetFlags(const Cpu::Flags flags) const;
 
-	void SetBC(uint16_t val);
-	void SetDE(uint16_t val);
-	void SetHL(uint16_t val);
-	void AddBC(uint16_t val);
-	void AddDE(uint16_t val);
-	void AddHL(uint16_t val);
-	void SubBC(uint16_t val);
-	void SubDE(uint16_t val);
-	void SubHL(uint16_t val);
+	void SetBC(const uint16_t val);
+	void SetDE(const uint16_t val);
+	void SetHL(const uint16_t val);
+	void AddBC(const uint16_t val);
+	void AddDE(const uint16_t val);
+	void AddHL(const uint16_t val);
+	void SubBC(const uint16_t val);
+	void SubDE(const uint16_t val);
+	void SubHL(const uint16_t val);
 
-	void SetFlags(Cpu::Flags flags);
-	void UnsetFlags(Cpu::Flags flags);
+	void SetFlags(const Cpu::Flags flags);
+	void UnsetFlags(const Cpu::Flags flags);
 
 	uint16_t pc;
 	uint16_t sp;
@@ -45,11 +45,11 @@ struct Cpu {
 };
 
 
-constexpr Cpu::Flags operator|(Cpu::Flags f1, Cpu::Flags f2) {
+constexpr Cpu::Flags operator|(const Cpu::Flags f1, const Cpu::Flags f2) {
 	return static_cast<Cpu::Flags>(static_cast<uint8_t>(f1) | static_cast<uint8_t>(f2));
 }
 
-constexpr Cpu::Flags operator&(Cpu::Flags f1, Cpu::Flags f2) {
+constexpr Cpu::Flags operator&(const Cpu::Flags f1, const Cpu::Flags f2) {
 	return static_cast<Cpu::Flags>(static_cast<uint8_t>(f1) & static_cast<uint8_t>(f2));
 }
 
@@ -67,17 +67,17 @@ inline uint16_t Cpu::GetHL() const {
 }
 
 
-inline bool Cpu::GetFlags(Cpu::Flags flags) const {
+inline bool Cpu::GetFlags(const Cpu::Flags flags) const {
 	return (this->F & static_cast<uint8_t>(flags)) != 0;
 }
 
 
-inline void Cpu::SetFlags(Cpu::Flags flags) {
+inline void Cpu::SetFlags(const Cpu::Flags flags) {
 	this->F |= static_cast<uint8_t>(flags);
 }
 
 
-inline void Cpu::UnsetFlags(Cpu::Flags flags) {
+inline void Cpu::UnsetFlags(const Cpu::Flags flags) {
 	this->F ^= static_cast<uint8_t>(flags);
 }
 

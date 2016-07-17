@@ -254,7 +254,8 @@ void jr_20(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: 12 if jumps, 8 if not
 
-	const int8_t r8 = static_cast<int8_t>(mach->memory.Read8(mach->cpu.pc + 1));
+	// we read a signed byte from memory, so the jump can be backward(-) or forward(+)
+	const auto r8 = static_cast<int8_t>(mach->memory.Read8(mach->cpu.pc + 1));
 
 	printf("%X: JR NZ, %d\n", mach->cpu.pc, r8);
 
