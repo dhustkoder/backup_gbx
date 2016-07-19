@@ -48,13 +48,13 @@ uint16_t Cpu::SBC16(const uint16_t, const uint16_t) {
 
 
 
-uint8_t Cpu::ADC8(const uint8_t val1, const uint8_t val2) {
-	const uint16_t result = val1 + val2;
+uint8_t Cpu::ADC8(const uint8_t first, const uint8_t second) {
+	const uint16_t result = first + second;
 	uint8_t f = 0;
 	
 	if(result == 0)
 		f = FLAG_Z;
-	else if(GetHighNibble(result) != GetHighNibble(val1))
+	else if(GetHighNibble(result) != GetHighNibble(first))
 		f |= FLAG_H;
 	if(result & 0xff00)
 		f |= FLAG_C;
@@ -65,13 +65,15 @@ uint8_t Cpu::ADC8(const uint8_t val1, const uint8_t val2) {
 }
 
 
-uint8_t Cpu::SBC8(const uint8_t val1, const uint8_t val2) {
-	const uint16_t result = val1 - val2;
+
+
+uint8_t Cpu::SBC8(const uint8_t first, const uint8_t second) {
+	const uint16_t result = first - second;
 	uint8_t f = FLAG_N;
 	
 	if(result == 0)
 		f |= FLAG_Z;
-	else if(GetHighNibble(result) != GetHighNibble(val1)) 
+	else if(GetHighNibble(result) != GetHighNibble(first)) 
 		f |= FLAG_H;
 	if(result & 0xff00)
 		f |= FLAG_C;
@@ -84,13 +86,13 @@ uint8_t Cpu::SBC8(const uint8_t val1, const uint8_t val2) {
 
 
 
-uint8_t Cpu::AddWithZNH(const uint8_t reg, const uint8_t value) {
-	const uint8_t result = reg + value;
+uint8_t Cpu::ADDWithZNH(const uint8_t first, const uint8_t second) {
+	const uint8_t result = first + second;
 	uint8_t f = GetF() & FLAG_C;
 	
 	if(result == 0)
 		f |= FLAG_Z;
-	else if(GetHighNibble(result) != GetHighNibble(reg)) 
+	else if(GetHighNibble(result) != GetHighNibble(first)) 
 		f |= FLAG_H;
 	
 	SetF(f);
@@ -103,13 +105,13 @@ uint8_t Cpu::AddWithZNH(const uint8_t reg, const uint8_t value) {
 
 
 
-uint8_t Cpu::SubWithZNH(const uint8_t reg, const uint8_t value) {
-	const uint8_t result = reg - value;
+uint8_t Cpu::SUBWithZNH(const uint8_t first, const uint8_t second) {
+	const uint8_t result = first - second;
 	uint8_t f = GetF() & FLAG_C;
 	
 	if(result == 0)
 		f |= FLAG_Z;
-	if(GetHighNibble(result) != GetHighNibble(reg)) 
+	if(GetHighNibble(result) != GetHighNibble(first)) 
 		f |= FLAG_H;
 
 	SetF(f);
@@ -120,7 +122,12 @@ uint8_t Cpu::SubWithZNH(const uint8_t reg, const uint8_t value) {
 
 
 
-
+uint8_t Cpu::ORWithZNHC(const uint8_t first, const uint8_t second) {
+	const auto result = first | second;
+	SetF( result == 0 ? FLAG_Z : 0 );
+	ShowFlags();
+	return result;
+}
 
 
 
