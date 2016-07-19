@@ -11,10 +11,9 @@ namespace gbx {
 
 
 
-
 Machine* CreateMachine() {	
 
-	auto* const mach = static_cast<Machine*>( malloc(sizeof(Machine)) );
+	auto* const mach = static_cast<Machine*>(malloc(sizeof(Machine)));
 
 	if(!mach) {
 		perror("can't allocate memory for Machine");
@@ -25,14 +24,17 @@ Machine* CreateMachine() {
 			free(mach);
 	});
 
-	memset(mach, 0, sizeof(Machine));
-
-	const_cast<uint8_t*&>(mach->memory.ram) = static_cast<uint8_t*>(malloc(sizeof(uint8_t) * TOTAL_RAM_SIZE));
-
-	if(!mach->memory.ram) {
-		perror("failed to allocate Machine's memory");
+	if(!mach->memory.Initialize())
 		return nullptr;
-	}
+
+
+	mach->cpu.SetPC(0);
+	mach->cpu.SetSP(0);
+	mach->cpu.SetOP(0);
+	mach->cpu.SetAF(0);
+	mach->cpu.SetBC(0);
+	mach->cpu.SetDE(0);
+	mach->cpu.SetHL(0);
 
 	mach_cleanup.Cancel();
 	return mach;
@@ -42,10 +44,9 @@ Machine* CreateMachine() {
 
 
 void DestroyMachine(Machine* const mach) {
-	free(mach->memory.ram);
+	mach->memory.Dispose();
 	free(mach);
 }
-
 
 
 
@@ -73,15 +74,15 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 		return false;
 	}
 
-	fread(this->memory.ram, sizeof(uint8_t), rom_size, rom_file);
+	fread(this->memory.Data(), sizeof(uint8_t), rom_size, rom_file);
 
 	if(ferror(rom_file)) {
 		perror("error while reading from rom");
 		return false;
 	}
 
-	const_cast<size_t&>(this->rom_size) = rom_size;
-	this->cpu.pc = CARTRIDGE_ENTRY_POINT;
+	this->m_rom_size = rom_size;
+	this->cpu.SetPC( CARTRIDGE_ENTRY_POINT );
 
 	return true;
 }
@@ -92,11 +93,12 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 bool Machine::StepMachine() {
 	// fetch Opcode and execute instruction
 	// uint8_t variable can't overflow main_instruction array
-	const uint16_t pc = this->cpu.pc;
+	const uint16_t pc = this->cpu.GetPC();
 	printf("%X: ", pc);
 	if(pc < CHAR_DATA_OFFSET) {
-		cpu.op = memory.Read8(pc);
-		main_instructions[cpu.op](this);
+		const auto op = memory.Read8(pc);
+		cpu.SetOP(op);
+		main_instructions[op](this);
 	} 
 	else {
 		putchar('\n');

@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "Common.h"
 #include "Memory.h"
 
@@ -5,28 +7,43 @@ namespace gbx {
 
 
 
+bool Memory::Initialize(const size_t ram_size) {
+	const_cast<uint8_t*&>(m_data) = static_cast<uint8_t*>( malloc(ram_size) );
+	if(!m_data) {
+		perror("Memory::Initialize: Couldn't allocate memory");
+		return false;
+	}
+	
+	return true;
+}
+
+void Memory::Dispose() {
+	free(m_data);
+}
+
+
 uint8_t Memory::Read8(const uint16_t pointer) const {
-	return ram[pointer];
+	return m_data[pointer];
 }
 
 uint16_t Memory::Read16(const uint16_t pointer) const {
-	return ConcatBytes(ram[pointer+1], ram[pointer]);
+	return ConcatBytes(m_data[pointer+1], m_data[pointer]);
 }
 
 
 void Memory::Read16(const uint16_t pointer, uint8_t* const high_byte, uint8_t* const low_byte) const {
-	*high_byte = ram[pointer+1];
-	*low_byte = ram[pointer];
+	*high_byte = m_data[pointer+1];
+	*low_byte = m_data[pointer];
 }
 
 
 void Memory::Write8(const uint16_t pointer, const uint8_t value) {
-	ram[pointer] = value;
+	m_data[pointer] = value;
 }
 
 
 void Memory::Write16(const uint16_t pointer, const uint16_t value) {
-	Split16(value, &ram[pointer+1], &ram[pointer]);
+	Split16(value, &m_data[pointer+1], &m_data[pointer]);
 }
 
 

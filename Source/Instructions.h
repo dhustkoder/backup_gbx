@@ -3,7 +3,7 @@
 
 namespace gbx {
 
-struct Machine;
+class Machine;
 
 using InstructionFunction = void(*)(Machine*);
 extern InstructionFunction main_instructions[0x100];

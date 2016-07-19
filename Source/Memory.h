@@ -80,13 +80,20 @@ constexpr const size_t TOTAL_RAM_SIZE = 0xFFFF;
 constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
 
 
-struct Memory {
+class Memory {
+public:
 	Memory()=delete;
+	~Memory()=delete;
 	Memory(Memory&)=delete;
 	Memory(Memory&&)=delete;
-	~Memory()=delete;
 	Memory&operator=(Memory&)=delete;
 	Memory&operator=(Memory&&)=delete;
+
+	bool Initialize(const size_t ram_size = TOTAL_RAM_SIZE);
+	void Dispose();
+
+	const uint8_t* Data() const;
+	uint8_t* Data();
 
 	uint8_t Read8(const uint16_t pointer) const;
 	uint16_t Read16(const uint16_t pointer) const;
@@ -99,8 +106,10 @@ struct Memory {
 	void Add16(const uint16_t pointer, const uint16_t val);
 	void Sub8(const uint16_t pointer, const uint8_t val);
 	void Sub16(const uint16_t pointer, const uint16_t val);
+	
 
-	uint8_t* const ram;
+private:
+	uint8_t* const m_data;
 };
 
 
@@ -108,6 +117,9 @@ struct Memory {
 
 
 
+inline const uint8_t* Memory::Data() const { return m_data; }
+
+inline uint8_t* Memory::Data() { return m_data; }
 
 
 

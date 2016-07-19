@@ -7,31 +7,29 @@
 namespace gbx {
 
 
-
-
-
 Cpu::Flags Cpu::GetFlags(const Cpu::Flags flags) const {
-	return static_cast<Flags>(this->f & flags);
+	return static_cast<Flags>(GetF() & flags);
 }
 
 
 void Cpu::ShowFlags() const {
-	const auto z = this->f & FLAG_Z;
-	const auto n = this->f & FLAG_N;
-	const auto h = this->f & FLAG_H;
-	const auto c = this->f & FLAG_C;
+	const auto f = GetF();
+	const auto z = f & FLAG_Z;
+	const auto n = f & FLAG_N;
+	const auto h = f & FLAG_H;
+	const auto c = f & FLAG_C;
 	printf("CPU FLAGS: Z(%X), N(%X), H(%X), C(%X)\n", z, n, h, c);
 }
 
 
 void Cpu::SetFlags(const Cpu::Flags flags) {
-	this->f |= flags;
+	SetF(GetF() | flags);
 	this->ShowFlags();
 }
 
 
 void Cpu::UnsetFlags(const Cpu::Flags flags) {
-	this->f &= ~flags;
+	SetF(GetF() & ~flags);
 	this->ShowFlags();
 }
 
@@ -52,33 +50,34 @@ uint16_t Cpu::SBC16(const uint16_t, const uint16_t) {
 
 uint8_t Cpu::ADC8(const uint8_t val1, const uint8_t val2) {
 	const uint16_t result = val1 + val2;
-	this->f = 0;
+	uint8_t f = 0;
 	
 	if(result == 0)
-		this->f = FLAG_Z;
+		f = FLAG_Z;
 	else if(GetHighNibble(result) != GetHighNibble(val1))
-		this->f |= FLAG_H;
+		f |= FLAG_H;
 	if(result & 0xff00)
-		this->f |= FLAG_C;
+		f |= FLAG_C;
 
-	this->ShowFlags();
+	SetF(f);
+	ShowFlags();
 	return result;
 }
 
 
 uint8_t Cpu::SBC8(const uint8_t val1, const uint8_t val2) {
 	const uint16_t result = val1 - val2;
-	this->f = FLAG_N;
+	uint8_t f = FLAG_N;
 	
 	if(result == 0)
-		this->f |= FLAG_Z;
+		f |= FLAG_Z;
 	else if(GetHighNibble(result) != GetHighNibble(val1)) 
-		this->f |= FLAG_H;
-	
+		f |= FLAG_H;
 	if(result & 0xff00)
-		this->f |= FLAG_C;
+		f |= FLAG_C;
 
-	this->ShowFlags();
+	SetF(f);
+	ShowFlags();
 	return result;
 }
 
@@ -87,14 +86,15 @@ uint8_t Cpu::SBC8(const uint8_t val1, const uint8_t val2) {
 
 uint8_t Cpu::AddWithZNH(const uint8_t reg, const uint8_t value) {
 	const uint8_t result = reg + value;
-	this->f = this->f & FLAG_C;
+	uint8_t f = GetF() & FLAG_C;
 	
 	if(result == 0)
-		this->f |= FLAG_Z;
+		f |= FLAG_Z;
 	else if(GetHighNibble(result) != GetHighNibble(reg)) 
-		this->f |= FLAG_H;
+		f |= FLAG_H;
 	
-	this->ShowFlags();
+	SetF(f);
+	ShowFlags();
 	return result;
 }
 
@@ -105,14 +105,15 @@ uint8_t Cpu::AddWithZNH(const uint8_t reg, const uint8_t value) {
 
 uint8_t Cpu::SubWithZNH(const uint8_t reg, const uint8_t value) {
 	const uint8_t result = reg - value;
-	this->f = this->f & FLAG_C;
+	uint8_t f = GetF() & FLAG_C;
 	
 	if(result == 0)
-		this->f |= FLAG_Z;
+		f |= FLAG_Z;
 	if(GetHighNibble(result) != GetHighNibble(reg)) 
-		this->f |= FLAG_H;
+		f |= FLAG_H;
 
-	this->ShowFlags();
+	SetF(f);
+	ShowFlags();
 	return result;
 }
 

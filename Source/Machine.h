@@ -7,14 +7,16 @@
 namespace gbx {
 
 
-struct Machine {
+class Machine {
+public:
 	Machine()=delete;
+	~Machine()=delete;
 	Machine(Machine&)=delete;
 	Machine(Machine&&)=delete;
-	~Machine()=delete;
 	Machine&operator=(Machine&)=delete;
 	Machine&operator=(Machine&&)=delete;
 
+	size_t GetRomSize() const;
 	bool LoadRom(const char* rom_file_name);
 	bool StepMachine();
 
@@ -25,33 +27,46 @@ struct Machine {
 
 	Cpu cpu;
 	Memory memory;
-	const size_t rom_size;
-};
 
+private:
+	size_t m_rom_size;
+};
 
 Machine* CreateMachine();
 void DestroyMachine(Machine* const mach);
 
 
 
+inline size_t Machine::GetRomSize() const {
+	return m_rom_size;
+}
+
 
 inline void Machine::PushStack8(const uint8_t value) {
-	memory.Write8(--cpu.sp, value);
+	const auto sp = cpu.GetSP() - 1;
+	memory.Write8(sp, value);
+	cpu.SetSP(sp);
+
 }
 
 inline void Machine::PushStack16(const uint16_t value) {
-	cpu.sp -= 2;
-	memory.Write16(cpu.sp, value);
+	const auto sp = cpu.GetSP() - 2;
+	memory.Write16(sp, value);
+	cpu.SetSP(sp);
 }
 
 inline uint8_t Machine::PopStack8() {
-	return memory.Read8(cpu.sp++);
+	const auto sp = cpu.GetSP();
+	const auto val = memory.Read8(sp);
+	cpu.SetSP(sp + 1);
+	return val;
 }
 
 
 inline uint16_t Machine::PopStack16() {
-	const auto val = memory.Read16(cpu.sp);
-	cpu.sp += 2;
+	const auto sp = cpu.GetSP();
+	const auto val = memory.Read16(sp);
+	cpu.SetSP(sp + 2);
 	return val;
 }
 
