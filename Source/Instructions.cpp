@@ -63,9 +63,9 @@ void ld_01(Machine* const mach) {
 	// bytes: 3
 	// clock cyles: 10 or 12 ?
 	
-	mach->memory.Read16(mach->cpu.pc + 1, &mach->cpu.B, &mach->cpu.C);
+	mach->memory.Read16(mach->cpu.pc + 1, &mach->cpu.b, &mach->cpu.c);
 
-	printf("LD BC, %X\n", mach->cpu.GetBC());
+	printf("LD BC, %X\n", mach->cpu.bc);
 	mach->cpu.pc += 3;
 }
 
@@ -77,9 +77,9 @@ void ld_02(Machine* const mach) {
 	// value in register A is stored in memory location pointed by BC
 	// bytes: 1
 	// clock cycles: 7 or 8 ?
-	mach->memory.Write8(mach->cpu.GetBC(), mach->cpu.A);
+	mach->memory.Write8(mach->cpu.bc, mach->cpu.a);
 
-	printf("LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.GetBC(), mach->cpu.A);
+	printf("LD (BC), A ; ->  BC = (%X), A = (%X)\n", mach->cpu.bc, mach->cpu.a);
 	++mach->cpu.pc;
 }
 
@@ -91,9 +91,9 @@ void inc_03(Machine* const mach) {
 	// adds one to BC
 	// bytes: 1
 	// clock cyles: 6 or 8 ?
-	mach->cpu.AddBC(1);
+	++mach->cpu.bc;
 
-	printf("INC BC; -> BC(%X)\n", mach->cpu.GetBC());
+	printf("INC BC; -> BC(%X)\n", mach->cpu.bc);
 	++mach->cpu.pc;
 }
 
@@ -108,8 +108,8 @@ void inc_04(Machine* const mach) {
 	// clock cyles: 4
 	// flags affected Z 0 H -
 	
-	mach->cpu.B = mach->cpu.AddWithZNH(mach->cpu.B, 1);
-	printf("INC B; -> B(%X)\n", mach->cpu.B);
+	mach->cpu.b = mach->cpu.AddWithZNH(mach->cpu.b, 1);
+	printf("INC B; -> B(%X)\n", mach->cpu.b);
 	++mach->cpu.pc;
 }
 
@@ -123,8 +123,8 @@ void dec_05(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected Z 1 H -
 
-	mach->cpu.B = mach->cpu.SubWithZNH(mach->cpu.B, 1);
-	printf("DEC B; -> B(%X)\n", mach->cpu.B);
+	mach->cpu.b = mach->cpu.SubWithZNH(mach->cpu.b, 1);
+	printf("DEC B; -> B(%X)\n", mach->cpu.b);
 	mach->cpu.pc += 1;
 }
 
@@ -135,8 +135,8 @@ void ld_06(Machine* const mach) {
 	// loads immediate 8 bit value into B
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	mach->cpu.B = mach->memory.Read8(mach->cpu.pc + 1);
-	printf("LD B, %X\n", mach->cpu.B);
+	mach->cpu.b = mach->memory.Read8(mach->cpu.pc + 1);
+	printf("LD B, %X\n", mach->cpu.b);
 	mach->cpu.pc += 2; 
 }
 
@@ -161,8 +161,8 @@ void dec_0D(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected: Z 1 H
 
-	mach->cpu.C = mach->cpu.SubWithZNH(mach->cpu.C, 1);
-	printf("DEC C ; -> C(%X)\n", mach->cpu.C);
+	mach->cpu.c = mach->cpu.SubWithZNH(mach->cpu.c, 1);
+	printf("DEC C ; -> C(%X)\n", mach->cpu.c);
 	mach->cpu.pc += 1; 
 }
 
@@ -173,8 +173,8 @@ void ld_0E(Machine* const mach) {
 	// loads immediate 8 bit value into C
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
-	mach->cpu.C = mach->memory.Read8(mach->cpu.pc + 1);
-	printf("LD C, %X\n", mach->cpu.C);
+	mach->cpu.c = mach->memory.Read8(mach->cpu.pc + 1);
+	printf("LD C, %X\n", mach->cpu.c);
 	mach->cpu.pc += 2;
 }
 
@@ -250,9 +250,9 @@ void ld_21(Machine* const mach) {
 	// load immediate 16 bit value into HL
 	// bytes: 3
 	// clock cycles: 10 or 12
-	mach->memory.Read16(mach->cpu.pc + 1, &mach->cpu.H, &mach->cpu.L);
-	printf("LD HL, %X\n", mach->cpu.GetHL());
-	mach->cpu.pc += 3; 
+	mach->memory.Read16(mach->cpu.pc + 1, &mach->cpu.h, &mach->cpu.l);
+	printf("LD HL, %X\n", mach->cpu.hl);
+	mach->cpu.pc += 3;
 }
 
 
@@ -298,10 +298,9 @@ void ld_32(Machine* const mach) {
 	// store A into memory pointed by HL, Decrements HL
 	// bytes: 1
 	// clock cycles: 8
-	const uint16_t HL = mach->cpu.GetHL();
-	mach->memory.Write8(HL, mach->cpu.A);
-	mach->cpu.SubHL(1);
-	printf("LD (HL-), A ; -> HL(%X) , A(%X)\n", HL, mach->cpu.A);
+	mach->memory.Write8(mach->cpu.hl, mach->cpu.a);
+	--mach->cpu.hl;
+	printf("LD (HL-), A ; -> HL(%X) , A(%X)\n", mach->cpu.hl, mach->cpu.a);
 	++mach->cpu.pc;
 }
 
@@ -328,8 +327,8 @@ void ld_3E(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
 	
-	mach->cpu.A = mach->memory.Read8(mach->cpu.pc + 1);
-	printf("LD A, %X\n", mach->cpu.A);
+	mach->cpu.a = mach->memory.Read8(mach->cpu.pc + 1);
+	printf("LD A, %X\n", mach->cpu.a);
 	mach->cpu.pc += 2;
 }
 
@@ -378,8 +377,8 @@ void ld_57(Machine* const mach) {
 	// the value in A is loaded into D
 	// bytes: 1
 	// clock cycles: 4
-	mach->cpu.D = mach->cpu.A;
-	printf("LD D, A; -> A(%X)\n", mach->cpu.A);
+	mach->cpu.d = mach->cpu.a;
+	printf("LD D, A; -> A(%X)\n", mach->cpu.a);
 	++mach->cpu.pc;
 }
 
@@ -442,8 +441,8 @@ void ld_7A(Machine* mach) {
 	// bytes: 1
 	// clock cycles: 4
 
-	mach->cpu.D = mach->cpu.A;
-	printf("LD D, A; -> A(%X)\n", mach->cpu.A);
+	mach->cpu.d = mach->cpu.a;
+	printf("LD D, A; -> A(%X)\n", mach->cpu.a);
 	mach->cpu.pc += 1; 
 }
 
@@ -479,8 +478,8 @@ void add_87(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected: Z 0 H C
 
-	mach->cpu.A = mach->cpu.AddWithZNHC(mach->cpu.A, mach->cpu.A);
-	printf("ADD A, A ; -> A(%X)\n", mach->cpu.A);
+	mach->cpu.a = mach->cpu.AddWithZNHC(mach->cpu.a, mach->cpu.a);
+	printf("ADD A, A ; -> A(%X)\n", mach->cpu.a);
 	mach->cpu.pc += 1;
 }
 
@@ -551,14 +550,14 @@ void xor_AF(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected: Z 0 0 0
 
-	mach->cpu.A ^= mach->cpu.A;
+	mach->cpu.a ^= mach->cpu.a;
 
-	if(mach->cpu.A == 0)
-		mach->cpu.F = Cpu::FLAG_Z;
+	if(mach->cpu.a == 0)
+		mach->cpu.f = Cpu::FLAG_Z;
 	else
-		mach->cpu.F = 0;
+		mach->cpu.f = 0;
 
-	printf("XOR A; -> A(%X)\n", mach->cpu.A);
+	printf("XOR A; -> A(%X)\n", mach->cpu.a);
 	mach->cpu.ShowFlags();
 	++mach->cpu.pc;
 }
@@ -740,8 +739,8 @@ void ld_EA(Machine* const mach) {
 	// bytes: 3
 	// clock cycles: 16
 	const auto address = mach->memory.Read16(mach->cpu.pc + 1);
-	mach->memory.Write8(address, mach->cpu.A);
-	printf("LD (a16), A; -> a16(%X), A(%X)\n", address, mach->cpu.A);
+	mach->memory.Write8(address, mach->cpu.a);
+	printf("LD (a16), A; -> a16(%X), A(%X)\n", address, mach->cpu.a);
 	mach->cpu.pc += 3; 
 }
 
@@ -770,8 +769,8 @@ void ldh_F0(Machine* const mach) {
 	// clock cycles: 12
 	const uint8_t a8 = mach->memory.Read8(mach->cpu.pc + 1);
 	const uint16_t pointer = 0xFF00 + a8;
-	mach->cpu.A = mach->memory.Read8(pointer);
-	printf("LDH A, (a8); -> pointer(%X), A(%X)\n", pointer, mach->cpu.A);
+	mach->cpu.a = mach->memory.Read8(pointer);
+	printf("LDH A, (a8); -> pointer(%X), A(%X)\n", pointer, mach->cpu.a);
 	mach->cpu.pc += 2;
 }
 
@@ -832,7 +831,7 @@ void cp_FE(Machine* const mach) {
 
 
 	const auto d8 = mach->memory.Read8(mach->cpu.pc + 1);
-	mach->cpu.SubWithZNHC(mach->cpu.A, d8);
+	mach->cpu.SubWithZNHC(mach->cpu.a, d8);
 	printf("CP %X\n", d8);
 	mach->cpu.pc += 2;
 }

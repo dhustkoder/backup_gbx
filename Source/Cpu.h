@@ -17,21 +17,12 @@ struct Cpu {
 	};
 
 
-	uint16_t GetBC() const;
-	uint16_t GetDE() const;
-	uint16_t GetHL() const;
 	Flags GetFlags(const Cpu::Flags flags) const;
 	void ShowFlags() const;
 
 	void SetBC(const uint16_t val);
 	void SetDE(const uint16_t val);
 	void SetHL(const uint16_t val);
-	void AddBC(const uint16_t val);
-	void AddDE(const uint16_t val);
-	void AddHL(const uint16_t val);
-	void SubBC(const uint16_t val);
-	void SubDE(const uint16_t val);
-	void SubHL(const uint16_t val);
 
 	uint8_t AddWithZNHC(const uint8_t reg, const uint8_t value);
 	uint8_t SubWithZNHC(const uint8_t reg, const uint8_t value);
@@ -45,10 +36,34 @@ struct Cpu {
 	uint16_t pc;
 	uint16_t sp;
 	uint8_t op;
-	uint8_t A, F; 
-	uint8_t B, C; 
-	uint8_t D, E;
-	uint8_t H, L;
+	
+	union {
+		struct {
+			uint8_t f, a; 
+		};
+		uint16_t af;
+	};
+
+	union {
+		struct {
+			uint8_t c, b; 
+		};
+		uint16_t bc;
+	};
+
+	union {
+		struct {
+			uint8_t e, d; 
+		};
+		uint16_t de;
+	};
+
+	union {
+		struct {
+			uint8_t l, h; 
+		};
+		uint16_t hl;
+	};
 };
 
 
