@@ -1,5 +1,3 @@
-CC=gcc
-CXX=g++
 
 CXX_FLAGS=-std=c++11 -nodefaultlibs -pedantic -pedantic-errors -Wall -Wextra -Werror \
           -O3 -DNDEBUG -flto \

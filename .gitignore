@@ -1,4 +1,10 @@
 
+#build
+build/
+Build/
+BUILD/
+
+
 # C C++
 # Compiled Object files
 *.slo
