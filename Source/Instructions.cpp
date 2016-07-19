@@ -58,7 +58,6 @@ void nop_00(Machine* const mach) {
 	// bytes: 1
 	// clock cyles: 4
 	mach->cpu.AddPC(1);
-
 	printf("NOP\n");
 }
 
@@ -290,7 +289,26 @@ void ld_21(Machine* const mach) {
 
 
 void ld_22(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void inc_23(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+void inc_23(Machine* const mach) {
+	// INC HL
+	// bytes: 1
+	// clock cycles: 8
+	const auto result = mach->cpu.GetHL() + 1;
+	mach->cpu.SetHL(result);
+	mach->cpu.AddPC(1);
+
+	printf("INC HL; -> HL(%x)\n", result);
+}
+
+
+
+
+
 void inc_24(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_25(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_26(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
@@ -489,7 +507,30 @@ void ld_5A(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_5B(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_5C(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_5D(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_5E(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+void ld_5E(Machine* const mach) {
+	// LD E, (HL)
+	// value in address pointed by HL is stored into E
+	// bytes: 1
+	// clock cycles: 8
+	const auto hl = mach->cpu.GetHL();
+	const auto value = mach->memory.Read8(hl);
+	mach->cpu.SetE(value);
+	mach->cpu.AddPC(1);
+
+
+	printf("LD E, (HL) ; -> HL(%x), E(%x)\n", hl, value);
+}
+
+
+
+
+
+
+
 void ld_5F(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
