@@ -20,12 +20,11 @@ struct Cpu {
 	Flags GetFlags(const Cpu::Flags flags) const;
 	void ShowFlags() const;
 
-	void SetBC(const uint16_t val);
-	void SetDE(const uint16_t val);
-	void SetHL(const uint16_t val);
+	uint16_t ADC16(const uint16_t val1, const uint16_t val2);
+	uint16_t SBC16(const uint16_t val1, const uint16_t val2);
 
-	uint8_t AddWithZNHC(const uint8_t reg, const uint8_t value);
-	uint8_t SubWithZNHC(const uint8_t reg, const uint8_t value);
+	uint8_t ADC8(const uint8_t val1, const uint8_t val2);
+	uint8_t SBC8(const uint8_t val1, const uint8_t val2);
 
 	uint8_t AddWithZNH(const uint8_t reg, const uint8_t value);
 	uint8_t SubWithZNH(const uint8_t reg, const uint8_t value);

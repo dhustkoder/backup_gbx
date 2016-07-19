@@ -478,7 +478,7 @@ void add_87(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected: Z 0 H C
 
-	mach->cpu.a = mach->cpu.AddWithZNHC(mach->cpu.a, mach->cpu.a);
+	mach->cpu.a = mach->cpu.ADC8(mach->cpu.a, mach->cpu.a);
 	printf("ADD A, A ; -> A(%X)\n", mach->cpu.a);
 	mach->cpu.pc += 1;
 }
@@ -831,7 +831,7 @@ void cp_FE(Machine* const mach) {
 
 
 	const auto d8 = mach->memory.Read8(mach->cpu.pc + 1);
-	mach->cpu.SubWithZNHC(mach->cpu.a, d8);
+	mach->cpu.SBC8(mach->cpu.a, d8);
 	printf("CP %X\n", d8);
 	mach->cpu.pc += 2;
 }
