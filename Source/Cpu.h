@@ -79,7 +79,8 @@ private:
 	uint16_t pc;
 	uint16_t sp;
 	uint8_t op;
-	
+
+// TODO: check endianess, this is only compatible with little endian
 	union {
 		struct {
 			uint8_t f, a; 

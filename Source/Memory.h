@@ -76,7 +76,7 @@ constexpr const size_t CHAR_DATA_OFFSET = 0x8000;
 constexpr const size_t CARTRIDGE_ENTRY_POINT = 0x100;
 
 
-constexpr const size_t TOTAL_RAM_SIZE = 0xFFFF;
+constexpr const size_t TOTAL_RAM_SIZE = 0x10000;
 constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
 
 
