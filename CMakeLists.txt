@@ -5,8 +5,8 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -pedantic -pedantic-errors -Wall -Wextra -Werror
 
 
 if(NOT CMAKE_BUILD_TYPE)
-	message(STATUS "No build type selected! default to release")
-	set(CMAKE_BUILD_TYPE "Release")
+	message(STATUS "No build type selected! default to Debug")
+	set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
 

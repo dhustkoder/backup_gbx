@@ -41,14 +41,24 @@ InstructionFunction main_instructions[0x100] =
 
 
 
+// common names:
+// d8:  immediate 8 bit value
+// d16: immediate 16 bit value
+// a8:  8 bit unsigned data, which are added to $FF00 in certain instructions (replacement for missing IN and OUT instructions)
+// a16: 16 bit address
+// r8: means 8 bit signed data, which are added to program counter
+
+
+
+
 // Main instructions implementation:
 // 0x00
 
 void miss_instr(Machine* const mach) {
 	// not implemented instruction
 	mach->cpu.AddPC(1);
-
-	printf("MISSING INSTRUCTION! opcode: %x\n", mach->cpu.GetOP());
+	
+	printf("MISSING INSTRUCTION! opcode: %x\n", mach->cpu.GetOP());	
 }
 
 
@@ -91,7 +101,7 @@ void ld_02(Machine* const mach) {
 	mach->cpu.AddPC(1);
 
 
-	printf("LD (BC), A ; ->  BC = (%x), A = (%x)\n", bc, a);
+	printf("LD (BC), A; ->  BC = (%x), A = (%x)\n", bc, a);
 }
 
 
@@ -185,7 +195,7 @@ void dec_0D(Machine* const mach) {
 	mach->cpu.SetC(c);
 	mach->cpu.AddPC(1);
 
-	printf("DEC C ; -> C(%x)\n", c);
+	printf("DEC C; -> C(%x)\n", c);
 }
 
 
@@ -251,8 +261,6 @@ void jr_20(Machine* const mach) {
 	// jump if Z flags is reset
 	// bytes: 2
 	// clock cycles: 12 if jumps, 8 if not
-
-	// we read a signed byte from memory, so the jump can be backward(-) or forward(+)
 
 	const auto pc = mach->cpu.GetPC();
 	const auto r8 = static_cast<int8_t>(mach->memory.Read8(pc + 1));
@@ -347,7 +355,7 @@ void ld_2A(Machine* const mach) {
 	mach->cpu.SetHL(hl + 1);
 	mach->cpu.AddPC(1); 
 
-	printf("LD A, (HL+) ; HL -> (%x)\n", hl);
+	printf("LD A, (HL+); HL -> (%x)\n", hl);
 }
 
 
@@ -365,7 +373,7 @@ void dec_2B(Machine* const mach) {
 	mach->cpu.SetHL(result);
 	mach->cpu.AddPC(1);
 	
-	printf("DEC HL ; -> HL(%x)\n", result);
+	printf("DEC HL; -> HL(%x)\n", result);
 }
 
 
@@ -413,7 +421,7 @@ void ld_32(Machine* const mach) {
 	mach->cpu.SetHL(hl);
 	mach->cpu.AddPC(1);
 
-	printf("LD (HL-), A ; -> HL(%x) , A(%x)\n", hl, a);
+	printf("LD (HL-), A; -> HL(%x) , A(%x)\n", hl, a);
 }
 
 
@@ -482,7 +490,20 @@ void ld_52(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_53(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_54(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_55(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_56(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+void ld_56(Machine* const mach) {
+	// LD D, (HL)
+	// value in memory address pointed by HL is stored in D
+	// bytes: 1
+	// clock cycles: 8
+	const auto hl = mach->cpu.GetHL();
+	const auto value = mach->memory.Read8(hl);
+	mach->cpu.SetD(value); 
+	mach->cpu.AddPC(1);
+
+	printf("LD D, (HL); -> HL(%x), D(%x)\n", hl, value);
+}
 
 
 
@@ -522,7 +543,7 @@ void ld_5E(Machine* const mach) {
 	mach->cpu.AddPC(1);
 
 
-	printf("LD E, (HL) ; -> HL(%x), E(%x)\n", hl, value);
+	printf("LD E, (HL); -> HL(%x), E(%x)\n", hl, value);
 }
 
 
@@ -540,7 +561,27 @@ void ld_5F(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 // 0x60
 void ld_60(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_61(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_62(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+void ld_62(Machine* const mach) {
+	// LD H, D
+	// value in D is stored into H
+	// bytes: 1
+	// clock cycles: 4
+	
+	const auto d = mach->cpu.GetD();
+	mach->cpu.SetH(d);
+	mach->cpu.AddPC(1);
+
+	printf("LD H, D; -> D(%x)\n", d);
+}
+
+
+
+
 void ld_63(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_64(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_65(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -549,7 +590,29 @@ void ld_67(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_68(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_69(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_6A(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_6B(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+void ld_6B(Machine* const mach) {
+	// LD L, E
+	// value in E is stored in L
+	// bytes: 1
+	// clock cycles: 4
+	const auto e = mach->cpu.GetE();
+	mach->cpu.SetL(e);
+	mach->cpu.AddPC(1);
+
+	printf("LD L, E; -> E(%x)\n", e);
+}
+
+
+
+
+
+
+
 void ld_6C(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_6D(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_6E(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -574,7 +637,7 @@ void ld_70(Machine* const mach) {
 	mach->memory.Write8(hl, b);
 	mach->cpu.AddPC(1);
 
-	printf("LD (HL), B ; -> HL(%x), B(%x)\n", hl, b);
+	printf("LD (HL), B; -> HL(%x), B(%x)\n", hl, b);
 }
 
 
@@ -661,7 +724,7 @@ void add_87(Machine* const mach) {
 	mach->cpu.AddPC(1);
 
 
-	printf("ADD A, A ; -> A(%x)\n", a);
+	printf("ADD A, A; -> A(%x)\n", a);
 }
 
 
@@ -775,7 +838,7 @@ void or_B6(Machine* const mach) {
 	mach->cpu.SetA(result);
 	mach->cpu.AddPC(1);
 
-	printf("OR (HL) ; -> (HL)(%x) | A(%x)\n", value, a);
+	printf("OR (HL); -> (HL)(%x) | A(%x)\n", value, a);
 }
 
 
@@ -975,14 +1038,33 @@ void ld_E2(Machine* const mach) {
 	mach->memory.Write8(0xFF00 + c, a);
 	mach->cpu.AddPC(2);
 
-	printf("LD (C), A ; -> C(%x), A(%x)\n", c, a);
+	printf("LD (C), A; -> C(%x), A(%x)\n", c, a);
 }
 
 
 
-// MISSING ----
-// MISSING ----
-void push_E5(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+// MISSING E3 ----
+// MISSING E4 ----
+
+
+
+
+void push_E5(Machine* const mach) {
+	// PUSH HL
+	// push hl register into stack
+	// bytes: 1
+	// clock cycles: 16
+	const auto hl = mach->cpu.GetHL();
+	mach->PushStack16(hl);
+	mach->cpu.AddPC(1);
+
+	printf("PUSH HL\n");
+}
+
+
+
+
+
 void and_E6(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rst_E7(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void add_E8(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
@@ -1106,7 +1188,7 @@ void ld_FA(Machine* const mach) {
 	mach->cpu.SetA(value);
 	mach->cpu.AddPC(3);
 
-	printf("LD A, (a16) ; -> a16(%x), A(%x)\n", a16, value);
+	printf("LD A, (a16); -> a16(%x), A(%x)\n", a16, value);
 }
 
 

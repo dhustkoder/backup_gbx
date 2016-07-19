@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 		fprintf(stderr, "usage: %s <rom>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
-
+	
 	gbx::Machine* const machine = gbx::CreateMachine();
 	
 	if(!machine)
