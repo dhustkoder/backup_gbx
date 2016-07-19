@@ -42,8 +42,9 @@ InstructionFunction main_instructions[0x100] =
 
 void miss_instr(Machine* const mach) {
 	// not implemented instruction
-	printf("MISSING INSTRUCTION! opcode: %X\n", mach->cpu.GetOP());
 	mach->cpu.AddPC(1);
+
+	printf("MISSING INSTRUCTION! opcode: %X\n", mach->cpu.GetOP());
 }
 
 
@@ -52,8 +53,9 @@ void nop_00(Machine* const mach) {
 	// no operation is performed
 	// bytes: 1
 	// clock cyles: 4
-	printf("NOP\n");
 	mach->cpu.AddPC(1);
+
+	printf("NOP\n");
 }
 
 
@@ -64,9 +66,10 @@ void ld_01(Machine* const mach) {
 	// clock cyles: 10 or 12 ?
 	const auto pc = mach->cpu.GetPC();
 	mach->cpu.SetBC(mach->memory.Read16(pc + 1));
+	mach->cpu.AddPC(3);
+
 
 	printf("LD BC, %X\n", mach->cpu.GetBC());
-	mach->cpu.AddPC(3);
 }
 
 
@@ -81,9 +84,10 @@ void ld_02(Machine* const mach) {
 	const auto a = mach->cpu.GetA();
 
 	mach->memory.Write8(bc, a);
+	mach->cpu.AddPC(1);
+
 
 	printf("LD (BC), A ; ->  BC = (%X), A = (%X)\n", bc, a);
-	mach->cpu.AddPC(1);
 }
 
 
@@ -94,11 +98,11 @@ void inc_03(Machine* const mach) {
 	// adds one to BC
 	// bytes: 1
 	// clock cyles: 6 or 8 ?
-	auto bc = mach->cpu.GetBC();
-	++bc;
+	auto bc = mach->cpu.GetBC() + 1;
 	mach->cpu.SetBC(bc);
-	printf("INC BC; -> BC(%X)\n", bc);
 	mach->cpu.AddPC(1);
+
+	printf("INC BC; -> BC(%X)\n", bc);
 }
 
 
@@ -114,8 +118,9 @@ void inc_04(Machine* const mach) {
 	auto b = mach->cpu.GetB();
 	b = mach->cpu.AddWithZNH(b, 1);
 	mach->cpu.SetB(b);
-	printf("INC B; -> B(%X)\n", b);
 	mach->cpu.AddPC(1);
+
+	printf("INC B; -> B(%X)\n", b);
 }
 
 
@@ -130,8 +135,9 @@ void dec_05(Machine* const mach) {
 	auto b = mach->cpu.GetB();
 	b = mach->cpu.SubWithZNH(b, 1);
 	mach->cpu.SetB(b);
-	printf("DEC B; -> B(%X)\n", b);
 	mach->cpu.AddPC(1);
+
+	printf("DEC B; -> B(%X)\n", b);
 }
 
 
@@ -144,8 +150,10 @@ void ld_06(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto d8 = mach->memory.Read8(pc + 1);
 	mach->cpu.SetB(d8);
-	printf("LD B, %X\n", d8);
-	mach->cpu.AddPC(2); 
+	mach->cpu.AddPC(2);
+
+
+	printf("LD B, %X\n", d8); 
 }
 
 
@@ -171,8 +179,9 @@ void dec_0D(Machine* const mach) {
 	auto c = mach->cpu.GetC();
 	c = mach->cpu.SubWithZNH(c, 1);
 	mach->cpu.SetC(c);
-	printf("DEC C ; -> C(%X)\n", c);
 	mach->cpu.AddPC(1);
+
+	printf("DEC C ; -> C(%X)\n", c);
 }
 
 
@@ -185,8 +194,9 @@ void ld_0E(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto d8 = mach->memory.Read8(pc + 1);
 	mach->cpu.SetC(d8);
-	printf("LD C, %X\n", d8);
 	mach->cpu.AddPC(2);
+
+	printf("LD C, %X\n", d8);
 }
 
 
@@ -243,15 +253,15 @@ void jr_20(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto r8 = static_cast<int8_t>(mach->memory.Read8(pc + 1));
 
-	printf("JR NZ, %d\n", r8);
-
-
 	// figured out that we need to add the bytes from this instruction -
 	// to pc even when it jumps...
 	if(mach->cpu.GetFlags(Cpu::FLAG_Z) == 0)
 		mach->cpu.AddPC(r8+2);
 	else 
 		mach->cpu.AddPC(2);
+
+
+	printf("JR NZ, %d\n", r8);
 }
 
 
@@ -266,8 +276,10 @@ void ld_21(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto d16 = mach->memory.Read16(pc + 1);
 	mach->cpu.SetHL(d16);
-	printf("LD HL, %X\n", d16);
 	mach->cpu.AddPC(3);
+
+
+	printf("LD HL, %X\n", d16);
 }
 
 
@@ -305,9 +317,9 @@ void ld_31(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto d16 = mach->memory.Read16(pc + 1);
 	mach->cpu.SetSP(d16);
+	mach->cpu.AddPC(3); 
 
 	printf("LD SP, %X\n", d16);
-	mach->cpu.AddPC(3); 
 }
 
 
@@ -467,8 +479,9 @@ void ld_7A(Machine* mach) {
 	// clock cycles: 4
 	const auto d = mach->cpu.GetD();
 	mach->cpu.SetA(d);
+	mach->cpu.AddPC(1);
+ 
 	printf("LD A, D; -> A(%X)\n", d);
-	mach->cpu.AddPC(1); 
 }
 
 
@@ -671,9 +684,9 @@ void ret_C9(Machine* const mach) {
 
 
 
-void jp_CA(Machine* mach)   { puts(__func__); mach->cpu.AddPC(3); }
+void jp_CA(Machine* mach)     { puts(__func__); mach->cpu.AddPC(3); }
 void PREFIX_CB(Machine* mach) { puts(__func__); mach->cpu.AddPC(2); }
-void call_CC(Machine* mach) { puts(__func__); mach->cpu.AddPC(3); }
+void call_CC(Machine* mach)   { puts(__func__); mach->cpu.AddPC(3); }
 
 
 
@@ -717,12 +730,14 @@ void ret_D0(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 20 if return 8 if not
 	const auto carry_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
-	printf("RET NC; -> C(%X)\n", carry_flag);
 
 	if(carry_flag)
  		mach->cpu.AddPC(1);
 	else
 		mach->cpu.SetPC(mach->PopStack16());
+
+
+	printf("RET NC; -> C(%X)\n", carry_flag);
 }
 
 
@@ -836,9 +851,9 @@ void di_F3(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 4
 	// TODO: back here when interrupts are implemented
+	mach->cpu.AddPC(1);
 
 	printf("DI\n");
-	mach->cpu.AddPC(1);
 }
 
 
