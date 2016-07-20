@@ -36,19 +36,22 @@ void Cpu::UnsetFlags(const Cpu::Flags flags) {
 
 
 
-uint16_t Cpu::ADC16(const uint16_t, const uint16_t) {
+uint16_t Cpu::ADC16(uint16_t, const uint16_t) {
 	ASSERT_MSG(false, "Not Implemented!");
 	return 0;
 }
 
-uint16_t Cpu::SBC16(const uint16_t, const uint16_t) {
+uint16_t Cpu::SBC16(uint16_t, const uint16_t) {
 	ASSERT_MSG(false, "Not Implemented!");
 	return 0;
 }
 
 
 
-uint8_t Cpu::ADC8(const uint8_t first, const uint8_t second) {
+uint8_t Cpu::ADC8(uint8_t first, const uint8_t second) {
+	if(GetFlags(FLAG_C))
+		++first;
+	
 	const uint16_t result = first + second;
 	uint8_t f = 0;
 	
@@ -67,7 +70,10 @@ uint8_t Cpu::ADC8(const uint8_t first, const uint8_t second) {
 
 
 
-uint8_t Cpu::SBC8(const uint8_t first, const uint8_t second) {
+uint8_t Cpu::SBC8(uint8_t first, const uint8_t second) {
+	if(GetFlags(FLAG_C))
+		--first;
+		
 	const uint16_t result = first - second;
 	uint8_t f = FLAG_N;
 	

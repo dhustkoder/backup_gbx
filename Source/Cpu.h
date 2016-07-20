@@ -66,11 +66,11 @@ public:
 
 
 
-	uint16_t ADC16(const uint16_t first, const uint16_t second);
-	uint16_t SBC16(const uint16_t first, const uint16_t second);
+	uint16_t ADC16(uint16_t first, const uint16_t second);
+	uint16_t SBC16(uint16_t first, const uint16_t second);
 	
-	uint8_t ADC8(const uint8_t first, const uint8_t second);
-	uint8_t SBC8(const uint8_t first, const uint8_t second);
+	uint8_t ADC8(uint8_t first, const uint8_t second);
+	uint8_t SBC8(uint8_t first, const uint8_t second);
 
 	uint8_t ADDWithZNH(const uint8_t first, const uint8_t second);
 	uint8_t SUBWithZNH(const uint8_t first, const uint8_t second);

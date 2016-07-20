@@ -98,7 +98,6 @@ bool Machine::StepMachine() {
 		main_instructions[op](this);
 	} 
 	else {
-		putchar('\n');
 		fprintf(stderr, "PC overflows program memory\n");
 		return false;
 	}
