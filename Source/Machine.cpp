@@ -28,14 +28,6 @@ Machine* CreateMachine() {
 		return nullptr;
 
 
-	mach->cpu.SetPC(0);
-	mach->cpu.SetSP(0);
-	mach->cpu.SetOP(0);
-	mach->cpu.SetAF(0);
-	mach->cpu.SetBC(0);
-	mach->cpu.SetDE(0);
-	mach->cpu.SetHL(0);
-
 	mach_cleanup.Cancel();
 	return mach;
 }
@@ -82,7 +74,12 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 	}
 
 	this->m_rom_size = rom_size;
-	this->cpu.SetPC( CARTRIDGE_ENTRY_POINT );
+	cpu.SetPC(CARTRIDGE_ENTRY_POINT);
+	cpu.SetSP(0xFFFE);
+	cpu.SetAF(0x01B0);
+	cpu.SetBC(0x0013);
+	cpu.SetDE(0x00D8);
+	cpu.SetHL(0x014D);
 
 	return true;
 }

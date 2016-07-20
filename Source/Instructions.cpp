@@ -392,7 +392,23 @@ void cpl_2F(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 // 0x30
-void jr_30(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void jr_30(Machine* const mach) {
+	// JR NC, r8
+	// jump if C flag is reset
+	// bytes: 2
+	// clock cycles: 12 if jump 8 if not
+	
+	const auto c_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
+	const auto pc = mach->cpu.GetPC();
+	const auto r8 = static_cast<int8_t>(mach->memory.Read8(pc + 1));
+	
+	if(c_flag)
+		mach->cpu.AddPC(r8+2);
+	else
+		mach->cpu.AddPC(2);
+	
+	printf("JR NC, %d\n", r8);
+}
 
 
 
