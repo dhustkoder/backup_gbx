@@ -95,21 +95,19 @@ public:
 	const uint8_t* Data() const;
 	uint8_t* Data();
 
-	uint8_t Read8(const uint16_t pointer) const;
-	uint16_t Read16(const uint16_t pointer) const;
-	void Read16(const uint16_t pointer, uint8_t* const high_byte, uint8_t* const low_byte) const;
-	void Write8(const uint16_t pointer, const uint8_t value);
-	void Write16(const uint16_t pointer, const uint16_t value);
-	void Write16(const uint16_t pointer, const uint8_t high_byte, const uint8_t low_byte);
-
-	void Add8(const uint16_t pointer, const uint8_t val);
-	void Add16(const uint16_t pointer, const uint16_t val);
-	void Sub8(const uint16_t pointer, const uint8_t val);
-	void Sub16(const uint16_t pointer, const uint16_t val);
+	int8_t ReadS8(const uint16_t pointer) const;
+	uint8_t ReadU8(const uint16_t pointer) const;
+	uint16_t ReadU16(const uint16_t pointer) const;
+	void ReadU16(const uint16_t pointer, uint8_t* const high_byte, uint8_t* const low_byte) const;
+	void WriteU8(const uint16_t pointer, const uint8_t value);
+	void WriteU16(const uint16_t pointer, const uint16_t value);
+	void WriteU16(const uint16_t pointer, const uint8_t high_byte, const uint8_t low_byte);
 	
 
 private:
 	uint8_t* const m_data;
+
+
 };
 
 
@@ -122,9 +120,21 @@ private:
 
 
 
-inline const uint8_t* Memory::Data() const { return m_data; }
 
-inline uint8_t* Memory::Data() { return m_data; }
+inline const uint8_t* Memory::Data() const {
+	return m_data;
+}
+
+
+inline int8_t Memory::ReadS8(const uint16_t pointer) const {
+	// TODO: this might not be totally portable 
+	return static_cast<int8_t>(ReadU8(pointer));
+}
+
+
+inline uint8_t* Memory::Data() {
+	return m_data;
+}
 
 
 

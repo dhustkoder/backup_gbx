@@ -129,6 +129,7 @@ uint8_t Cpu::SUBWithZNH(const uint8_t first, const uint8_t second) {
 
 
 uint8_t Cpu::ORWithZNHC(const uint8_t first, const uint8_t second) {
+	// flags effect: Z 0 0 0
 	const auto result = first | second;
 	SetF( result == 0 ? FLAG_Z : 0 );
 	ShowFlags();
@@ -136,6 +137,13 @@ uint8_t Cpu::ORWithZNHC(const uint8_t first, const uint8_t second) {
 }
 
 
+
+uint8_t Cpu::ANDWithZNHC(const uint8_t first, const uint8_t second) {
+	// flags effect: Z 0 1 0
+	const auto result = first & second;
+	SetF( result == 0 ? (FLAG_Z | FLAG_H) : FLAG_H);
+	return result;
+}
 
 
 

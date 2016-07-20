@@ -44,20 +44,20 @@ inline size_t Machine::GetRomSize() const {
 
 inline void Machine::PushStack8(const uint8_t value) {
 	const auto sp = cpu.GetSP() - 1;
-	memory.Write8(sp, value);
+	memory.WriteU8(sp, value);
 	cpu.SetSP(sp);
 
 }
 
 inline void Machine::PushStack16(const uint16_t value) {
 	const auto sp = cpu.GetSP() - 2;
-	memory.Write16(sp, value);
+	memory.WriteU16(sp, value);
 	cpu.SetSP(sp);
 }
 
 inline uint8_t Machine::PopStack8() {
 	const auto sp = cpu.GetSP();
-	const auto val = memory.Read8(sp);
+	const auto val = memory.ReadU8(sp);
 	cpu.SetSP(sp + 1);
 	return val;
 }
@@ -65,7 +65,7 @@ inline uint8_t Machine::PopStack8() {
 
 inline uint16_t Machine::PopStack16() {
 	const auto sp = cpu.GetSP();
-	const auto val = memory.Read16(sp);
+	const auto val = memory.ReadU16(sp);
 	cpu.SetSP(sp + 2);
 	return val;
 }

@@ -76,7 +76,7 @@ public:
 	uint8_t SUBWithZNH(const uint8_t first, const uint8_t second);
 	
 	uint8_t ORWithZNHC(const uint8_t first, const uint8_t second);
-
+	uint8_t ANDWithZNHC(const uint8_t first, const uint8_t second);
 
 
 private:
@@ -84,7 +84,7 @@ private:
 	uint16_t sp;
 	uint8_t op;
 
-// TODO: check endianess, this is only compatible with little endian
+	// TODO: check endianess, this is only compatible with little endian
 	union {
 		struct {
 			uint8_t f, a; 

@@ -78,7 +78,7 @@ void ld_01(Machine* const mach) {
 	// bytes: 3
 	// clock cyles: 10 or 12 ?
 	const auto pc = mach->cpu.GetPC();
-	const auto d16 = mach->memory.Read16(pc + 1);
+	const auto d16 = mach->memory.ReadU16(pc + 1);
 	mach->cpu.SetBC(d16);
 	mach->cpu.AddPC(3);
 
@@ -97,7 +97,7 @@ void ld_02(Machine* const mach) {
 	const auto bc = mach->cpu.GetBC();
 	const auto a = mach->cpu.GetA();
 
-	mach->memory.Write8(bc, a);
+	mach->memory.WriteU8(bc, a);
 	mach->cpu.AddPC(1);
 
 
@@ -162,7 +162,7 @@ void ld_06(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
 	const auto pc = mach->cpu.GetPC();
-	const auto d8 = mach->memory.Read8(pc + 1);
+	const auto d8 = mach->memory.ReadU8(pc + 1);
 	mach->cpu.SetB(d8);
 	mach->cpu.AddPC(2);
 
@@ -190,12 +190,12 @@ void dec_0D(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 4
 	// flags affected: Z 1 H
-	auto c = mach->cpu.GetC();
-	c = mach->cpu.SUBWithZNH(c, 1);
-	mach->cpu.SetC(c);
+	const auto c = mach->cpu.GetC();
+	const auto result = mach->cpu.SUBWithZNH(c, 1);
+	mach->cpu.SetC(result);
 	mach->cpu.AddPC(1);
 
-	printf("DEC C; -> C(%x)\n", c);
+	printf("DEC C; -> C(%x)\n", result);
 }
 
 
@@ -206,7 +206,7 @@ void ld_0E(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
 	const auto pc = mach->cpu.GetPC();
-	const auto d8 = mach->memory.Read8(pc + 1);
+	const auto d8 = mach->memory.ReadU8(pc + 1);
 	mach->cpu.SetC(d8);
 	mach->cpu.AddPC(2);
 
@@ -263,7 +263,7 @@ void jr_20(Machine* const mach) {
 	// clock cycles: 12 if jumps, 8 if not
 
 	const auto pc = mach->cpu.GetPC();
-	const auto r8 = static_cast<int8_t>(mach->memory.Read8(pc + 1));
+	const auto r8 = mach->memory.ReadS8(pc + 1);
 
 	// figured out that we need to add the bytes from this instruction -
 	// to pc even when it jumps...
@@ -286,7 +286,7 @@ void ld_21(Machine* const mach) {
 	// bytes: 3
 	// clock cycles: 10 or 12
 	const auto pc = mach->cpu.GetPC();
-	const auto d16 = mach->memory.Read16(pc + 1);
+	const auto d16 = mach->memory.ReadU16(pc + 1);
 	mach->cpu.SetHL(d16);
 	mach->cpu.AddPC(3);
 
@@ -329,7 +329,7 @@ void jr_28(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: if jumps 12, else 8
 	const auto pc = mach->cpu.GetPC();
-	const auto r8 = static_cast<int8_t>( mach->memory.Read8( pc + 1 ) );
+	const auto r8 = mach->memory.ReadS8(pc + 1);
 	const auto zero_flag = mach->cpu.GetFlags(Cpu::FLAG_Z);
 	mach->cpu.AddPC( zero_flag ? (r8+2) : 2 );
 	
@@ -350,7 +350,7 @@ void ld_2A(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 8
 	const auto hl = mach->cpu.GetHL();
-	const auto value = mach->memory.Read8(hl);
+	const auto value = mach->memory.ReadU8(hl);
 	mach->cpu.SetA(value);
 	mach->cpu.SetHL(hl + 1);
 	mach->cpu.AddPC(1); 
@@ -400,9 +400,9 @@ void jr_30(Machine* const mach) {
 	
 	const auto c_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
 	const auto pc = mach->cpu.GetPC();
-	const auto r8 = static_cast<int8_t>(mach->memory.Read8(pc + 1));
+	const auto r8 = mach->memory.ReadS8(pc + 1);
 	
-	if(c_flag)
+	if(!c_flag)
 		mach->cpu.AddPC(r8+2);
 	else
 		mach->cpu.AddPC(2);
@@ -418,7 +418,7 @@ void ld_31(Machine* const mach) {
 	// bytes: 3
 	// clock cycles: 10 or 12 ?
 	const auto pc = mach->cpu.GetPC();
-	const auto d16 = mach->memory.Read16(pc + 1);
+	const auto d16 = mach->memory.ReadU16(pc + 1);
 	mach->cpu.SetSP(d16);
 	mach->cpu.AddPC(3); 
 
@@ -433,7 +433,7 @@ void ld_32(Machine* const mach) {
 	// clock cycles: 8
 	const auto a = mach->cpu.GetA();
 	auto hl = mach->cpu.GetHL();	
-	mach->memory.Write8(hl--, a);
+	mach->memory.WriteU8(hl--, a);
 	mach->cpu.SetHL(hl);
 	mach->cpu.AddPC(1);
 
@@ -449,7 +449,32 @@ void inc_34(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_35(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_36(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void scf_37(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void jr_38(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+
+
+
+
+void jr_38(Machine* const mach) {
+	// JR C, r8
+	// jump if C flag is set
+	// bytes: 2
+	// clock cycles: if jumps 12, else 8
+	const auto pc = mach->cpu.GetPC();
+	const auto r8 = mach->memory.ReadS8(pc + 1 );
+	const auto c_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
+
+	if(c_flag)
+		mach->cpu.AddPC(r8+2);
+	else
+		mach->cpu.AddPC(2);
+
+	printf("JR C, %i\n", r8);
+}
+
+
+
+
+
 void add_39(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_3A(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_3B(Machine* mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -463,7 +488,7 @@ void ld_3E(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: 7 or 8 ?
 	const auto pc = mach->cpu.GetPC();
-	const auto d8 = mach->memory.Read8(pc + 1);
+	const auto d8 = mach->memory.ReadU8(pc + 1);
 	mach->cpu.SetA(d8);
 	mach->cpu.AddPC(2);
 
@@ -514,7 +539,7 @@ void ld_56(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 8
 	const auto hl = mach->cpu.GetHL();
-	const auto value = mach->memory.Read8(hl);
+	const auto value = mach->memory.ReadU8(hl);
 	mach->cpu.SetD(value); 
 	mach->cpu.AddPC(1);
 
@@ -554,7 +579,7 @@ void ld_5E(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 8
 	const auto hl = mach->cpu.GetHL();
-	const auto value = mach->memory.Read8(hl);
+	const auto value = mach->memory.ReadU8(hl);
 	mach->cpu.SetE(value);
 	mach->cpu.AddPC(1);
 
@@ -650,7 +675,7 @@ void ld_70(Machine* const mach) {
 	// clock cycles: 8
 	const auto hl = mach->cpu.GetHL();
 	const auto b = mach->cpu.GetB();
-	mach->memory.Write8(hl, b);
+	mach->memory.WriteU8(hl, b);
 	mach->cpu.AddPC(1);
 
 	printf("LD (HL), B; -> HL(%x), B(%x)\n", hl, b);
@@ -669,7 +694,7 @@ void ld_71(Machine* const mach) {
 	// clock cycles: 8
 	const auto hl = mach->cpu.GetHL();
 	const auto c  = mach->cpu.GetC();
-	mach->memory.Write8(hl, c);
+	mach->memory.WriteU8(hl, c);
 	mach->cpu.AddPC(1);
 
 	printf("LD (HL), C; -> HL(%x), C(%x)\n", hl, c);
@@ -849,7 +874,7 @@ void or_B6(Machine* const mach) {
 	// flags affected: Z 0 0 0
 	const auto a = mach->cpu.GetA();
 	const auto hl = mach->cpu.GetHL();
-	const auto value = mach->memory.Read8(hl);
+	const auto value = mach->memory.ReadU8(hl);
 	const auto result = mach->cpu.ORWithZNHC(value, a);
 	mach->cpu.SetA(result);
 	mach->cpu.AddPC(1);
@@ -888,7 +913,7 @@ void jp_C3(Machine* const mach)   {
 	// bytes: 3
 	// clock cycles: 10 or 16 ?
 	const auto pc = mach->cpu.GetPC();
-	const auto a16 = mach->memory.Read16(pc + 1);
+	const auto a16 = mach->memory.ReadU16(pc + 1);
 	mach->cpu.SetPC(a16);
 
 	printf("JP %x\n", a16);
@@ -942,7 +967,7 @@ void call_CD(Machine* const mach) {
 	// bytes: 3
 	// clock cycles: 24
 	const auto pc = mach->cpu.GetPC();
-	const auto a16 = mach->memory.Read16(pc + 1);
+	const auto a16 = mach->memory.ReadU16(pc + 1);
 
 	// store pc + 3 into stack
 	mach->PushStack16(pc + 3);
@@ -1017,8 +1042,8 @@ void ldh_E0(Machine* const mach) {
 	// clock cycles: 12
 	const auto a = mach->cpu.GetA();
 	const auto pc = mach->cpu.GetPC();
-	const auto a8 = mach->memory.Read8(pc + 1);
-	mach->memory.Write8(0xFF00 + a8, a);
+	const auto a8 = mach->memory.ReadU8(pc + 1);
+	mach->memory.WriteU8(0xFF00 + a8, a);
 	mach->cpu.AddPC(2);
 
 	printf("LDH (0xFF00 + %x), A\n", a8);
@@ -1051,7 +1076,7 @@ void ld_E2(Machine* const mach) {
 	// clock cycles: 8
 	const auto c = mach->cpu.GetC();
 	const auto a = mach->cpu.GetA();
-	mach->memory.Write8(0xFF00 + c, a);
+	mach->memory.WriteU8(0xFF00 + c, a);
 	mach->cpu.AddPC(2);
 
 	printf("LD (C), A; -> C(%x), A(%x)\n", c, a);
@@ -1081,7 +1106,28 @@ void push_E5(Machine* const mach) {
 
 
 
-void and_E6(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+void and_E6(Machine* const mach) {
+	// AND d8
+	// and op on A immediate 8 bit value, result in A
+	// bytes: 2
+	// clock cycles: 8
+	// flags affected: Z 0 1 0
+	const auto a = mach->cpu.GetA();
+	const auto pc = mach->cpu.GetPC();
+	const auto d8 = mach->memory.ReadU8(pc + 1);
+	const auto result = mach->cpu.ANDWithZNHC(a, d8);
+	mach->cpu.SetA(result);
+	mach->cpu.AddPC(2);
+	
+	printf("AND %x\n", d8);
+}
+
+
+
+
+
+
 void rst_E7(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void add_E8(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 
@@ -1109,9 +1155,9 @@ void ld_EA(Machine* const mach) {
 	// bytes: 3
 	// clock cycles: 16
 	const auto pc = mach->cpu.GetPC();
-	const auto a16 = mach->memory.Read16(pc + 1);
+	const auto a16 = mach->memory.ReadU16(pc + 1);
 	const auto a = mach->cpu.GetA();
-	mach->memory.Write8(a16, a);
+	mach->memory.WriteU8(a16, a);
 	mach->cpu.AddPC(3);
 
 
@@ -1142,9 +1188,9 @@ void ldh_F0(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: 12
 	const auto pc = mach->cpu.GetPC();
-	const auto a8 = mach->memory.Read8(pc + 1);
+	const auto a8 = mach->memory.ReadU8(pc + 1);
 	const uint16_t evaluated_address = 0xFF00 + a8;
-	const auto a = mach->memory.Read8(evaluated_address);
+	const auto a = mach->memory.ReadU8(evaluated_address);
 	mach->cpu.SetA(a);
 	mach->cpu.AddPC(2);
 
@@ -1212,8 +1258,8 @@ void ld_FA(Machine* const mach) {
 	// bytes: 3
 	// clock cycles: 16
 	const auto pc = mach->cpu.GetPC();
-	const auto a16 = mach->memory.Read16( pc + 1 );
-	const auto value = mach->memory.Read8(a16);
+	const auto a16 = mach->memory.ReadU16( pc + 1 );
+	const auto value = mach->memory.ReadU8(a16);
 	mach->cpu.SetA(value);
 	mach->cpu.AddPC(3);
 
@@ -1254,7 +1300,7 @@ void cp_FE(Machine* const mach) {
 
 	const auto pc = mach->cpu.GetPC();
 	const auto a = mach->cpu.GetA();
-	const auto d8 = mach->memory.Read8(pc + 1);
+	const auto d8 = mach->memory.ReadU8(pc + 1);
 	mach->cpu.SBC8(a, d8);
 	mach->cpu.AddPC(2);
 

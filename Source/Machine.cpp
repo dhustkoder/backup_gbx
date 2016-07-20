@@ -93,7 +93,7 @@ bool Machine::StepMachine() {
 	const uint16_t pc = this->cpu.GetPC();
 	printf("%X: ", pc);
 	if(pc < CHAR_DATA_OFFSET) {
-		const auto op = memory.Read8(pc);
+		const auto op = memory.ReadU8(pc);
 		cpu.SetOP(op);
 		main_instructions[op](this);
 	} 
