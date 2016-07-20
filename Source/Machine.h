@@ -24,6 +24,7 @@ public:
 	void PushStack16(const uint16_t value);
 	uint8_t PopStack8();
 	uint16_t PopStack16();
+	
 
 	Cpu cpu;
 	Memory memory;
@@ -69,9 +70,6 @@ inline uint16_t Machine::PopStack16() {
 	cpu.SetSP(sp + 2);
 	return val;
 }
-
-
-
 
 
 

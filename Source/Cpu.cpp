@@ -18,7 +18,7 @@ void Cpu::ShowFlags() const {
 	const auto n = f & FLAG_N;
 	const auto h = f & FLAG_H;
 	const auto c = f & FLAG_C;
-	printf("CPU FLAGS: Z(%X), N(%X), H(%X), C(%X)\n", z, n, h, c);
+	printf("| CPU FLAGS: Z(%x), N(%x), H(%x), C(%x) | ", z, n, h, c);
 }
 
 

@@ -129,12 +129,12 @@ void inc_04(Machine* const mach) {
 	// bytes: 1
 	// clock cyles: 4
 	// flags affected Z 0 H -
-	auto b = mach->cpu.GetB();
-	b = mach->cpu.ADDWithZNH(b, 1);
-	mach->cpu.SetB(b);
+	const auto b = mach->cpu.GetB();
+	const auto result = mach->cpu.ADDWithZNH(b, 1);
+	mach->cpu.SetB(result);
 	mach->cpu.AddPC(1);
 
-	printf("INC B; -> B(%x)\n", b);
+	printf("INC B; -> B(%x)\n", result);
 }
 
 
@@ -146,12 +146,12 @@ void dec_05(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 4
 	// flags affected Z 1 H -
-	auto b = mach->cpu.GetB();
-	b = mach->cpu.SUBWithZNH(b, 1);
-	mach->cpu.SetB(b);
+	const auto b = mach->cpu.GetB();
+	const auto result = mach->cpu.SUBWithZNH(b, 1);
+	mach->cpu.SetB(result);
 	mach->cpu.AddPC(1);
 
-	printf("DEC B; -> B(%x)\n", b);
+	printf("DEC B; -> B(%x)\n", result);
 }
 
 
@@ -265,8 +265,6 @@ void jr_20(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto r8 = mach->memory.ReadS8(pc + 1);
 
-	// figured out that we need to add the bytes from this instruction -
-	// to pc even when it jumps...
 	if(mach->cpu.GetFlags(Cpu::FLAG_Z) == 0)
 		mach->cpu.AddPC(r8+2);
 	else 

@@ -27,7 +27,13 @@ Machine* CreateMachine() {
 	if(!mach->memory.Initialize())
 		return nullptr;
 
-
+	mach->cpu.SetPC(CARTRIDGE_ENTRY_POINT);
+	mach->cpu.SetSP(0xFFFE);
+	mach->cpu.SetAF(0x01B0);
+	mach->cpu.SetBC(0x0013);
+	mach->cpu.SetDE(0x00D8);
+	mach->cpu.SetHL(0x014D);
+	
 	mach_cleanup.Cancel();
 	return mach;
 }
@@ -74,12 +80,6 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 	}
 
 	this->m_rom_size = rom_size;
-	cpu.SetPC(CARTRIDGE_ENTRY_POINT);
-	cpu.SetSP(0xFFFE);
-	cpu.SetAF(0x01B0);
-	cpu.SetBC(0x0013);
-	cpu.SetDE(0x00D8);
-	cpu.SetHL(0x014D);
 
 	return true;
 }
@@ -91,10 +91,11 @@ bool Machine::StepMachine() {
 	// fetch Opcode and execute instruction
 	// uint8_t variable can't overflow main_instruction array
 	const uint16_t pc = this->cpu.GetPC();
-	printf("%X: ", pc);
+	printf("PC: %4x | ", pc);
 	if(pc < CHAR_DATA_OFFSET) {
 		const auto op = memory.ReadU8(pc);
 		cpu.SetOP(op);
+		printf("OPCODE: %2x | ", op);
 		main_instructions[op](this);
 	} 
 	else {
