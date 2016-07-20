@@ -1068,7 +1068,20 @@ void push_E5(Machine* const mach) {
 void and_E6(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rst_E7(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void add_E8(Machine* mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void jp_E9(Machine* mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+void jp_E9(Machine* const mach) {
+	// JP (HL)
+	// Jump to address contained in HL
+	// bytes: 1
+	// clock cycles: 4
+	const auto hl = mach->cpu.GetHL();
+	mach->cpu.SetPC(hl);
+	
+	printf("JP (HL); HL -> (%x)\n", hl);
+}
 
 
 
