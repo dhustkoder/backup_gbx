@@ -9,5 +9,5 @@ CXX_LINK_LIBS_PATH=
 CXX_LINK_LIBS= -lc
 FILES=Source/*.cpp
 
-compile_objs:
+compile:
 	$(CXX) $(FILES) $(CXX_LINK_LIBS_PATH) $(CXX_LINK_LIBS) $(CXX_INCLUDE) $(CXX_FLAGS) -ogbx.exe
