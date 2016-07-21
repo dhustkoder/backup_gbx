@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.8)
 project(gbx)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -pedantic -pedantic-errors -Wall -Wextra -Werror -fno-exceptions -fno-rtti")
@@ -13,8 +13,10 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 
+
 # "Release" full optimization , no debug info.
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG -O3 -flto -fomit-frame-pointer -ffunction-sections -fdata-sections")
 
 	set(LINK_FLAGS "-nodefaultlibs -flto -s -Wl,--gc-sections")
@@ -23,24 +25,35 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
 	set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "${LINK_FLAGS}")
 	set(CMAKE_STATIC_LIBRARY_LINK_CXX_FLAGS "${LINK_FLAGS}")
 
+
+
 # "Debug" full debug information, no optimization, asserts enabled
 elseif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DEBUG -O0 -g3")
 
-	if(${ADDRESS_SANIZIER})
+
+	if(ADDRESS_SANIZIER)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 	endif()
 
-	if(${UNDEFINED_SANITIZER})
+	if(UNDEFINED_SANITIZER)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
 	endif()
 
 endif()
 
+#directories
+set(GBX_SRC_DIR "./Source")
 
+#using headers only utitlites from utix
+include_directories("./Dependencies/Utix/Utix/include/")
 
-file(GLOB_RECURSE SRC ./Source/*.cpp)
-include_directories(./Dependencies/Utix/Utix/include/)
-add_executable(${PROJECT_NAME} ${SRC})
-#link libc
+#files
+file(GLOB_RECURSE GBX_SRC "${GBX_SRC_DIR}/*.cpp")
+
+# compile
+add_executable(${PROJECT_NAME} ${GBX_SRC})
+
+# link libraries
 target_link_libraries(${PROJECT_NAME} -lc)
