@@ -1,21 +1,17 @@
 
 
 
-typedef volatile unsigned char* Addr;
-#define ADDR(x) ((Addr)x)
+#define ADDR(x) ((unsigned char*)x)
 
 void main(void) {
 
-//	Addr ptr = ADDR(0x6677);
-//	Addr ptr = ADDR(0x1111);
-//	Addr ptr = ADDR(0x2222);
-	Addr ptr = ADDR(0x3031);
-//	Addr ptr = ADDR(0x4444);
+	
+	volatile unsigned char* const ptr = ADDR(0x3031);
+//	volatile unsigned char* const ptr2 = ADDR(0x7117);
 
-store:
-
-	*ptr = 0x66;
-
-goto store;
+	while(1) {
+		*ptr = 0x66;
+//		*ptr2 = 0x99;
+	}
 
 }

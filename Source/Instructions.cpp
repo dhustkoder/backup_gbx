@@ -131,7 +131,7 @@ void inc_04(Machine* const mach) {
 	// clock cyles: 4
 	// flags affected Z 0 H -
 	const auto b = mach->cpu.GetB();
-	const auto result = mach->cpu.ADDWithZNH(b, 1);
+	const auto result = mach->cpu.INC(b);
 	mach->cpu.SetB(result);
 	mach->cpu.AddPC(1);
 
@@ -148,11 +148,12 @@ void dec_05(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected Z 1 H -
 	const auto b = mach->cpu.GetB();
-	const auto result = mach->cpu.SUBWithZNH(b, 1);
+	const auto result = mach->cpu.DEC(b);
 	mach->cpu.SetB(result);
 	mach->cpu.AddPC(1);
 
-	printf("DEC B; -> B(%x)\n", result);
+	printf("DEC B; -> B(%x) | ", result);
+	mach->cpu.ShowFlags();
 }
 
 
@@ -192,11 +193,12 @@ void dec_0D(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected: Z 1 H
 	const auto c = mach->cpu.GetC();
-	const auto result = mach->cpu.SUBWithZNH(c, 1);
+	const auto result = mach->cpu.DEC(c);
 	mach->cpu.SetC(result);
 	mach->cpu.AddPC(1);
 
-	printf("DEC C; -> C(%x)\n", result);
+	printf("DEC C; -> C(%x) | ", result);
+	mach->cpu.ShowFlags();
 }
 
 
@@ -770,12 +772,13 @@ void add_87(Machine* const mach) {
 	// clock cycles: 4
 	// flags affected: Z 0 H C
 	auto a = mach->cpu.GetA();
-	a = mach->cpu.ADC8(a, a);
+	a = mach->cpu.ADD(a, a);
 	mach->cpu.SetA(a);
 	mach->cpu.AddPC(1);
 
 
-	printf("ADD A, A; -> A(%x)\n", a);
+	printf("ADD A, A; -> A(%x) | ", a);
+	mach->cpu.ShowFlags();
 }
 
 
@@ -844,18 +847,12 @@ void xor_AF(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 4
 	// flags affected: Z 0 0 0
-	auto a = mach->cpu.GetA();
-	a ^= a;
-
-	if(a == 0)
-		mach->cpu.SetF( Cpu::FLAG_Z );
-	else
-		mach->cpu.SetF(0);
-
-	mach->cpu.SetA(a);
+	const auto a = mach->cpu.GetA();
+	const auto result = mach->cpu.XOR(a, a);
+	mach->cpu.SetA(result);
 	mach->cpu.AddPC(1);
 
-	printf("XOR A; -> A(%x)\n", a);
+	printf("XOR A; -> A(%x) | ", result);
 	mach->cpu.ShowFlags();
 }
 
@@ -885,11 +882,12 @@ void or_B6(Machine* const mach) {
 	const auto a = mach->cpu.GetA();
 	const auto hl = mach->cpu.GetHL();
 	const auto value = mach->memory.ReadU8(hl);
-	const auto result = mach->cpu.ORWithZNHC(value, a);
+	const auto result = mach->cpu.OR(value, a);
 	mach->cpu.SetA(result);
 	mach->cpu.AddPC(1);
 
-	printf("OR (HL); -> (HL)(%x) | A(%x)\n", value, a);
+	printf("OR (HL); -> HL(%x), (HL)(%x), A(%x) | ", hl, value, a);
+	mach->cpu.ShowFlags();
 }
 
 
@@ -1009,13 +1007,13 @@ void ret_D0(Machine* const mach) {
 	// clock cycles: 20 if return 8 if not
 	const auto carry_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
 
-	if(carry_flag)
- 		mach->cpu.AddPC(1);
-	else
+	if(!carry_flag)
 		mach->cpu.SetPC(mach->PopStack16());
+	else
+		mach->cpu.AddPC(1);
 
 
-	printf("RET NC; -> C(%x)\n", carry_flag);
+	printf("RET NC;\n");
 }
 
 
@@ -1126,11 +1124,12 @@ void and_E6(Machine* const mach) {
 	const auto a = mach->cpu.GetA();
 	const auto pc = mach->cpu.GetPC();
 	const auto d8 = mach->memory.ReadU8(pc + 1);
-	const auto result = mach->cpu.ANDWithZNHC(a, d8);
+	const auto result = mach->cpu.AND(a, d8);
 	mach->cpu.SetA(result);
 	mach->cpu.AddPC(2);
 	
-	printf("AND %x\n", d8);
+	printf("AND %x ; | ", d8);
+	mach->cpu.ShowFlags();
 }
 
 
@@ -1139,7 +1138,35 @@ void and_E6(Machine* const mach) {
 
 
 void rst_E7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void add_E8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+
+
+
+
+void add_E8(Machine* const mach) {
+	// ADD SP, r8
+	// add immediate signed 8 bit data to SP
+	// bytes: 2
+	// clock cycles: 16
+	// flags affected: 0 0 H C
+	const auto pc = mach->cpu.GetPC();
+	const auto sp = mach->cpu.GetSP();
+	const auto r8 = mach->memory.ReadS8(pc + 1);
+	const uint32_t result = sp + r8;
+	mach->cpu.SetF(0);
+	
+	if( result & 0xffff0000 )
+		mach->cpu.SetFlags(Cpu::FLAG_C);
+	if( ((result&0xf) + (r8&0xf)) > 0x0f )
+		mach->cpu.SetFlags(Cpu::FLAG_H);
+	
+	mach->cpu.SetSP(result & 0xffff);
+	mach->cpu.AddPC(2);
+	
+	printf("LD SP, %i; -> SP(%x) | ", r8, result);
+	mach->cpu.ShowFlags();
+}
+
 
 
 
@@ -1200,12 +1227,12 @@ void ldh_F0(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto a8 = mach->memory.ReadU8(pc + 1);
 	const uint16_t evaluated_address = 0xFF00 + a8;
-	const auto a = mach->memory.ReadU8(evaluated_address);
-	mach->cpu.SetA(a);
+	const auto value = mach->memory.ReadU8(evaluated_address);
+	mach->cpu.SetA(value);
 	mach->cpu.AddPC(2);
 
 
-	printf("LDH A, (a8); -> pointer(%x), A(%x)\n", evaluated_address, a);
+	printf("LDH A, (a8); -> pointer(%x), A(%x)\n", evaluated_address, value);
 }
 
 
@@ -1311,10 +1338,11 @@ void cp_FE(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto a = mach->cpu.GetA();
 	const auto d8 = mach->memory.ReadU8(pc + 1);
-	mach->cpu.SBC8(a, d8);
+	mach->cpu.SUB(a, d8);
 	mach->cpu.AddPC(2);
 
-	printf("CP %x\n", d8);
+	printf("CP %x; | ", d8);
+	mach->cpu.ShowFlags();
 }
 
 

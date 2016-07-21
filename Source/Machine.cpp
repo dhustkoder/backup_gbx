@@ -88,6 +88,12 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 
 
 bool Machine::StepMachine() {
+	
+	// boot code seems to expected the value in this area
+	// to keep changing
+	memory.WriteU8(0xff44, memory.ReadU8(0xff44) + 1);
+	
+	
 	// fetch Opcode and execute instruction
 	// uint8_t variable can't overflow main_instruction array
 	const uint16_t pc = this->cpu.GetPC();

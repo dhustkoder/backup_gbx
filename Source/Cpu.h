@@ -63,21 +63,18 @@ public:
 	void SetFlags(const Cpu::Flags flags);
 	void UnsetFlags(const Cpu::Flags flags);
 
-
-
-
-	uint16_t ADC16(uint16_t first, const uint16_t second);
-	uint16_t SBC16(uint16_t first, const uint16_t second);
+	uint8_t INC(uint8_t value);
+	uint8_t DEC(uint8_t value);
 	
-	uint8_t ADC8(uint8_t first, const uint8_t second);
-	uint8_t SBC8(uint8_t first, const uint8_t second);
+	uint8_t ADC(uint8_t first, const uint8_t second);
+	uint8_t SBC(uint8_t first, const uint8_t second);
 
-	uint8_t ADDWithZNH(const uint8_t first, const uint8_t second);
-	uint8_t SUBWithZNH(const uint8_t first, const uint8_t second);
+	uint8_t ADD(const uint8_t first, const uint8_t second);
+	uint8_t SUB(const uint8_t first, const uint8_t second);
 	
-	uint8_t ORWithZNHC(const uint8_t first, const uint8_t second);
-	uint8_t ANDWithZNHC(const uint8_t first, const uint8_t second);
-
+	uint8_t OR(const uint8_t first, const uint8_t second);
+	uint8_t AND(const uint8_t first, const uint8_t second);
+	uint8_t XOR(const uint8_t first, const uint8_t second);
 
 private:
 	uint16_t pc;
@@ -156,10 +153,6 @@ inline void Cpu::SetDE(const uint16_t val) { de.pair = val; }
 inline void Cpu::SetHL(const uint16_t val) { hl.pair = val; }
 
 inline void Cpu::AddPC(const uint16_t val) { pc += val; }
-
-
-
-
 
 
 
