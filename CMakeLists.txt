@@ -3,6 +3,9 @@ project(gbx)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -pedantic -pedantic-errors -Wall -Wextra -Werror -fno-exceptions -fno-rtti")
 
+option(ADDRESS_SANITIZER OFF)
+option(UNDEFINED_SANITIZER OFF)
+
 
 if(NOT CMAKE_BUILD_TYPE)
 	message(STATUS "No build type selected! default to Debug")
@@ -22,7 +25,15 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
 
 # "Debug" full debug information, no optimization, asserts enabled
 elseif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DEBUG -O0 -g3 -fsanitize=address -fsanitize=undefined")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DEBUG -O0 -g3")
+
+	if(${ADDRESS_SANIZIER})
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+	endif()
+
+	if(${UNDEFINED_SANITIZER})
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
+	endif()
 
 endif()
 
