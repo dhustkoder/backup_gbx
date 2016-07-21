@@ -65,13 +65,21 @@ catridge's entry point is at 0x100
 //constexpr const size_t FIXED_HOME_SIZE = 16 * 1024;
 
 //MEMORY AREAS OFFSETS:
+//constexpr const size_t OAM_RAM_MAX_OFFSET = 0xFEFF;
 //constexpr const size_t OAM_RAM_OFFSET = 0xFE00;
+//constexpr const size_t WORK_RAM_MAX_OFFSET = 0xDFFF;
 //constexpr const size_t WORK_RAM_OFFSET = 0xC000;
+//constexpr const size_t EXPANDED_WORK_RAM_MAX_OFFSET = 0xBFFF;
 //constexpr const size_t EXPANDED_WORK_RAM_OFFSET = 0xA000;
+//constexpr const size_t BKG_DISP_DATA2_MAX_OFFSET = 0x9FFF;
 //constexpr const size_t BKG_DISP_DATA2_OFFSET = 0x9C00;
+//constexpr const size_t BKG_DISP_DATA1_MAX_OFFSET = 0x9BFF;
 //constexpr const size_t BKG_DISP_DATA1_OFFSET = 0x9800;
-constexpr const size_t CHAR_DATA_OFFSET = 0x8000;
+//constexpr const size_t CHAR_DATA_MAX_OFFSET = 0x97FF;
+//constexpr const size_t CHAR_DATA_OFFSET = 0x8000;
+constexpr const size_t HOME_MAX_OFFSET = 0x7FFF;
 //constexpr const size_t HOME_OFFSET = 0x4000;
+//constexpr const size_t FIXED_HOME_MAX_OFFSET = 0x3FFF;
 //onstexpr const size_t FIXED_HOME_OFFSET = 0;
 constexpr const size_t CARTRIDGE_ENTRY_POINT = 0x100;
 
