@@ -19,6 +19,7 @@ inline Cpu::Flags CheckZH(uint16_t result, uint8_t first, int16_t second) {
 }
 
 
+
 inline Cpu::Flags CheckZHC(uint16_t result, uint8_t first, int16_t second) {
 	uint8_t f = 0;
 	
@@ -35,9 +36,17 @@ inline Cpu::Flags CheckZHC(uint16_t result, uint8_t first, int16_t second) {
 
 
 
+
+
+
 Cpu::Flags Cpu::GetFlags(const Cpu::Flags flags) const {
 	return static_cast<Flags>(GetF() & flags);
 }
+
+
+
+
+
 
 
 void Cpu::ShowFlags() const {
@@ -50,9 +59,18 @@ void Cpu::ShowFlags() const {
 }
 
 
+
+
+
+
+
 void Cpu::SetFlags(const Cpu::Flags flags) {
 	SetF(GetF() | flags);
 }
+
+
+
+
 
 
 void Cpu::UnsetFlags(const Cpu::Flags flags) {
@@ -75,6 +93,11 @@ uint8_t Cpu::INC(uint8_t value) {
 	
 	return value;
 }
+
+
+
+
+
 
 
 
@@ -110,6 +133,11 @@ uint8_t Cpu::ADC(uint8_t first, const uint8_t second) {
 
 
 
+
+
+
+
+
 uint8_t Cpu::SBC(uint8_t first, const uint8_t second) {
 	// flags effect: Z 1 H C
 	if(GetFlags(FLAG_C))
@@ -117,6 +145,10 @@ uint8_t Cpu::SBC(uint8_t first, const uint8_t second) {
 		
 	return SUB(first, second);
 }
+
+
+
+
 
 
 
@@ -136,6 +168,9 @@ uint8_t Cpu::ADD(const uint8_t first, const uint8_t second) {
 
 
 
+
+
+
 uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 1 H C
 	const uint16_t result = first - second;
@@ -149,12 +184,21 @@ uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 
 
 
+
+
+
+
+
 uint8_t Cpu::OR(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 0 0
 	const auto result = first | second;
 	SetF( result == 0 ? FLAG_Z : 0 );
 	return result;
 }
+
+
+
+
 
 
 
@@ -166,12 +210,22 @@ uint8_t Cpu::AND(const uint8_t first, const uint8_t second) {
 }
 
 
+
+
+
+
+
 uint8_t Cpu::XOR(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 0 0
 	const auto result = first ^ second;
 	SetF(result == 0 ?  FLAG_Z : 0 );
 	return result;
 }
+
+
+
+
+
 
 
 

@@ -64,6 +64,8 @@ void miss_instr(Machine* const mach) {
 
 
 
+
+
 void nop_00(Machine* const mach) {
 	// no operation is performed
 	// bytes: 1
@@ -71,6 +73,9 @@ void nop_00(Machine* const mach) {
 	mach->cpu.AddPC(1);
 	printf("NOP\n");
 }
+
+
+
 
 
 void ld_01(Machine* const mach) {
@@ -86,6 +91,10 @@ void ld_01(Machine* const mach) {
 
 	printf("LD BC, %x\n", d16);
 }
+
+
+
+
 
 
 
@@ -108,6 +117,9 @@ void ld_02(Machine* const mach) {
 
 
 
+
+
+
 void inc_03(Machine* const mach) {
 	// INC BC
 	// adds one to BC
@@ -119,6 +131,9 @@ void inc_03(Machine* const mach) {
 
 	printf("INC BC; -> BC(%x)\n", bc);
 }
+
+
+
 
 
 
@@ -141,6 +156,9 @@ void inc_04(Machine* const mach) {
 
 
 
+
+
+
 void dec_05(Machine* const mach) {
 	// DEC B
 	// decrement B by 1
@@ -155,6 +173,9 @@ void dec_05(Machine* const mach) {
 	printf("DEC B; -> B(%x) | ", result);
 	mach->cpu.ShowFlags();
 }
+
+
+
 
 
 
@@ -186,6 +207,9 @@ void inc_0C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
+
 void dec_0D(Machine* const mach) {
 	// DEC C
 	// subtract C by one
@@ -203,6 +227,10 @@ void dec_0D(Machine* const mach) {
 
 
 
+
+
+
+
 void ld_0E(Machine* const mach) { 
 	// LD C, d8
 	// loads immediate 8 bit value into C
@@ -215,6 +243,7 @@ void ld_0E(Machine* const mach) {
 
 	printf("LD C, %x\n", d8);
 }
+
 
 
 
@@ -281,6 +310,9 @@ void jr_20(Machine* const mach) {
 
 
 
+
+
+
 void ld_21(Machine* const mach) {
 	// LD HL, d16
 	// load immediate 16 bit value into HL
@@ -297,7 +329,12 @@ void ld_21(Machine* const mach) {
 
 
 
+
+
+
 void ld_22(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
 
 
 
@@ -324,6 +361,10 @@ void ld_26(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void daa_27(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
+
+
+
+
 void jr_28(Machine* const mach) {
 	// JP Z, r8
 	// jump if Z flag is set
@@ -339,7 +380,13 @@ void jr_28(Machine* const mach) {
 
 
 
+
+
+
 void add_29(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
 
 
 
@@ -358,6 +405,9 @@ void ld_2A(Machine* const mach) {
 
 	printf("LD A, (HL+); HL -> (%x)\n", hl);
 }
+
+
+
 
 
 
@@ -413,6 +463,10 @@ void jr_30(Machine* const mach) {
 
 
 
+
+
+
+
 void ld_31(Machine* const mach) {
 	// LD SP, d16
 	// loads immediate 16 bits value into SP
@@ -425,6 +479,11 @@ void ld_31(Machine* const mach) {
 
 	printf("LD SP, %x\n", d16);
 }
+
+
+
+
+
 
 
 void ld_32(Machine* const mach) {
@@ -450,6 +509,7 @@ void inc_34(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_35(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_36(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void scf_37(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
 
 
 
@@ -481,6 +541,9 @@ void ld_3A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_3B(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void inc_3C(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_3D(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
 
 
 
@@ -543,6 +606,9 @@ void ld_55(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
+
 void ld_56(Machine* const mach) {
 	// LD D, (HL)
 	// value in memory address pointed by HL is stored in D
@@ -555,6 +621,10 @@ void ld_56(Machine* const mach) {
 
 	printf("LD D, (HL); -> HL(%x), D(%x)\n", hl, value);
 }
+
+
+
+
 
 
 
@@ -575,12 +645,18 @@ void ld_57(Machine* const mach) {
 
 
 
+
+
+
 void ld_58(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_59(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_5A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_5B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_5C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_5D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
 
 
 
@@ -619,6 +695,9 @@ void ld_61(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
+
 void ld_62(Machine* const mach) {
 	// LD H, D
 	// value in D is stored into H
@@ -648,6 +727,8 @@ void ld_6A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
 void ld_6B(Machine* const mach) {
 	// LD L, E
 	// value in E is stored in L
@@ -659,6 +740,8 @@ void ld_6B(Machine* const mach) {
 
 	printf("LD L, E; -> E(%x)\n", e);
 }
+
+
 
 
 
@@ -680,6 +763,9 @@ void ld_6F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
+
 void ld_70(Machine* const mach) {
 	// LD (HL), B
 	// value in B is stored into address pointed by HL
@@ -692,6 +778,10 @@ void ld_70(Machine* const mach) {
 
 	printf("LD (HL), B; -> HL(%x), B(%x)\n", hl, b);
 }
+
+
+
+
 
 
 
@@ -717,6 +807,8 @@ void ld_71(Machine* const mach) {
 
 
 
+
+
 void ld_72(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_73(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_74(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -725,6 +817,10 @@ void halt_76(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_77(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_78(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_79(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
 
 
 
@@ -739,6 +835,10 @@ void ld_7A(Machine* const mach) {
  
 	printf("LD A, D; -> A(%x)\n", d);
 }
+
+
+
+
 
 
 
@@ -765,6 +865,8 @@ void add_86(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
 void add_87(Machine* const mach) {
 	// ADD A, A
 	// add A into A
@@ -780,6 +882,9 @@ void add_87(Machine* const mach) {
 	printf("ADD A, A; -> A(%x) | ", a);
 	mach->cpu.ShowFlags();
 }
+
+
+
 
 
 
@@ -841,6 +946,9 @@ void xor_AE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
+
 void xor_AF(Machine* const mach) {
 	// XOR A
 	// bitwise xor in a with a
@@ -861,6 +969,9 @@ void xor_AF(Machine* const mach) {
 
 
 
+
+
+
 // 0xB0
 void or_B0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void or_B1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -868,6 +979,9 @@ void or_B2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void or_B3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void or_B4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void or_B5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
 
 
 
@@ -894,6 +1008,9 @@ void or_B6(Machine* const mach) {
 
 
 
+
+
+
 void or_B7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void cp_B8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void cp_B9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -913,6 +1030,12 @@ void cp_BF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ret_C0(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void pop_C1(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void jp_C2(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
+
+
+
+
+
+
 
 
 void jp_C3(Machine* const mach)   { 
@@ -942,6 +1065,8 @@ void ret_C8(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
 void ret_C9(Machine* const mach) {
 	// RET
 	// return from subroutine
@@ -963,6 +1088,9 @@ void ret_C9(Machine* const mach) {
 void jp_CA(Machine* const mach)     { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
 void PREFIX_CB(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void call_CC(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
+
+
+
 
 
 
@@ -999,6 +1127,8 @@ void rst_CF(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
 // 0xD0
 void ret_D0(Machine* const mach) { 
 	// RET NC
@@ -1020,9 +1150,11 @@ void ret_D0(Machine* const mach) {
 
 
 
+
+
 void pop_D1(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void jp_D2(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
-// MISSING ----
+// MISSING D3 ----
 void call_D4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
 void push_D5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void sub_D6(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
@@ -1030,11 +1162,13 @@ void rst_D7(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ret_D8(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void reti_D9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void jp_DA(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
-// MISSING -----
+// MISSING DB -----
 void call_DC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
-// MISSING -----
+// MISSING DD -----
 void sbc_DE(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rst_DF(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
 
 
 
@@ -1062,6 +1196,9 @@ void ldh_E0(Machine* const mach) {
 
 
 
+
+
+
 void pop_E1(Machine* const mach) {
 	// POP HL
 	// pop 2 bytes off stack into register HL
@@ -1073,6 +1210,10 @@ void pop_E1(Machine* const mach) {
 
 	printf("POP HL; -> HL(%x)\n", value);
 }
+
+
+
+
 
 
 
@@ -1092,8 +1233,14 @@ void ld_E2(Machine* const mach) {
 
 
 
+
+
+
 // MISSING E3 ----
 // MISSING E4 ----
+
+
+
 
 
 
@@ -1109,6 +1256,9 @@ void push_E5(Machine* const mach) {
 
 	printf("PUSH HL\n");
 }
+
+
+
 
 
 
@@ -1143,6 +1293,11 @@ void rst_E7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 
+
+
+
+
+
 void add_E8(Machine* const mach) {
 	// ADD SP, r8
 	// add immediate signed 8 bit data to SP
@@ -1171,6 +1326,11 @@ void add_E8(Machine* const mach) {
 
 
 
+
+
+
+
+
 void jp_E9(Machine* const mach) {
 	// JP (HL)
 	// Jump to address contained in HL
@@ -1181,6 +1341,10 @@ void jp_E9(Machine* const mach) {
 	
 	printf("JP (HL); HL -> (%x)\n", hl);
 }
+
+
+
+
 
 
 
@@ -1206,11 +1370,14 @@ void ld_EA(Machine* const mach) {
 
 
 
-// MISSING -----
-// MISSING -----
-// MISSING -----
+
+// MISSING EB -----
+// MISSING EC -----
+// MISSING ED -----
 void xor_EE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rst_EF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
 
 
 
@@ -1240,8 +1407,14 @@ void ldh_F0(Machine* const mach) {
 
 
 
+
+
 void pop_F1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_F2(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+
+
+
 
 
 
@@ -1265,7 +1438,16 @@ void di_F3(Machine* const mach) {
 
 
 
-// MISSING ----
+
+
+
+
+// MISSING F4 ----
+
+
+
+
+
 void push_F5(Machine* const mach) {
 	// PUSH AF
 	// push register AF into stack
@@ -1282,10 +1464,16 @@ void push_F5(Machine* const mach) {
 
 
 
+
 void or_F6(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rst_F7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_F8(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void ld_F9(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
 
 
 
@@ -1302,6 +1490,11 @@ void ld_FA(Machine* const mach) {
 
 	printf("LD A, (a16); -> a16(%x), A(%x)\n", a16, value);
 }
+
+
+
+
+
 
 
 
