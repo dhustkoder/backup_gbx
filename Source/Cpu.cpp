@@ -160,7 +160,7 @@ uint8_t Cpu::ADD(const uint8_t first, const uint8_t second) {
 	const auto f = CheckZHC(result, first, second);
 	
 	SetF(f);
-	return result;
+	return static_cast<uint8_t>(result);
 }
 
 
@@ -178,7 +178,7 @@ uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 	const auto f = CheckZHC(result, first, -second);
 
 	SetF(f | FLAG_N);
-	return result;
+	return static_cast<uint8_t>(result);
 }
 
 
