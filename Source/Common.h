@@ -18,13 +18,13 @@ inline void Split16(const uint16_t value, uint8_t* const high_byte, uint8_t* con
 
 
 inline void Add16(const uint16_t val, uint8_t* const high_byte, uint8_t* const low_byte) {
-	const auto result = ConcatBytes(*high_byte, *low_byte) + val;
+	const uint16_t result = ConcatBytes(*high_byte, *low_byte) + val;
 	Split16(result, high_byte, low_byte);
 }
 
 
 inline void Sub16(const uint16_t val, uint8_t* const high_byte, uint8_t* const low_byte) {
-	const auto result = ConcatBytes(*high_byte, *low_byte) - val;
+	const uint16_t result = ConcatBytes(*high_byte, *low_byte) - val;
 	Split16(result, high_byte, low_byte);
 }
 

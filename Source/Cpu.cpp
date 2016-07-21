@@ -191,7 +191,7 @@ uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 
 uint8_t Cpu::OR(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 0 0
-	const auto result = first | second;
+	const uint8_t result = first | second;
 	SetF( result == 0 ? FLAG_Z : 0 );
 	return result;
 }
@@ -204,7 +204,7 @@ uint8_t Cpu::OR(const uint8_t first, const uint8_t second) {
 
 uint8_t Cpu::AND(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 1 0
-	const auto result = first & second;
+	const uint8_t result = first & second;
 	SetF( result == 0 ? (FLAG_Z | FLAG_H) : FLAG_H);
 	return result;
 }
@@ -217,7 +217,7 @@ uint8_t Cpu::AND(const uint8_t first, const uint8_t second) {
 
 uint8_t Cpu::XOR(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 0 0
-	const auto result = first ^ second;
+	const uint8_t result = first ^ second;
 	SetF(result == 0 ?  FLAG_Z : 0 );
 	return result;
 }

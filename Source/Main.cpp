@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 	if(!machine)
 		return EXIT_FAILURE;
 
-	const auto machine_cleanup = utix::MakeScopeExit([=]() noexcept {
+	const auto machine_cleanup = utix::MakeScopeExit([=] {
 		gbx::DestroyMachine(machine);
 	});
 
