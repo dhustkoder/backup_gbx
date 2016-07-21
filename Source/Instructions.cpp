@@ -47,7 +47,8 @@ InstructionFunction main_instructions[0x100] =
 // a8:  8 bit unsigned data, which are added to $FF00 in certain instructions (replacement for missing IN and OUT instructions)
 // a16: 16 bit address
 // r8: means 8 bit signed data, which are added to program counter
-
+// note: on gameboy PC appears to be incremented before the instruction is executed -
+// so relative jump instructions (jr) here still need to add 2 to pc, or to r8 itself 
 
 
 
@@ -396,11 +397,11 @@ void jr_30(Machine* const mach) {
 	// bytes: 2
 	// clock cycles: 12 if jump 8 if not
 	
-	const auto c_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
+	const auto carry_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
 	const auto pc = mach->cpu.GetPC();
 	const auto r8 = mach->memory.ReadS8(pc + 1);
 	
-	if(!c_flag)
+	if(!carry_flag)
 		mach->cpu.AddPC(r8+2);
 	else
 		mach->cpu.AddPC(2);
@@ -459,9 +460,9 @@ void jr_38(Machine* const mach) {
 	// clock cycles: if jumps 12, else 8
 	const auto pc = mach->cpu.GetPC();
 	const auto r8 = mach->memory.ReadS8(pc + 1 );
-	const auto c_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
+	const auto carry_flag = mach->cpu.GetFlags(Cpu::FLAG_C);
 
-	if(c_flag)
+	if(carry_flag)
 		mach->cpu.AddPC(r8+2);
 	else
 		mach->cpu.AddPC(2);
