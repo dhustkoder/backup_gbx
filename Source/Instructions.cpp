@@ -125,7 +125,7 @@ void inc_03(Machine* const mach) {
 	// adds one to BC
 	// bytes: 1
 	// clock cyles: 6 or 8 ?
-	const auto bc = mach->cpu.GetBC() + 1;
+	const uint16_t bc = mach->cpu.GetBC() + 1;
 	mach->cpu.SetBC(bc);
 	mach->cpu.AddPC(1);
 
@@ -344,7 +344,7 @@ void inc_23(Machine* const mach) {
 	// INC HL
 	// bytes: 1
 	// clock cycles: 8
-	const auto result = mach->cpu.GetHL() + 1;
+	const uint16_t result = mach->cpu.GetHL() + 1;
 	mach->cpu.SetHL(result);
 	mach->cpu.AddPC(1);
 
@@ -420,7 +420,7 @@ void dec_2B(Machine* const mach) {
 	// decrement register HL by 1
 	// bytes: 1
 	// clock cycles: 8
-	const auto result = mach->cpu.GetHL() - 1;
+	const uint16_t result = mach->cpu.GetHL() - 1;
 	mach->cpu.SetHL(result);
 	mach->cpu.AddPC(1);
 	

@@ -20,7 +20,7 @@ Machine* CreateMachine() {
 		return nullptr;
 	}
 
-	auto mach_cleanup = utix::MakeScopeExitIf([=]() noexcept {
+	auto mach_cleanup = utix::MakeScopeExitIf([=] {
 			free(mach);
 	});
 
@@ -59,7 +59,7 @@ bool Machine::LoadRom(const char* const rom_file_name) {
 		return false;
 	}
 
-	const auto file_cleanup = utix::MakeScopeExit([=]() noexcept {
+	const auto file_cleanup = utix::MakeScopeExit([=] {
 		fclose(rom_file);
 	});	
 

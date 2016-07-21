@@ -45,7 +45,7 @@ inline size_t Machine::GetRomSize() const {
 
 
 inline void Machine::PushStack8(const uint8_t value) {
-	const auto sp = cpu.GetSP() - 1;
+	const uint16_t sp = cpu.GetSP() - 1;
 	memory.WriteU8(sp, value);
 	cpu.SetSP(sp);
 
@@ -54,7 +54,7 @@ inline void Machine::PushStack8(const uint8_t value) {
 
 
 inline void Machine::PushStack16(const uint16_t value) {
-	const auto sp = cpu.GetSP() - 2;
+	const uint16_t sp = cpu.GetSP() - 2;
 	memory.WriteU16(sp, value);
 	cpu.SetSP(sp);
 }
