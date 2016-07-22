@@ -202,7 +202,27 @@ void rlca_07(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_08(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
 void add_09(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_0A(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void dec_0B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+void dec_0B(Machine* const mach) {
+	// DEC BC
+	// decrement BC
+	// bytes: 1
+	// clock cycles: 8
+	const uint16_t result = mach->cpu.GetBC() - 1;
+	mach->cpu.SetBC(result);
+	mach->cpu.AddPC(1);
+	
+	printf("DEC BC; -> BC(%x)\n", result);
+}
+
+
+
+
+
 void inc_0C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
@@ -403,7 +423,7 @@ void ld_2A(Machine* const mach) {
 	mach->cpu.SetHL(hl + 1);
 	mach->cpu.AddPC(1); 
 
-	printf("LD A, (HL+); HL -> (%x)\n", hl);
+	printf("LD A, (HL+); -> HL(%x), (HL)(%x)\n", hl, value);
 }
 
 
@@ -492,9 +512,9 @@ void ld_32(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 8
 	const auto a = mach->cpu.GetA();
-	auto hl = mach->cpu.GetHL();	
-	mach->memory.WriteU8(hl--, a);
-	mach->cpu.SetHL(hl);
+	const auto hl = mach->cpu.GetHL();	
+	mach->memory.WriteU8(hl, a);
+	mach->cpu.SetHL(hl - 1);
 	mach->cpu.AddPC(1);
 
 	printf("LD (HL-), A; -> HL(%x) , A(%x)\n", hl, a);
@@ -507,7 +527,30 @@ void ld_32(Machine* const mach) {
 void inc_33(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void inc_34(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_35(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_36(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+
+
+
+
+void ld_36(Machine* const mach) {
+	// LD (HL), d8
+	// store d8 into mem address pointed by HL
+	// bytes: 2
+	// clock cycles: 12
+	const auto pc = mach->cpu.GetPC();
+	const auto hl = mach->cpu.GetHL();
+	const auto d8 = mach->memory.ReadU8(pc + 1);
+	mach->memory.WriteU8(hl, d8);
+	mach->cpu.AddPC(2);
+	
+	printf("LD (HL), %x; -> HL(%x)\n", d8, hl);
+}
+
+
+
+
+
+
 void scf_37(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
@@ -619,7 +662,7 @@ void ld_56(Machine* const mach) {
 	mach->cpu.SetD(value); 
 	mach->cpu.AddPC(1);
 
-	printf("LD D, (HL); -> HL(%x), D(%x)\n", hl, value);
+	printf("LD D, (HL); -> HL(%x), (HL)(%x)\n", hl, value);
 }
 
 
@@ -672,7 +715,7 @@ void ld_5E(Machine* const mach) {
 	mach->cpu.AddPC(1);
 
 
-	printf("LD E, (HL); -> HL(%x), E(%x)\n", hl, value);
+	printf("LD E, (HL); -> HL(%x), (HL)(%x)\n", hl, value);
 }
 
 
@@ -815,7 +858,30 @@ void ld_74(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_75(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void halt_76(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_77(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_78(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void ld_78(Machine* const mach) {
+	// LD A, B
+	// store value in B into A
+	// bytes: 1
+	// clock cycles: 4
+	const auto b = mach->cpu.GetB();
+	mach->cpu.SetA(b);
+	mach->cpu.AddPC(1);
+	
+	printf("LD A, B; -> B(%x)\n", b);
+}
+
+
+
+
+
+
+
 void ld_79(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
@@ -833,7 +899,7 @@ void ld_7A(Machine* const mach) {
 	mach->cpu.SetA(d);
 	mach->cpu.AddPC(1);
  
-	printf("LD A, D; -> A(%x)\n", d);
+	printf("LD A, D; -> D(%x)\n", d);
 }
 
 
@@ -873,13 +939,13 @@ void add_87(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 4
 	// flags affected: Z 0 H C
-	auto a = mach->cpu.GetA();
-	a = mach->cpu.ADD(a, a);
-	mach->cpu.SetA(a);
+	const auto a = mach->cpu.GetA();
+	const auto result = mach->cpu.ADD(a, a);
+	mach->cpu.SetA(result);
 	mach->cpu.AddPC(1);
 
 
-	printf("ADD A, A; -> A(%x) | ", a);
+	printf("ADD A, A; -> A(%x), Result(%x) | ", a, result);
 	mach->cpu.ShowFlags();
 }
 
@@ -960,7 +1026,7 @@ void xor_AF(Machine* const mach) {
 	mach->cpu.SetA(result);
 	mach->cpu.AddPC(1);
 
-	printf("XOR A; -> A(%x) | ", result);
+	printf("XOR A; -> A(%x), Result(%x) | ", a, result);
 	mach->cpu.ShowFlags();
 }
 
@@ -974,7 +1040,32 @@ void xor_AF(Machine* const mach) {
 
 // 0xB0
 void or_B0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void or_B1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+void or_B1(Machine* const mach) {
+	// OR C
+	// or C with A, result in A
+	// bytes: 1
+	// clock cycles: 4
+	// flags affected: Z 0 0 0
+	const auto a = mach->cpu.GetA();
+	const auto c = mach->cpu.GetC();
+	const auto result = mach->cpu.OR(c, a);
+	mach->cpu.SetA(result);
+	mach->cpu.AddPC(1);
+	
+	
+	printf("OR C; -> A(%x), C(%x), Result(%x) | ", a, c, result);
+	mach->cpu.ShowFlags();
+}
+
+
+
+
+
 void or_B2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void or_B3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void or_B4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -1000,7 +1091,7 @@ void or_B6(Machine* const mach) {
 	mach->cpu.SetA(result);
 	mach->cpu.AddPC(1);
 
-	printf("OR (HL); -> HL(%x), (HL)(%x), A(%x) | ", hl, value, a);
+	printf("OR (HL); -> HL(%x), (HL)(%x), A(%x), Result(%x) | ", hl, value, a, result);
 	mach->cpu.ShowFlags();
 }
 
@@ -1488,7 +1579,7 @@ void ld_FA(Machine* const mach) {
 	mach->cpu.SetA(value);
 	mach->cpu.AddPC(3);
 
-	printf("LD A, (a16); -> a16(%x), A(%x)\n", a16, value);
+	printf("LD A, (%x); -> A(%x)\n", a16, value);
 }
 
 
