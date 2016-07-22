@@ -75,7 +75,11 @@ public:
 	uint8_t OR(const uint8_t first, const uint8_t second);
 	uint8_t AND(const uint8_t first, const uint8_t second);
 	uint8_t XOR(const uint8_t first, const uint8_t second);
-
+	
+	
+	
+	uint8_t SWAP(const uint8_t value);
+	
 private:
 	uint16_t pc;
 	uint16_t sp;

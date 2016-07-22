@@ -225,7 +225,12 @@ uint8_t Cpu::XOR(const uint8_t first, const uint8_t second) {
 
 
 
-
+uint8_t Cpu::SWAP(const uint8_t value) {
+	// flags effect: Z 0 0 0
+	const uint8_t result = ((value & 0x0f) << 4) | ((value & 0xf0) >> 4);
+	SetF( result == 0 ? FLAG_Z : 0 );
+	return result;
+}
 
 
 

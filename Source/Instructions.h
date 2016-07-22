@@ -1,5 +1,13 @@
 #ifndef GBX_INSTRUCTIONS_H_
 #define GBX_INSTRUCTIONS_H_
+#include <stdio.h>
+
+#ifdef _DEBUG
+#include <Utix/Assert.h>
+#define ASSERT_INSTR_IMPL() puts(__func__); ASSERT_MSG(false, "Instruction Not Implemented!")
+#else
+#define ASSERT_INSTR_IMPL() puts(__func__);
+#endif
 
 namespace gbx {
 
@@ -7,6 +15,9 @@ class Machine;
 
 using InstructionFunction = void(*)(Machine* const);
 extern InstructionFunction main_instructions[0x100];
+extern InstructionFunction cb_instructions[0x100];
+
+
 
 // Main Instructions:
 extern void miss_instr(Machine* const);
@@ -297,6 +308,282 @@ extern void rst_FF(Machine* const);
 
 
 
+
+
+
+// CB Instructions:
+// 0x00
+extern void rlc_00(Machine* const);
+extern void rlc_01(Machine* const);
+extern void rlc_02(Machine* const);
+extern void rlc_03(Machine* const);
+extern void rlc_04(Machine* const);
+extern void rlc_05(Machine* const);
+extern void rlc_06(Machine* const);
+extern void rlc_07(Machine* const);
+extern void rrc_08(Machine* const);
+extern void rrc_09(Machine* const);
+extern void rrc_0A(Machine* const);
+extern void rrc_0B(Machine* const);
+extern void rrc_0C(Machine* const);
+extern void rrc_0D(Machine* const);
+extern void rrc_0E(Machine* const);
+extern void rrc_0F(Machine* const);
+// 0x01
+extern void rl_10(Machine* const);
+extern void rl_11(Machine* const);
+extern void rl_12(Machine* const);
+extern void rl_13(Machine* const);
+extern void rl_14(Machine* const);
+extern void rl_15(Machine* const);
+extern void rl_16(Machine* const);
+extern void rl_17(Machine* const);
+extern void rr_18(Machine* const);
+extern void rr_19(Machine* const);
+extern void rr_1A(Machine* const);
+extern void rr_1B(Machine* const);
+extern void rr_1C(Machine* const);
+extern void rr_1D(Machine* const);
+extern void rr_1E(Machine* const);
+extern void rr_1F(Machine* const);
+// 0x02
+extern void sla_20(Machine* const);
+extern void sla_21(Machine* const);
+extern void sla_22(Machine* const);
+extern void sla_23(Machine* const);
+extern void sla_24(Machine* const);
+extern void sla_25(Machine* const);
+extern void sla_26(Machine* const);
+extern void sla_27(Machine* const);
+extern void sra_28(Machine* const);
+extern void sra_29(Machine* const);
+extern void sra_2A(Machine* const);
+extern void sra_2B(Machine* const);
+extern void sra_2C(Machine* const);
+extern void sra_2D(Machine* const);
+extern void sra_2E(Machine* const);
+extern void sra_2F(Machine* const);
+// 0x03
+extern void swap_30(Machine* const);
+extern void swap_31(Machine* const);
+extern void swap_32(Machine* const);
+extern void swap_33(Machine* const);
+extern void swap_34(Machine* const);
+extern void swap_35(Machine* const);
+extern void swap_36(Machine* const);
+extern void swap_37(Machine* const);
+extern void srl_38(Machine* const);
+extern void srl_39(Machine* const);
+extern void srl_3A(Machine* const);
+extern void srl_3B(Machine* const);
+extern void srl_3C(Machine* const);
+extern void srl_3D(Machine* const);
+extern void srl_3E(Machine* const);
+extern void srl_3F(Machine* const);
+// 0x04
+extern void bit_40(Machine* const);
+extern void bit_41(Machine* const);
+extern void bit_42(Machine* const);
+extern void bit_43(Machine* const);
+extern void bit_44(Machine* const);
+extern void bit_45(Machine* const);
+extern void bit_46(Machine* const);
+extern void bit_47(Machine* const);
+extern void bit_48(Machine* const);
+extern void bit_49(Machine* const);
+extern void bit_4A(Machine* const);
+extern void bit_4B(Machine* const);
+extern void bit_4C(Machine* const);
+extern void bit_4D(Machine* const);
+extern void bit_4E(Machine* const);
+extern void bit_4F(Machine* const);
+// 0x05
+extern void bit_50(Machine* const);
+extern void bit_51(Machine* const);
+extern void bit_52(Machine* const);
+extern void bit_53(Machine* const);
+extern void bit_54(Machine* const);
+extern void bit_55(Machine* const);
+extern void bit_56(Machine* const);
+extern void bit_57(Machine* const);
+extern void bit_58(Machine* const);
+extern void bit_59(Machine* const);
+extern void bit_5A(Machine* const);
+extern void bit_5B(Machine* const);
+extern void bit_5C(Machine* const);
+extern void bit_5D(Machine* const);
+extern void bit_5E(Machine* const);
+extern void bit_5F(Machine* const);
+// 0x06
+extern void bit_60(Machine* const);
+extern void bit_61(Machine* const);
+extern void bit_62(Machine* const);
+extern void bit_63(Machine* const);
+extern void bit_64(Machine* const);
+extern void bit_65(Machine* const);
+extern void bit_66(Machine* const);
+extern void bit_67(Machine* const);
+extern void bit_68(Machine* const);
+extern void bit_69(Machine* const);
+extern void bit_6A(Machine* const);
+extern void bit_6B(Machine* const);
+extern void bit_6C(Machine* const);
+extern void bit_6D(Machine* const);
+extern void bit_6E(Machine* const);
+extern void bit_6F(Machine* const);
+// 0x07
+extern void bit_70(Machine* const);
+extern void bit_71(Machine* const);
+extern void bit_72(Machine* const);
+extern void bit_73(Machine* const);
+extern void bit_74(Machine* const);
+extern void bit_75(Machine* const);
+extern void bit_76(Machine* const);
+extern void bit_77(Machine* const);
+extern void bit_78(Machine* const);
+extern void bit_79(Machine* const);
+extern void bit_7A(Machine* const);
+extern void bit_7B(Machine* const);
+extern void bit_7C(Machine* const);
+extern void bit_7D(Machine* const);
+extern void bit_7E(Machine* const);
+extern void bit_7F(Machine* const);
+// 0x08
+extern void res_80(Machine* const);
+extern void res_81(Machine* const);
+extern void res_82(Machine* const);
+extern void res_83(Machine* const);
+extern void res_84(Machine* const);
+extern void res_85(Machine* const);
+extern void res_86(Machine* const);
+extern void res_87(Machine* const);
+extern void res_88(Machine* const);
+extern void res_89(Machine* const);
+extern void res_8A(Machine* const);
+extern void res_8B(Machine* const);
+extern void res_8C(Machine* const);
+extern void res_8D(Machine* const);
+extern void res_8E(Machine* const);
+extern void res_8F(Machine* const);
+// 0x09
+extern void res_90(Machine* const);
+extern void res_91(Machine* const);
+extern void res_92(Machine* const);
+extern void res_93(Machine* const);
+extern void res_94(Machine* const);
+extern void res_95(Machine* const);
+extern void res_96(Machine* const);
+extern void res_97(Machine* const);
+extern void res_98(Machine* const);
+extern void res_99(Machine* const);
+extern void res_9A(Machine* const);
+extern void res_9B(Machine* const);
+extern void res_9C(Machine* const);
+extern void res_9D(Machine* const);
+extern void res_9E(Machine* const);
+extern void res_9F(Machine* const);
+// 0x0A
+extern void res_A0(Machine* const);
+extern void res_A1(Machine* const);
+extern void res_A2(Machine* const);
+extern void res_A3(Machine* const);
+extern void res_A4(Machine* const);
+extern void res_A5(Machine* const);
+extern void res_A6(Machine* const);
+extern void res_A7(Machine* const);
+extern void res_A8(Machine* const);
+extern void res_A9(Machine* const);
+extern void res_AA(Machine* const);
+extern void res_AB(Machine* const);
+extern void res_AC(Machine* const);
+extern void res_AD(Machine* const);
+extern void res_AE(Machine* const);
+extern void res_AF(Machine* const);
+// 0x0B
+extern void res_B0(Machine* const);
+extern void res_B1(Machine* const);
+extern void res_B2(Machine* const);
+extern void res_B3(Machine* const);
+extern void res_B4(Machine* const);
+extern void res_B5(Machine* const);
+extern void res_B6(Machine* const);
+extern void res_B7(Machine* const);
+extern void res_B8(Machine* const);
+extern void res_B9(Machine* const);
+extern void res_BA(Machine* const);
+extern void res_BB(Machine* const);
+extern void res_BC(Machine* const);
+extern void res_BD(Machine* const);
+extern void res_BE(Machine* const);
+extern void res_BF(Machine* const);
+// 0x0C
+extern void set_C0(Machine* const);
+extern void set_C1(Machine* const);
+extern void set_C2(Machine* const);
+extern void set_C3(Machine* const);
+extern void set_C4(Machine* const);
+extern void set_C5(Machine* const);
+extern void set_C6(Machine* const);
+extern void set_C7(Machine* const);
+extern void set_C8(Machine* const);
+extern void set_C9(Machine* const);
+extern void set_CA(Machine* const);
+extern void set_CB(Machine* const);
+extern void set_CC(Machine* const);
+extern void set_CD(Machine* const);
+extern void set_CE(Machine* const);
+extern void set_CF(Machine* const);
+// 0x0D
+extern void set_D0(Machine* const);
+extern void set_D1(Machine* const);
+extern void set_D2(Machine* const);
+extern void set_D3(Machine* const);
+extern void set_D4(Machine* const);
+extern void set_D5(Machine* const);
+extern void set_D6(Machine* const);
+extern void set_D7(Machine* const);
+extern void set_D8(Machine* const);
+extern void set_D9(Machine* const);
+extern void set_DA(Machine* const);
+extern void set_DB(Machine* const);
+extern void set_DC(Machine* const);
+extern void set_DD(Machine* const);
+extern void set_DE(Machine* const);
+extern void set_DF(Machine* const);
+// 0x0E
+extern void set_E0(Machine* const);
+extern void set_E1(Machine* const);
+extern void set_E2(Machine* const);
+extern void set_E3(Machine* const);
+extern void set_E4(Machine* const);
+extern void set_E5(Machine* const);
+extern void set_E6(Machine* const);
+extern void set_E7(Machine* const);
+extern void set_E8(Machine* const);
+extern void set_E9(Machine* const);
+extern void set_EA(Machine* const);
+extern void set_EB(Machine* const);
+extern void set_EC(Machine* const);
+extern void set_ED(Machine* const);
+extern void set_EE(Machine* const);
+extern void set_EF(Machine* const);
+// 0x0F
+extern void set_F0(Machine* const);
+extern void set_F1(Machine* const);
+extern void set_F2(Machine* const);
+extern void set_F3(Machine* const);
+extern void set_F4(Machine* const);
+extern void set_F5(Machine* const);
+extern void set_F6(Machine* const);
+extern void set_F7(Machine* const);
+extern void set_F8(Machine* const);
+extern void set_F9(Machine* const);
+extern void set_FA(Machine* const);
+extern void set_FB(Machine* const);
+extern void set_FC(Machine* const);
+extern void set_FD(Machine* const);
+extern void set_FE(Machine* const);
+extern void set_FF(Machine* const);
 
 
 
