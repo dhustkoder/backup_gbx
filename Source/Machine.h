@@ -16,7 +16,7 @@ public:
 	Machine&operator=(Machine&)=delete;
 	Machine&operator=(Machine&&)=delete;
 
-	size_t GetRomSize() const;
+
 	bool LoadRom(const char* rom_file_name);
 	bool StepMachine();
 
@@ -28,19 +28,31 @@ public:
 
 	Cpu cpu;
 	Memory memory;
-
-private:
-	size_t m_rom_size;
+	
 };
+
+
+
 
 Machine* CreateMachine();
 void DestroyMachine(Machine* const mach);
 
 
 
-inline size_t Machine::GetRomSize() const {
-	return m_rom_size;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -53,11 +65,19 @@ inline void Machine::PushStack8(const uint8_t value) {
 
 
 
+
+
+
+
 inline void Machine::PushStack16(const uint16_t value) {
 	const uint16_t sp = cpu.GetSP() - 2;
 	memory.WriteU16(sp, value);
 	cpu.SetSP(sp);
 }
+
+
+
+
 
 
 
@@ -67,6 +87,10 @@ inline uint8_t Machine::PopStack8() {
 	cpu.SetSP(sp + 1);
 	return val;
 }
+
+
+
+
 
 
 

@@ -85,12 +85,15 @@ void Cpu::UnsetFlags(const Cpu::Flags flags) {
 
 uint8_t Cpu::INC(uint8_t value) {
 	// flags effect: Z 0 H -
-	SetF(GetF() & FLAG_C);
-	if(((value&0xf)+1) > 0xf)
-		SetFlags(FLAG_H);
-	if(!++value)
-		SetFlags(FLAG_Z);
+	const uint8_t result = value + 1;
 	
+	uint8_t f = GetF() & FLAG_C;
+	if(((value&0xf)+1) > 0xf)
+		f |= FLAG_H;
+	if(result == 0)
+		f |= FLAG_Z;
+	
+	SetF(f);
 	return value;
 }
 
@@ -103,13 +106,16 @@ uint8_t Cpu::INC(uint8_t value) {
 
 uint8_t Cpu::DEC(uint8_t value) {
 	// flags effect: Z 1 H -
-	SetF((GetF() & FLAG_C) | FLAG_N);
-	if(((value&0xf)-1) > 0xf)
-		SetFlags(FLAG_H);
-	if(!--value)
-		SetFlags(FLAG_Z);
+	const uint8_t result = value - 1;
 	
-	return value;
+	uint8_t f = (GetF() & FLAG_C) | FLAG_N;
+	if(((value&0xf)-1) > 0xf)
+		f |= FLAG_H;
+	if(!result)
+		f |= FLAG_Z;
+	
+	SetF(f);
+	return result;
 }
 
 
@@ -180,6 +186,30 @@ uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 	SetF(f | FLAG_N);
 	return static_cast<uint8_t>(result);
 }
+
+
+
+
+
+
+
+
+uint16_t Cpu::ADD16(const uint16_t first, const uint16_t second) {
+	// flags effect: - 0 H C
+	const uint32_t result = first + second;
+	uint8_t f = GetF() & FLAG_Z;
+	
+	if(result&0xffff0000)
+		f = FLAG_C;
+	if(((first & 0x0f00) + (second&0x0f00)) > 0x0f00)
+		f |= FLAG_C;
+	
+	SetF(f);
+	return static_cast<uint16_t>(result);
+}
+
+
+
 
 
 

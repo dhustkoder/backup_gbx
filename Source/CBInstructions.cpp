@@ -27,70 +27,73 @@ InstructionFunction cb_instructions[0x100] = {
 
 
 
-
+// note: all CB instructons are 2 bytes long, no need to increment PC
+// this is done by the CB instructions caller.
 
 
 
 // CB Instructions Implementation:
 // 0x00
-void rlc_00(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rlc_01(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rlc_02(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rlc_03(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rlc_04(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rlc_05(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rlc_06(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rlc_07(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_08(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_09(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_0A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_0B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_0C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_0D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_0E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rrc_0F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void rlc_00(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rlc_01(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rlc_02(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rlc_03(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rlc_04(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rlc_05(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rlc_06(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rlc_07(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_08(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_09(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_0A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_0B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_0C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_0D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_0E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rrc_0F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x01
-void rl_10(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rl_11(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rl_12(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rl_13(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rl_14(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rl_15(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rl_16(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rl_17(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_18(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_19(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_1A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_1B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_1C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_1D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_1E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void rr_1F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void rl_10(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rl_11(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rl_12(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rl_13(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rl_14(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rl_15(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rl_16(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rl_17(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_18(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_19(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_1A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_1B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_1C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_1D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_1E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void rr_1F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x02
-void sla_20(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sla_21(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sla_22(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sla_23(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sla_24(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sla_25(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sla_26(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sla_27(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_28(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_29(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_2A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_2B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_2C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_2D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_2E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void sra_2F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void sla_20(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sla_21(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sla_22(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sla_23(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sla_24(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sla_25(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sla_26(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sla_27(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_28(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_29(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_2A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_2B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_2C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_2D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_2E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void sra_2F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x03
-void swap_30(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void swap_31(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void swap_32(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void swap_33(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void swap_34(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void swap_35(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void swap_36(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void swap_30(Machine* const) { ASSERT_INSTR_IMPL(); }
+void swap_31(Machine* const) { ASSERT_INSTR_IMPL(); }
+void swap_32(Machine* const) { ASSERT_INSTR_IMPL(); }
+void swap_33(Machine* const) { ASSERT_INSTR_IMPL(); }
+void swap_34(Machine* const) { ASSERT_INSTR_IMPL(); }
+void swap_35(Machine* const) { ASSERT_INSTR_IMPL(); }
+void swap_36(Machine* const) { ASSERT_INSTR_IMPL(); }
+
+
 
 
 
@@ -105,7 +108,7 @@ void swap_37(Machine* const mach) {
     const auto a = mach->cpu.GetA();
     const auto result = mach->cpu.SWAP(a);
     mach->cpu.SetA(result);
-    mach->cpu.AddPC(2);
+    
     
     printf("SWAP A; -> A(%x), Result(%x) | ", a, result);
     mach->cpu.ShowFlags();
@@ -115,218 +118,221 @@ void swap_37(Machine* const mach) {
 
 
 
-void srl_38(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void srl_39(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void srl_3A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void srl_3B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void srl_3C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void srl_3D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void srl_3E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void srl_3F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+
+
+void srl_38(Machine* const) { ASSERT_INSTR_IMPL(); }
+void srl_39(Machine* const) { ASSERT_INSTR_IMPL(); }
+void srl_3A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void srl_3B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void srl_3C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void srl_3D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void srl_3E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void srl_3F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x04
-void bit_40(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_41(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_42(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_43(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_44(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_45(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_46(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_47(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_48(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_49(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_4A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_4B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_4C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_4D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_4E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_4F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void bit_40(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_41(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_42(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_43(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_44(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_45(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_46(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_47(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_48(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_49(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_4A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_4B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_4C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_4D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_4E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_4F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x05
-void bit_50(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_51(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_52(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_53(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_54(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_55(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_56(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_57(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_58(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_59(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_5A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_5B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_5C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_5D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_5E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_5F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void bit_50(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_51(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_52(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_53(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_54(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_55(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_56(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_57(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_58(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_59(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_5A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_5B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_5C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_5D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_5E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_5F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x06
-void bit_60(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_61(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_62(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_63(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_64(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_65(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_66(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_67(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_68(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_69(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_6A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_6B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_6C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_6D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_6E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_6F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void bit_60(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_61(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_62(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_63(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_64(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_65(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_66(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_67(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_68(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_69(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_6A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_6B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_6C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_6D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_6E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_6F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x07
-void bit_70(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_71(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_72(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_73(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_74(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_75(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_76(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_77(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_78(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_79(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_7A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_7B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_7C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_7D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_7E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void bit_7F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void bit_70(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_71(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_72(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_73(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_74(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_75(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_76(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_77(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_78(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_79(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_7A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_7B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_7C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_7D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_7E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void bit_7F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x08
-void res_80(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_81(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_82(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_83(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_84(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_85(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_86(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_87(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_88(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_89(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_8A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_8B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_8C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_8D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_8E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_8F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void res_80(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_81(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_82(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_83(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_84(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_85(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_86(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_87(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_88(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_89(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_8A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_8B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_8C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_8D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_8E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_8F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x09
-void res_90(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_91(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_92(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_93(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_94(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_95(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_96(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_97(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_98(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_99(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_9A(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_9B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_9C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_9D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_9E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_9F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void res_90(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_91(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_92(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_93(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_94(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_95(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_96(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_97(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_98(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_99(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_9A(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_9B(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_9C(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_9D(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_9E(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_9F(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x0A
-void res_A0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A6(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_A9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_AA(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_AB(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_AC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_AD(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_AE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_AF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void res_A0(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A1(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A2(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A3(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A4(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A5(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A6(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A7(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A8(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_A9(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_AA(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_AB(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_AC(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_AD(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_AE(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_AF(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x0B
-void res_B0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B6(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_B9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_BA(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_BB(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_BC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_BD(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_BE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void res_BF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void res_B0(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B1(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B2(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B3(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B4(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B5(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B6(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B7(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B8(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_B9(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_BA(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_BB(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_BC(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_BD(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_BE(Machine* const) { ASSERT_INSTR_IMPL(); }
+void res_BF(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x0C
-void set_C0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C6(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_C9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_CA(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_CB(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_CC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_CD(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_CE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_CF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void set_C0(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C1(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C2(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C3(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C4(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C5(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C6(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C7(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C8(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_C9(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_CA(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_CB(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_CC(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_CD(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_CE(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_CF(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x0D
-void set_D0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D6(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_D9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_DA(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_DB(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_DC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_DD(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_DE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_DF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void set_D0(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D1(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D2(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D3(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D4(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D5(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D6(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D7(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D8(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_D9(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_DA(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_DB(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_DC(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_DD(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_DE(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_DF(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x0E
-void set_E0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E6(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_E9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_EA(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_EB(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_EC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_ED(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_EE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_EF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void set_E0(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E1(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E2(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E3(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E4(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E5(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E6(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E7(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E8(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_E9(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_EA(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_EB(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_EC(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_ED(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_EE(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_EF(Machine* const) { ASSERT_INSTR_IMPL(); }
 // 0x0F
-void set_F0(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F2(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F6(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_F9(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_FA(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_FB(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_FC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_FD(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_FE(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void set_FF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+void set_F0(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F1(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F2(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F3(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F4(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F5(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F6(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F7(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F8(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_F9(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_FA(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_FB(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_FC(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_FD(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_FE(Machine* const) { ASSERT_INSTR_IMPL(); }
+void set_FF(Machine* const) { ASSERT_INSTR_IMPL(); }
 
 
 

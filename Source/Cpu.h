@@ -72,6 +72,9 @@ public:
 	uint8_t ADD(const uint8_t first, const uint8_t second);
 	uint8_t SUB(const uint8_t first, const uint8_t second);
 	
+	uint16_t ADD16(const uint16_t first, const uint16_t second);
+	
+	
 	uint8_t OR(const uint8_t first, const uint8_t second);
 	uint8_t AND(const uint8_t first, const uint8_t second);
 	uint8_t XOR(const uint8_t first, const uint8_t second);
@@ -114,6 +117,16 @@ private:
 		uint16_t pair;
 	}hl;
 };
+
+
+
+
+
+
+
+
+
+
 
 
 inline uint8_t Cpu::GetA() const { return af.bytes.a; }

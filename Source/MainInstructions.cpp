@@ -284,10 +284,65 @@ void ld_12(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void inc_13(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void inc_14(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_15(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_16(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+
+
+
+
+
+
+void ld_16(Machine* const mach) {
+	// LD D, d8
+	// immediate 8 bit value stored into D
+	// bytes: 2
+	// clock cycles: 8
+	const auto pc = mach->cpu.GetPC();
+	const auto d8 = mach->memory.ReadU8(pc + 1);
+	mach->cpu.SetD(d8);
+	mach->cpu.AddPC(2);
+	
+	
+	printf("LD D, %x\n", d8);
+}
+
+
+
+
+
+
+
+
 void rla_17(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void jr_18(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void add_19(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void add_19(Machine* const mach) {
+	// ADD HL, DE
+	// add DE into HL
+	// bytes: 1
+	// clock cycles: 8
+	// flags affected: - 0 H C
+	const auto hl = mach->cpu.GetHL();
+	const auto de = mach->cpu.GetDE();
+	const auto result = mach->cpu.ADD16(hl, de);
+	mach->cpu.SetHL(result);
+	mach->cpu.AddPC(1);
+	
+	
+	printf("LD HL, DE; -> HL(%x), DE(%x), Result(%x) | ", hl, de, result);
+	mach->cpu.ShowFlags();
+}
+
+
+
+
+
+
+
 void ld_1A(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_1B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void inc_1C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -1356,8 +1411,10 @@ void PREFIX_CB(Machine* const mach) {
 	const auto pc = mach->cpu.GetPC();
 	const auto op = mach->memory.ReadU8(pc + 1);
 	mach->cpu.SetOP(op);
+	
 	printf("CB INSTRUCTION: %x | ", op);
 	cb_instructions[op](mach);
+	mach->cpu.AddPC(2);
 }
 
 
@@ -1435,7 +1492,33 @@ void pop_D1(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void jp_D2(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
 // MISSING D3 ----
 void call_D4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
-void push_D5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+
+
+void push_D5(Machine* const mach) {
+	// PUSH DE
+	// push DE into stack
+	// bytes: 1
+	// clock cycles: 16
+	const auto de = mach->cpu.GetDE();
+	mach->PushStack16(de);
+	mach->cpu.AddPC(1);
+	
+	printf("PUSH DE\n");
+}
+
+
+
+
+
+
+
+
 void sub_D6(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rst_D7(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ret_D8(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }

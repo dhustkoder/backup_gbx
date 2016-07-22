@@ -111,6 +111,8 @@ public:
 	void WriteU16(const uint16_t pointer, const uint16_t value);
 	void WriteU16(const uint16_t pointer, const uint8_t high_byte, const uint8_t low_byte);
 	
+	void AddU8(const uint16_t pointer, const uint8_t value);
+	void SubU8(const uint16_t pointer, const uint8_t value);
 
 private:
 	uint8_t* const m_data;

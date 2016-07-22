@@ -107,8 +107,20 @@ void Memory::WriteU16(const uint16_t pointer, const uint8_t high_byte, const uin
 
 
 
+void Memory::AddU8(const uint16_t pointer, const uint8_t value) {
+	const uint8_t result = ReadU8(pointer) + value;
+	WriteU8(pointer, result);
+}
 
 
+
+
+
+
+void Memory::SubU8(const uint16_t pointer, const uint8_t value) {
+	const uint8_t result = ReadU8(pointer) - value;
+	WriteU8(pointer, result);
+}
 
 
 
@@ -125,4 +137,5 @@ void Memory::WriteU16(const uint16_t pointer, const uint8_t high_byte, const uin
 
 
 	
+
 }
