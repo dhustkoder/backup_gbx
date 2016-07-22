@@ -1670,12 +1670,8 @@ void add_E8(Machine* const mach) {
 	const auto sp = mach->cpu.GetSP();
 	const auto r8 = mach->memory.ReadS8(pc + 1);
 	const uint32_t result = sp + r8;
-	mach->cpu.SetF(0);
-	
-	if( result & 0xffff0000 )
-		mach->cpu.SetF(Cpu::FLAG_C);
-	if( ((result&0xf) + (r8&0xf)) > 0x0f )
-		mach->cpu.SetFlags(Cpu::FLAG_H);
+	const uint8_t flags_result = CheckH_11th_bit(sp, r8) | CheckC_15th_bit(result);
+	mach->cpu.SetF(flags_result);
 	
 	mach->cpu.SetSP(result & 0xffff);
 	mach->cpu.AddPC(2);

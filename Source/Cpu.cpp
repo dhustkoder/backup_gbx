@@ -7,41 +7,11 @@
 namespace gbx {
 
 
-inline Cpu::Flags CheckZH(uint16_t result, uint8_t first, int16_t second) {
-	uint8_t f = 0;
-	
-	if(((first&0xf)+(second&0xf) > 0xf))
-		f = Cpu::FLAG_H;
-	if(!result)
-		f |= Cpu::FLAG_Z;
-	
-	return static_cast<Cpu::Flags>(f);
-}
-
-
-
-inline Cpu::Flags CheckZHC(uint16_t result, uint8_t first, int16_t second) {
-	uint8_t f = 0;
-	
-	if(((first&0xf)+(second&0xf) > 0xf))
-		f = Cpu::FLAG_H;
-	if(!result)
-		f |= Cpu::FLAG_Z;
-	else if(result & 0xff00)
-		f |= Cpu::FLAG_C;
-	
-	return static_cast<Cpu::Flags>(f);
-}
 
 
 
 
 
-
-
-Cpu::Flags Cpu::GetFlags(const Cpu::Flags flags) const {
-	return static_cast<Flags>(GetF() & flags);
-}
 
 
 
@@ -64,35 +34,12 @@ void Cpu::ShowFlags() const {
 
 
 
-void Cpu::SetFlags(const Cpu::Flags flags) {
-	SetF(GetF() | flags);
-}
-
-
-
-
-
-
-void Cpu::UnsetFlags(const Cpu::Flags flags) {
-	SetF(GetF() & ~flags);
-}
-
-
-
-
-
-
 
 uint8_t Cpu::INC(uint8_t value) {
 	// flags effect: Z 0 H -
 	const uint8_t result = value + 1;
-	
 	uint8_t f = GetF() & FLAG_C;
-	if(((value&0xf)+1) > 0xf)
-		f |= FLAG_H;
-	if(result == 0)
-		f |= FLAG_Z;
-	
+	f |= CheckZ(result) | CheckH_3th_bit(value, 1);
 	SetF(f);
 	return value;
 }
@@ -109,10 +56,7 @@ uint8_t Cpu::DEC(uint8_t value) {
 	const uint8_t result = value - 1;
 	
 	uint8_t f = (GetF() & FLAG_C) | FLAG_N;
-	if(((value&0xf)-1) > 0xf)
-		f |= FLAG_H;
-	if(!result)
-		f |= FLAG_Z;
+	f |= CheckZ(result) | CheckH_borrow(value, 1);
 	
 	SetF(f);
 	return result;
@@ -163,7 +107,7 @@ uint8_t Cpu::ADD(const uint8_t first, const uint8_t second) {
 	// flags effect Z 0 H C
 	const uint16_t result = first + second;
 	
-	const auto f = CheckZHC(result, first, second);
+	const uint8_t f = CheckZ(result) | CheckH_3th_bit(first, second) | CheckC_11th_bit(result);
 	
 	SetF(f);
 	return static_cast<uint8_t>(result);
@@ -181,7 +125,7 @@ uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 1 H C
 	const uint16_t result = first - second;
 	
-	const auto f = CheckZHC(result, first, -second);
+	const auto f = CheckZ(result) | CheckH_borrow(first, second) | CheckC_borrow(first, second);
 
 	SetF(f | FLAG_N);
 	return static_cast<uint8_t>(result);
@@ -199,10 +143,7 @@ uint16_t Cpu::ADD16(const uint16_t first, const uint16_t second) {
 	const uint32_t result = first + second;
 	uint8_t f = GetF() & FLAG_Z;
 	
-	if(result&0xffff0000)
-		f = FLAG_C;
-	if(((first & 0x0f00) + (second&0x0f00)) > 0x0f00)
-		f |= FLAG_C;
+	f |= CheckH_11th_bit(first, second) | CheckC_15th_bit(result);
 	
 	SetF(f);
 	return static_cast<uint16_t>(result);
@@ -222,7 +163,7 @@ uint16_t Cpu::ADD16(const uint16_t first, const uint16_t second) {
 uint8_t Cpu::OR(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 0 0
 	const uint8_t result = first | second;
-	SetF( result == 0 ? FLAG_Z : 0 );
+	SetF( CheckZ(result) );
 	return result;
 }
 
@@ -235,7 +176,7 @@ uint8_t Cpu::OR(const uint8_t first, const uint8_t second) {
 uint8_t Cpu::AND(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 1 0
 	const uint8_t result = first & second;
-	SetF( result == 0 ? (FLAG_Z | FLAG_H) : FLAG_H);
+	SetF(CheckZ(result) | FLAG_H);
 	return result;
 }
 
@@ -248,7 +189,7 @@ uint8_t Cpu::AND(const uint8_t first, const uint8_t second) {
 uint8_t Cpu::XOR(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 0 0
 	const uint8_t result = first ^ second;
-	SetF(result == 0 ?  FLAG_Z : 0 );
+	SetF(CheckZ(result));
 	return result;
 }
 
@@ -258,9 +199,12 @@ uint8_t Cpu::XOR(const uint8_t first, const uint8_t second) {
 uint8_t Cpu::SWAP(const uint8_t value) {
 	// flags effect: Z 0 0 0
 	const uint8_t result = ((value & 0x0f) << 4) | ((value & 0xf0) >> 4);
-	SetF( result == 0 ? FLAG_Z : 0 );
+	SetF(CheckZ(result));
 	return result;
 }
+
+
+
 
 
 
