@@ -94,8 +94,9 @@ bool Machine::StepMachine() {
 	
 	// fetch Opcode and execute instruction
 	// uint8_t variable can't overflow main_instruction array
-	const uint16_t pc = this->cpu.GetPC();
+	const uint16_t pc = cpu.GetPC();
 	printf("PC: %4x | ", pc);
+
 	if(pc <= HOME_MAX_OFFSET) {
 		const auto op = memory.ReadU8(pc);
 		cpu.SetOP(op);

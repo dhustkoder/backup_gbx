@@ -18,6 +18,21 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\Common.h" />
+    <ClInclude Include="..\..\Source\Cpu.h" />
+    <ClInclude Include="..\..\Source\Instructions.h" />
+    <ClInclude Include="..\..\Source\Machine.h" />
+    <ClInclude Include="..\..\Source\Memory.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\CBInstructions.cpp" />
+    <ClCompile Include="..\..\Source\Cpu.cpp" />
+    <ClCompile Include="..\..\Source\Machine.cpp" />
+    <ClCompile Include="..\..\Source\Main.cpp" />
+    <ClCompile Include="..\..\Source\MainInstructions.cpp" />
+    <ClCompile Include="..\..\Source\Memory.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F71158D5-BA91-444E-8295-17A4332B5BEE}</ProjectGuid>
     <RootNamespace>gbx</RootNamespace>
@@ -144,20 +159,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\Common.h" />
-    <ClInclude Include="..\..\Source\Cpu.h" />
-    <ClInclude Include="..\..\Source\Instructions.h" />
-    <ClInclude Include="..\..\Source\Machine.h" />
-    <ClInclude Include="..\..\Source\Memory.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\Cpu.cpp" />
-    <ClCompile Include="..\..\Source\Instructions.cpp" />
-    <ClCompile Include="..\..\Source\Machine.cpp" />
-    <ClCompile Include="..\..\Source\Main.cpp" />
-    <ClCompile Include="..\..\Source\Memory.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

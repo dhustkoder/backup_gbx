@@ -125,7 +125,7 @@ uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 1 H C
 	const uint16_t result = first - second;
 	
-	const auto f = CheckZ(result) | CheckH_borrow(first, second) | CheckC_borrow(first, second);
+	const uint8_t f = CheckZ(result) | CheckH_borrow(first, second) | CheckC_borrow(first, second);
 
 	SetF(f | FLAG_N);
 	return static_cast<uint8_t>(result);
