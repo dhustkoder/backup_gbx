@@ -63,8 +63,11 @@ public:
 	void SetFlags(const Cpu::Flags flags);
 	void UnsetFlags(const Cpu::Flags flags);
 
-	uint8_t INC(uint8_t value);
-	uint8_t DEC(uint8_t value);
+
+	void ADDHL(const uint16_t reg_pair);
+
+	uint8_t INC(uint8_t first);
+	uint8_t DEC(uint8_t first);
 	
 	uint8_t ADC(uint8_t first, const uint8_t second);
 	uint8_t SBC(uint8_t first, const uint8_t second);
@@ -72,17 +75,14 @@ public:
 	uint8_t ADD(const uint8_t first, const uint8_t second);
 	uint8_t SUB(const uint8_t first, const uint8_t second);
 	
-	uint16_t ADD16(const uint16_t first, const uint16_t second);
-	
 	
 	uint8_t OR(const uint8_t first, const uint8_t second);
 	uint8_t AND(const uint8_t first, const uint8_t second);
 	uint8_t XOR(const uint8_t first, const uint8_t second);
 	
-	
-	
 	uint8_t SWAP(const uint8_t value);
 	
+
 private:
 	uint16_t pc;
 	uint16_t sp;
@@ -116,7 +116,9 @@ private:
 		}bytes;
 		uint16_t pair;
 	}hl;
+	
 };
+
 
 
 
@@ -240,6 +242,99 @@ inline void Cpu::UnsetFlags(const Cpu::Flags flags) {
 
 
 inline void Cpu::AddPC(const uint16_t val) { pc += val; }
+
+
+
+
+
+
+inline void Cpu::ADDHL(const uint16_t second) {
+	// flags effect: - 0 H C
+	const auto hl = GetHL();
+	const uint32_t result = hl + second;
+	const uint8_t flags_result = GetFlags(FLAG_Z) | CheckH_11th_bit(hl, second) | CheckC_15th_bit(result);
+	SetHL(static_cast<uint16_t>(result));
+	SetF(flags_result);
+}
+
+
+
+
+
+
+
+
+inline uint8_t Cpu::INC(uint8_t first) {
+	// flags effect: Z 0 H -
+	const uint8_t result = first + 1;
+	const uint8_t f = CheckZ(result) | CheckH_3th_bit(first, 1) | GetFlags(FLAG_C);
+	SetF(f);
+	return first;
+}
+
+
+
+
+inline uint8_t Cpu::DEC(uint8_t first) {
+	// flags effect: Z 1 H -
+	const uint8_t result = first - 1;
+	const uint8_t f = CheckZ(result) | FLAG_N | CheckH_borrow(first, 1) | GetFlags(FLAG_C);
+	SetF(f);
+	return result;
+}
+
+
+
+
+
+
+
+
+
+
+inline uint8_t Cpu::OR(const uint8_t first, const uint8_t second) {
+	// flags effect: Z 0 0 0
+	const uint8_t result = first | second;
+	SetF( CheckZ(result) );
+	return result;
+}
+
+
+
+
+
+
+inline uint8_t Cpu::AND(const uint8_t first, const uint8_t second) {
+	// flags effect: Z 0 1 0
+	const uint8_t result = first & second;
+	SetF(CheckZ(result) | FLAG_H);
+	return result;
+}
+
+
+
+
+
+
+inline uint8_t Cpu::XOR(const uint8_t first, const uint8_t second) {
+	// flags effect: Z 0 0 0
+	const uint8_t result = first ^ second;
+	SetF(CheckZ(result));
+	return result;
+}
+
+
+
+
+
+
+
+inline uint8_t Cpu::SWAP(const uint8_t value) {
+	// flags effect: Z 0 0 0
+	const uint8_t result = ((value & 0x0f) << 4) | ((value & 0xf0) >> 4);
+	SetF(CheckZ(result));
+	return result;
+}
 
 
 

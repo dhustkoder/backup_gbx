@@ -205,7 +205,29 @@ void res_83(Machine* const) { ASSERT_INSTR_IMPL(); }
 void res_84(Machine* const) { ASSERT_INSTR_IMPL(); }
 void res_85(Machine* const) { ASSERT_INSTR_IMPL(); }
 void res_86(Machine* const) { ASSERT_INSTR_IMPL(); }
-void res_87(Machine* const) { ASSERT_INSTR_IMPL(); }
+
+
+
+
+
+
+void res_87(Machine* const mach) {
+    // RES 0, A
+    // reset bit 0 in register A
+    // bytes: 2
+    // clock cycles: 8
+    const auto a = mach->cpu.GetA();
+    const uint8_t result = a & 0xfe;
+    mach->cpu.SetA(result);
+    
+    printf("RES 0, A; -> A(%x), Result(%x)\n", a, result);
+}
+
+
+
+
+
+
 void res_88(Machine* const) { ASSERT_INSTR_IMPL(); }
 void res_89(Machine* const) { ASSERT_INSTR_IMPL(); }
 void res_8A(Machine* const) { ASSERT_INSTR_IMPL(); }

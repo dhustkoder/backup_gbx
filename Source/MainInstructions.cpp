@@ -121,7 +121,6 @@ void inc_03(Machine* const mach) {
 	// clock cyles: 6 or 8 ?
 	const auto bc = mach->cpu.GetBC();
 	const uint16_t result = bc + 1;
-	mach->cpu.SetBC(result);
 	mach->cpu.AddPC(1);
 
 	printf("INC BC; -> BC(%x), Result(%x)\n", bc, result);
@@ -279,9 +278,71 @@ void rrca_0F(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 // 0x10
 void stop_10(Machine* const mach){ ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
-void ld_11(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
-void ld_12(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void inc_13(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void ld_11(Machine* const mach) {
+	// LD DE, d16
+	// store immediate d16 value into DE
+	// bytes: 3
+	// clock cycles: 12
+	const auto pc = mach->cpu.GetPC();
+	const auto d16 = mach->memory.ReadU16(pc + 1);
+	mach->cpu.SetDE(d16);
+	mach->cpu.AddPC(3);
+	
+	
+	printf("LD DE, %x\n", d16);
+}
+
+
+
+
+
+
+
+void ld_12(Machine* const mach) {
+	// LD (DE), A
+	// store A into mem address pointed by DE
+	// bytes: 1
+	// clock cycles: 8
+	const auto de = mach->cpu.GetDE();
+	const auto a = mach->cpu.GetA();
+	mach->memory.WriteU8(de, a);
+	mach->cpu.AddPC(1);
+	
+	printf("LD (DE), A; -> DE(%x), A(%x)\n", de, a);
+}
+
+
+
+
+
+
+
+void inc_13(Machine* const mach) {
+	// INC DE
+	// increment DE
+	// bytes: 1
+	// clock cycles: 8
+	const auto de = mach->cpu.GetDE();
+	const auto result = de + 1;
+	mach->cpu.SetDE(result);
+	mach->cpu.AddPC(1);
+	
+	printf("INC DE; -> DE(%x), Result(%x)\n", de, result);
+}
+
+
+
+
+
+
+
+
 void inc_14(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void dec_15(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
@@ -313,7 +374,27 @@ void ld_16(Machine* const mach) {
 
 
 void rla_17(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void jr_18(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
+
+
+
+
+
+
+
+
+void jr_18(Machine* const mach) {
+	// JR r8
+	// Add r8 to pc and jump to it.
+	// bytes: 2
+	// clock cycles: 12
+	const auto pc = mach->cpu.GetPC();
+	const auto r8 = mach->memory.ReadS8(pc + 1);
+	const uint16_t address = (pc+r8) + 2;
+	mach->cpu.SetPC(address);
+
+
+	printf("JR %x\n", address);
+}
 
 
 
@@ -328,8 +409,8 @@ void add_19(Machine* const mach) {
 	// flags affected: - 0 H C
 	const auto hl = mach->cpu.GetHL();
 	const auto de = mach->cpu.GetDE();
-	const auto result = mach->cpu.ADD16(hl, de);
-	mach->cpu.SetHL(result);
+	mach->cpu.ADDHL(de);
+	const auto result = mach->cpu.GetHL();
 	mach->cpu.AddPC(1);
 	
 	
@@ -343,9 +424,51 @@ void add_19(Machine* const mach) {
 
 
 
-void ld_1A(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+void ld_1A(Machine* const mach) {
+	// LD A, (DE)
+	// store value in mem address pointed by DE into A
+	// bytes: 1
+	// clock cycles: 8
+	const auto de = mach->cpu.GetDE();
+	const auto value = mach->memory.ReadU8(de);
+	mach->cpu.SetA(value);
+	mach->cpu.AddPC(1);
+	
+	printf("LD A, (DE); -> DE(%x), (DE)(%x)\n", de, value);
+}
+
+
+
+
+
+
 void dec_1B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void inc_1C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void inc_1C(Machine* const mach) {
+	// INC E
+	// bytes: 1
+	// clock cycles: 4
+	// flags affected: Z 0 H -
+	const auto e = mach->cpu.GetE();
+	const auto result = mach->cpu.INC(e);
+	mach->cpu.SetE(result);
+	mach->cpu.AddPC(1);
+	
+	printf("INC E; -> E(%x), Result(%x) | ", e, result);
+	mach->cpu.ShowFlags();
+}
+
+
+
+
+
 void dec_1D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void ld_1E(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rra_1F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
@@ -406,7 +529,19 @@ void ld_21(Machine* const mach) {
 
 
 
-void ld_22(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+void ld_22(Machine* const mach) {
+	// LD (HL+), A / or /  LD (HLI), A / or / LDI (HL), A
+	// Put A into memory address HL. Increment HL
+	// bytes: 1
+	// clock cycles: 8
+	const auto hl = mach->cpu.GetHL();
+	const auto a = mach->cpu.GetA();
+	mach->memory.WriteU8(hl, a);
+	mach->cpu.SetHL(hl + 1);
+	mach->cpu.AddPC(1);
+	
+	printf("LD (HL+), A; -> HL(%x), A(%x)\n", hl, a);
+}
 
 
 
@@ -585,7 +720,7 @@ void ld_31(Machine* const mach) {
 
 
 void ld_32(Machine* const mach) {
-	// LD (HL-), A or LDD (HL), A
+	// LD (HL-), A  / or / LD (HLD), A / or / LDD (HL), A
 	// store A into memory pointed by HL, Decrements HL
 	// bytes: 1
 	// clock cycles: 8
@@ -1061,9 +1196,56 @@ void ld_7A(Machine* const mach) {
 
 
 void ld_7B(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_7C(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void ld_7C(Machine* const mach) {
+	// LD A, H
+	// store value in H into A
+	// bytes: 1
+	// clock cycles: 4
+	const auto h = mach->cpu.GetH();
+	mach->cpu.SetA(h);
+	mach->cpu.AddPC(1);
+	
+	printf("LD A, H; -> H(%x)\n", h);
+}
+
+
+
+
+
+
+
 void ld_7D(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ld_7E(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void ld_7E(Machine* const mach) {
+	// LD A, (HL)
+	// value in mem pointed by HL is stored in A
+	// bytes: 1
+	// clock cycles: 8
+	const auto hl = mach->cpu.GetHL();
+	const auto value = mach->memory.ReadU8(hl);
+	mach->cpu.SetA(value);
+	mach->cpu.AddPC(1);
+	
+	printf("LD A, (HL); -> HL(%x), (HL)(%x)\n", hl, value);
+}
+
+
+
+
+
+
+
 void ld_7F(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
@@ -1177,7 +1359,33 @@ void and_A3(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void and_A4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void and_A5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void and_A6(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void and_A7(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void and_A7(Machine* const mach) {
+	// AND A
+	// Logically AND A with A, result in A.
+	// bytes: 1
+	// clock cycles: 4
+	// flags affected: Z 0 1 0
+	const auto a = mach->cpu.GetA();
+	const auto result = mach->cpu.AND(a, a);
+	mach->cpu.SetA(result);
+	mach->cpu.AddPC(1);
+	
+	printf("AND A; -> A(%x), Result(%x) | ", a, result);
+	mach->cpu.ShowFlags();
+}
+
+
+
+
+
+
+
 void xor_A8(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
@@ -1341,7 +1549,30 @@ void cp_BF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 // 0xC0
 void ret_C0(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void pop_C1(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+
+void pop_C1(Machine* const mach) {
+	// POP BC
+	// bytes: 1
+	// clock cycles: 12
+	const auto value = mach->PopStack16();
+	mach->cpu.SetBC(value);
+	mach->cpu.AddPC(1);
+	
+	printf("POP BC;\n");
+}
+
+
+
+
+
+
+
 void jp_C2(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
 
 
@@ -1369,10 +1600,54 @@ void jp_C3(Machine* const mach)   {
 
 
 void call_C4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
-void push_C5(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+void push_C5(Machine* const mach) {
+	// PUSH BC
+	// Push register pair BC onto stack.
+	// bytes: 1
+	// clock cycles: 16
+	const auto bc = mach->cpu.GetBC();
+	mach->PushStack16(bc);
+	mach->cpu.AddPC(1);
+	
+	printf("PUSH BC\n");
+}
+
+
+
+
+
+
+
 void add_C6(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 void rst_C7(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
-void ret_C8(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+
+
+
+
+
+void ret_C8(Machine* const mach) {
+	// RET Z
+	// return if z flag is set
+	// bytes: 1
+	// clock cycles: if jump 20. if not 8
+	if(mach->cpu.GetFlags(Cpu::FLAG_Z)) {
+		const auto address = mach->PopStack16();
+		mach->cpu.SetPC(address);
+	}
+	else {
+		mach->cpu.AddPC(1);
+	}
+	
+	printf("RET Z\n");
+}
 
 
 
@@ -1398,7 +1673,22 @@ void ret_C9(Machine* const mach) {
 
 
 
-void jp_CA(Machine* const mach)     { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
+void jp_CA(Machine* const mach) {
+	// JP Z, a16
+	// jump to immediate 16 bit address if flag Z is set
+	// bytes: 3
+	// clock cycles: if jump 16. if not 12
+	const auto pc = mach->cpu.GetPC();
+	const auto a16 = mach->memory.ReadU16(pc + 1);
+	const auto zero_flag = mach->cpu.GetFlags(Cpu::FLAG_Z);
+	
+	if(zero_flag)
+		mach->cpu.SetPC(a16);
+	else
+		mach->cpu.AddPC(3);
+	
+	printf("JP Z, %x\n", a16);
+}
 
 
 
@@ -1488,7 +1778,26 @@ void ret_D0(Machine* const mach) {
 
 
 
-void pop_D1(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+
+
+void pop_D1(Machine* const mach) {
+	// POP DE
+	// Pop two bytes off stack into register pair nn.
+	// bytes: 1
+	// clock cycles: 12
+	const auto value = mach->PopStack16();
+	mach->cpu.SetDE(value);
+	mach->cpu.AddPC(1);
+	
+	printf("POP DE;\n");
+}
+
+
+
+
+
+
+
 void jp_D2(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
 // MISSING D3 ----
 void call_D4(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
@@ -1570,7 +1879,7 @@ void pop_E1(Machine* const mach) {
 	mach->cpu.SetHL(value);
 	mach->cpu.AddPC(1);
 
-	printf("POP HL; -> HL(%x)\n", value);
+	printf("POP HL\n");
 }
 
 
@@ -1629,7 +1938,7 @@ void push_E5(Machine* const mach) {
 
 void and_E6(Machine* const mach) {
 	// AND d8
-	// logical AND r8 with A, result in A.
+	// logical AND d8 with A, result in A.
 	// bytes: 2
 	// clock cycles: 8
 	// flags affected: Z 0 1 0
@@ -1782,7 +2091,25 @@ void ldh_F0(Machine* const mach) {
 
 
 
-void pop_F1(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+void pop_F1(Machine* const mach) {
+	// POP AF
+	// pop 16 bits from stack into AF
+	// bytes: 1
+	// clock cycles: 12
+	// flags affected: all
+	const auto value = mach->PopStack16();
+	mach->cpu.SetAF(value);
+	mach->cpu.AddPC(1);
+	
+	printf("POP AF\n");
+}
+
+
+
+
+
+
+
 void ld_F2(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 
 
