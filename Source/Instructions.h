@@ -13,9 +13,9 @@ namespace gbx {
 
 class Machine;
 
-using InstructionFunction = void(*)(Machine* const);
-extern InstructionFunction main_instructions[0x100];
-extern InstructionFunction cb_instructions[0x100];
+using InstructionFunction = void(* const)(Machine* const);
+extern const InstructionFunction main_instructions[0x100];
+extern const InstructionFunction cb_instructions[0x100];
 
 
 
