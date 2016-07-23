@@ -329,7 +329,7 @@ void inc_13(Machine* const mach) {
 	// bytes: 1
 	// clock cycles: 8
 	const auto de = mach->cpu.GetDE();
-	const auto result = de + 1;
+	const uint16_t result = de + 1;
 	mach->cpu.SetDE(result);
 	mach->cpu.AddPC(1);
 	

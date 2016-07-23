@@ -250,9 +250,9 @@ inline void Cpu::AddPC(const uint16_t val) { pc += val; }
 
 inline void Cpu::ADDHL(const uint16_t second) {
 	// flags effect: - 0 H C
-	const auto hl = GetHL();
-	const uint32_t result = hl + second;
-	const uint8_t flags_result = GetFlags(FLAG_Z) | CheckH_11th_bit(hl, second) | CheckC_15th_bit(result);
+	const auto first = GetHL();
+	const uint32_t result = first + second;
+	const uint8_t flags_result = GetFlags(FLAG_Z) | CheckH_11th_bit(first, second) | CheckC_15th_bit(result);
 	SetHL(static_cast<uint16_t>(result));
 	SetF(flags_result);
 }
