@@ -2029,7 +2029,7 @@ void ld_EA(Machine* const mach) {
 	mach->cpu.AddPC(3);
 
 
-	printf("LD (a16), A; -> a16(%x), A(%x)\n", a16, a);
+	printf("LD (%x), A; -> A(%x)\n", a16, a);
 }
 
 
@@ -2081,7 +2081,7 @@ void ldh_F0(Machine* const mach) {
 	mach->cpu.AddPC(2);
 
 
-	printf("LDH A, (a8); -> pointer(%x), A(%x)\n", evaluated_address, value);
+	printf("LDH A, (0xff00 + %x); -> A(%x)\n", a8, value);
 }
 
 
