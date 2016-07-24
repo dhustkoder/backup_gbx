@@ -61,8 +61,8 @@ catridge's entry point is at 0x100
 //constexpr const size_t BKG_DISP_DATA2_SIZE = 1024;
 //constexpr const size_t BKG_DISP_DATA1_SIZE = 1024;
 //constexpr const size_t CHAR_DATA_SIZE = 6 * 1024;
-//constexpr const size_t HOME_SIZE = 16 * 1024;
-//constexpr const size_t FIXED_HOME_SIZE = 16 * 1024;
+constexpr const size_t HOME_SIZE = 16 * 1024;
+constexpr const size_t FIXED_HOME_SIZE = 16 * 1024;
 
 //MEMORY AREAS OFFSETS:
 //constexpr const size_t OAM_RAM_MAX_OFFSET = 0xFEFF;
@@ -78,9 +78,9 @@ catridge's entry point is at 0x100
 //constexpr const size_t CHAR_DATA_MAX_OFFSET = 0x97FF;
 //constexpr const size_t CHAR_DATA_OFFSET = 0x8000;
 constexpr const size_t HOME_MAX_OFFSET = 0x7FFF;
-//constexpr const size_t HOME_OFFSET = 0x4000;
+constexpr const size_t HOME_OFFSET = 0x4000;
 //constexpr const size_t FIXED_HOME_MAX_OFFSET = 0x3FFF;
-//onstexpr const size_t FIXED_HOME_OFFSET = 0;
+constexpr const size_t FIXED_HOME_OFFSET = 0;
 constexpr const size_t CARTRIDGE_ENTRY_POINT = 0x100;
 
 
@@ -100,8 +100,8 @@ public:
 	bool Initialize(const size_t ram_size = TOTAL_RAM_SIZE);
 	void Dispose();
 
-	const uint8_t* Data() const;
 	uint8_t* Data();
+	const uint8_t* Data() const;
 
 	int8_t ReadS8(const uint16_t pointer) const;
 	uint8_t ReadU8(const uint16_t pointer) const;
@@ -116,8 +116,6 @@ public:
 
 private:
 	uint8_t* const m_data;
-
-
 };
 
 

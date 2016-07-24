@@ -1,9 +1,6 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <Utix/BaseTraits.h>
 #include <Utix/ScopeExit.h>
-#include "Instructions.h"
 #include "Machine.h"
 
 namespace gbx {
@@ -26,7 +23,8 @@ Machine* CreateMachine() {
 
 	if(!mach->memory.Initialize())
 		return nullptr;
-
+	
+	mach->rom.Initialize();
 	mach->cpu.SetPC(CARTRIDGE_ENTRY_POINT);
 	mach->cpu.SetSP(0xFFFE);
 	mach->cpu.SetAF(0x01B0);
@@ -42,6 +40,7 @@ Machine* CreateMachine() {
 
 
 void DestroyMachine(Machine* const mach) {
+	mach->rom.Dispose();
 	mach->memory.Dispose();
 	free(mach);
 }
@@ -50,78 +49,23 @@ void DestroyMachine(Machine* const mach) {
 
 
 
-bool Machine::LoadRom(const char* const rom_file_name) {
 
-	FILE* const rom_file = fopen(rom_file_name, "r");
 
-	if(!rom_file) {
-		perror("Could not open rom file");
+bool Machine::LoadRom(const char* file_name) {
+	if (!this->rom.Load(file_name))
 		return false;
-	}
 
-	const auto file_cleanup = utix::MakeScopeExit([=] {
-		fclose(rom_file);
-	});	
+	// place the first banks into main memory
+	memcpy(memory.Data(), rom.Data(), sizeof(uint8_t) * (FIXED_HOME_SIZE + HOME_SIZE));
 
-	fseek(rom_file, 0, SEEK_END);
-	const auto rom_size = static_cast<size_t>(ftell(rom_file));
-	fseek(rom_file, 0, SEEK_SET);
-	
-	if(rom_size > MAX_CARTRIDGE_SIZE) {
-		fprintf(stderr, "\'%s\' size is too big\n", rom_file_name);
-		return false;
-	}
-
-	fread(this->memory.Data(), sizeof(uint8_t), rom_size, rom_file);
-
-	if(ferror(rom_file)) {
-		perror("error while reading from rom");
-		return false;
-	}
-
+	// show rom's internal name
+	uint8_t buffer[17];
+	memcpy(buffer, rom.Data() + 0x134, sizeof(uint8_t) * 16);
+	buffer[16] = 0;
+	printf("Internal ROM name: %s\n", buffer);
 
 	return true;
 }
-
-
-
-
-bool Machine::StepMachine() {
-	
-	// boot code seems to expected the value in this area
-	// to keep changing
-	memory.AddU8(0xff44, 1);
-	
-	// fetch Opcode and execute instruction
-	// uint8_t variable can't overflow main_instruction array
-	const uint16_t pc = cpu.GetPC();
-	printf("PC: %4x | ", pc);
-
-	if(pc <= HOME_MAX_OFFSET) {
-		const auto op = memory.ReadU8(pc);
-		cpu.SetOP(op);
-		printf("OPCODE: %2x | ", op);
-		main_instructions[op](this);
-	} 
-	else {
-		fprintf(stderr, "PC overflows program memory\n");
-		return false;
-	}
-
-	return true;
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

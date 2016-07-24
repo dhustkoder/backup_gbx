@@ -53,10 +53,10 @@ bool Memory::Initialize(const size_t ram_size) {
 }
 
 
-
 void Memory::Dispose() {
 	free(m_data);
 }
+
 
 
 

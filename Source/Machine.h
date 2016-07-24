@@ -3,6 +3,7 @@
 #include <Utix/Ints.h>
 #include "Cpu.h"
 #include "Memory.h"
+#include "Rom.h"
 
 namespace gbx {
 
@@ -16,9 +17,7 @@ public:
 	Machine&operator=(Machine&)=delete;
 	Machine&operator=(Machine&&)=delete;
 
-
-	bool LoadRom(const char* rom_file_name);
-	bool StepMachine();
+	bool LoadRom(const char* filename);
 
 	void PushStack8(const uint8_t value);
 	void PushStack16(const uint16_t value);
@@ -28,7 +27,7 @@ public:
 
 	Cpu cpu;
 	Memory memory;
-	
+	Rom rom;
 };
 
 
