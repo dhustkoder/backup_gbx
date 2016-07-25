@@ -19,6 +19,8 @@ extern const InstructionFunction cb_instructions[0x100];
 
 
 
+// note: instructions are named after their mnemonic, and opcode value
+
 // Main Instructions:
 extern void miss_instr(Machine* const);
 // 0x00

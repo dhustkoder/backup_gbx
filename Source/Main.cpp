@@ -43,7 +43,8 @@ int Debug(gbx::Machine* const machine) {
 	       "q - quit\n"                       \
 	       "s - 1 step\n"                     \
 	       "c - step until sig or pc break\n" \
-	       "b - set pc break\n");
+	       "b - set pc break\n"               \
+	       "r - print registers\n");
 
 	char opt = 0;
 	unsigned int pc_wanted = 0;
@@ -67,13 +68,25 @@ int Debug(gbx::Machine* const machine) {
 			break;
 		
 		case 'b':
-			printf("selected desired pc: ");
+			printf("selected desired pc value (hex): ");
 			scanf(" %x", &pc_wanted);
-			printf("\nselected: %x\n", pc_wanted);
+			printf("selected: 0x%x\n", pc_wanted);
 			if(pc_wanted > gbx::HOME_MAX_OFFSET)
 				fprintf(stderr, "warning pc_wanted oveflows HOME memory offsets\n");
 			break;
-		
+
+		case 'r': 
+			printf("AF: %4x\n" \
+			       "BC: %4x\n" \
+			       "DE: %4x\n" \
+			       "HL: %4x\n" \
+			       "SP: %4x\n" \
+			       "PC: %4x\n", machine->cpu.GetAF(),
+			       machine->cpu.GetBC(), machine->cpu.GetDE(),
+			       machine->cpu.GetHL(), machine->cpu.GetSP(),
+			       machine->cpu.GetPC());
+			break;
+
 		case 'q':
 			goto break_while;
 		
