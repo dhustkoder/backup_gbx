@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gbx", "gbx.vcxproj", "{F71158D5-BA91-444E-8295-17A4332B5BEE}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1921DC7C-715B-4045-907D-11E173E6A477} = {1921DC7C-715B-4045-907D-11E173E6A477}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utix", "..\..\Dependencies\Utix\vc\Utix\Utix.vcxproj", "{1921DC7C-715B-4045-907D-11E173E6A477}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,14 +21,6 @@ Global
 		{F71158D5-BA91-444E-8295-17A4332B5BEE}.Release|x64.Build.0 = Release|x64
 		{F71158D5-BA91-444E-8295-17A4332B5BEE}.Release|x86.ActiveCfg = Release|Win32
 		{F71158D5-BA91-444E-8295-17A4332B5BEE}.Release|x86.Build.0 = Release|Win32
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Debug|x64.ActiveCfg = Debug|x64
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Debug|x64.Build.0 = Debug|x64
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Debug|x86.ActiveCfg = Debug|Win32
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Debug|x86.Build.0 = Debug|Win32
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Release|x64.ActiveCfg = Release|x64
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Release|x64.Build.0 = Release|x64
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Release|x86.ActiveCfg = Release|Win32
-		{1921DC7C-715B-4045-907D-11E173E6A477}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

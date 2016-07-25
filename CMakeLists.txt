@@ -17,7 +17,7 @@ endif()
 # "Release" full optimization , no debug info.
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG -O3 -flto -fomit-frame-pointer -ffunction-sections -fdata-sections")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG -O3 -flto -fomit-frame-pointer -ffunction-sections -fdata-sections -fno-unwind-tables -fno-asynchronous-unwind-tables")
 
 	set(LINK_FLAGS "-nodefaultlibs -flto -s -Wl,--gc-sections")
 	set(CMAKE_EXE_LINKER_FLAGS "${LINK_FLAGS}")

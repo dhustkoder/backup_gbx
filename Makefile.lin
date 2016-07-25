@@ -17,8 +17,8 @@ debug: CXX_FLAGS += -D_DEBUG -g -O0
 debug: compile
 
 release: BUILD_MODE := Release
-release: CXX_FLAGS += -DNDEBUG -O3 -flto -fdata-sections -ffunction-sections -fomit-frame-pointer -fno-unwind-tables 
-release: LINK_FLAGS += -nodefaultlibs -flto -s
+release: CXX_FLAGS += -DNDEBUG -O3 -flto -fdata-sections -ffunction-sections -fomit-frame-pointer -fno-asynchronous-unwind-tables -fno-unwind-tables 
+release: LINK_FLAGS += -nodefaultlibs -flto -s -Wl,--gc-sections
 release: compile
 
 
