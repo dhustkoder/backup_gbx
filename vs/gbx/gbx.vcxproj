@@ -24,7 +24,7 @@
     <ClInclude Include="..\..\Source\Instructions.h" />
     <ClInclude Include="..\..\Source\Machine.h" />
     <ClInclude Include="..\..\Source\Memory.h" />
-    <ClInclude Include="..\..\Source\Rom.h" />
+    <ClInclude Include="..\..\Source\Cartridge.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\CBInstructions.cpp" />
@@ -33,7 +33,7 @@
     <ClCompile Include="..\..\Source\Main.cpp" />
     <ClCompile Include="..\..\Source\MainInstructions.cpp" />
     <ClCompile Include="..\..\Source\Memory.cpp" />
-    <ClCompile Include="..\..\Source\Rom.cpp" />
+    <ClCompile Include="..\..\Source\Cartridge.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F71158D5-BA91-444E-8295-17A4332B5BEE}</ProjectGuid>

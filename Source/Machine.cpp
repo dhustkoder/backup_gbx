@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <Utix/ScopeExit.h>
+#include "Instructions.h"
 #include "Machine.h"
+
 
 namespace gbx {
 
@@ -24,14 +26,7 @@ Machine* CreateMachine() {
 	if(!mach->memory.Initialize())
 		return nullptr;
 	
-	mach->rom.Initialize();
-	mach->cpu.SetPC(CARTRIDGE_ENTRY_POINT);
-	mach->cpu.SetSP(0xFFFE);
-	mach->cpu.SetAF(0x01B0);
-	mach->cpu.SetBC(0x0013);
-	mach->cpu.SetDE(0x00D8);
-	mach->cpu.SetHL(0x014D);
-	
+	mach->cartridge.Initialize();	
 	mach_cleanup.Cancel();
 	return mach;
 }
@@ -40,29 +35,66 @@ Machine* CreateMachine() {
 
 
 void DestroyMachine(Machine* const mach) {
-	mach->rom.Dispose();
+	mach->cartridge.Dispose();
 	mach->memory.Dispose();
 	free(mach);
 }
 
 
 
+bool Machine::Reset() {
+	const auto cartridge_gb_type = cartridge.GetGameBoyType();
+	const auto cartridge_type = cartridge.GetType();
+	printf("Internal ROM name: %s\n", cartridge.GetName());
+	printf("Gameboy type:   %x\n", cartridge_gb_type);
+	printf("Cartridge type: %x\n", cartridge_type);
 
-
-
-
-bool Machine::LoadRom(const char* file_name) {
-	if (!this->rom.Load(file_name))
+	if (cartridge_type != CartridgeType::ROM_ONLY) {
+		fprintf(stderr, "Cartridge type supported type!\n");
 		return false;
+	}
 
-	// place the first banks into main memory
-	memcpy(memory.Data(), rom.Data(), sizeof(uint8_t) * (FIXED_HOME_SIZE + HOME_SIZE));
+	memcpy(memory.Data(), cartridge.Data(), (FIXED_HOME_SIZE + HOME_SIZE));
+	cpu.SetPC(CARTRIDGE_ENTRY_POINT);
 
-	// show rom's internal name
-	uint8_t buffer[17];
-	memcpy(buffer, rom.Data() + 0x134, sizeof(uint8_t) * 16);
-	buffer[16] = 0;
-	printf("Internal ROM name: %s\n", buffer);
+	// Common GB init memory registers
+	cpu.SetSP(0xFFFE);
+	cpu.SetAF(0x01B0);
+	cpu.SetBC(0x0013);
+	cpu.SetDE(0x00D8);
+	cpu.SetHL(0x014D);
+
+	memory.WriteU8(0xFF05, 0x00); // TIMA
+	memory.WriteU8(0xFF06, 0x00); // TMA
+	memory.WriteU8(0xFF07, 0x00); // TAC
+	memory.WriteU8(0xFF10, 0x80); // NR10
+	memory.WriteU8(0xFF11, 0xBF); // NR11
+	memory.WriteU8(0xFF12, 0xF3); // NR12
+	memory.WriteU8(0xFF14, 0xBF); // NR14
+	memory.WriteU8(0xFF16, 0x3F); // NR21
+	memory.WriteU8(0xFF17, 0x00); // NR22
+	memory.WriteU8(0xFF19, 0xBF); // NR24
+	memory.WriteU8(0xFF1A, 0x7F); // NR30
+	memory.WriteU8(0xFF1B, 0xFF); // NR31
+	memory.WriteU8(0xFF1C, 0x9F); // NR32
+	memory.WriteU8(0xFF1E, 0xBF); // NR33
+	memory.WriteU8(0xFF20, 0xFF); // NR41
+	memory.WriteU8(0xFF21, 0x00); // NR42
+	memory.WriteU8(0xFF22, 0x00); // NR43
+	memory.WriteU8(0xFF23, 0xBF); // NR30
+	memory.WriteU8(0xFF24, 0x77); // NR50
+	memory.WriteU8(0xFF25, 0xF3); // NR51
+	memory.WriteU8(0xFF26, 0xF1); // NR52
+	memory.WriteU8(0xFF40, 0x91); // LCDC
+	memory.WriteU8(0xFF42, 0x00); // SCY
+	memory.WriteU8(0xFF43, 0x00); // SCX
+	memory.WriteU8(0xFF45, 0x00); // LYC
+	memory.WriteU8(0xFF47, 0xFC); // BGP
+	memory.WriteU8(0xFF48, 0xFF); // OBP0
+	memory.WriteU8(0xFF49, 0xFF); // OBP1
+	memory.WriteU8(0xFF4A, 0x00); // WY
+	memory.WriteU8(0xFF4B, 0x00); // WX
+	memory.WriteU8(0xFFFF, 0x00); // IE
 
 	return true;
 }
@@ -70,6 +102,42 @@ bool Machine::LoadRom(const char* file_name) {
 
 
 
+
+bool Machine::LoadRom(const char* file_name) {
+	if (!this->cartridge.Load(file_name))
+		return false;
+
+	return this->Reset();
+}
+
+
+
+
+
+
+bool Machine::Step() {
+	// boot code seems to expected the value in this area
+	// to keep changing
+	memory.AddU8(0xff44, 1);
+
+	// fetch Opcode and execute instruction
+	// uint8_t variable can't overflow main_instruction array
+	const uint16_t pc = cpu.GetPC();
+	printf("PC: %4x | ", pc);
+
+	if (pc <= HOME_MAX_OFFSET) {
+		const auto op = memory.ReadU8(pc);
+		cpu.SetOP(op);
+		printf("OPCODE: %2x | ", op);
+		main_instructions[op](this);
+	}
+	else {
+		fprintf(stderr, "PC overflows program memory\n");
+		return false;
+	}
+
+	return true;
+}
 
 
 

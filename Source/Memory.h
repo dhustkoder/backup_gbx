@@ -1,6 +1,9 @@
 #ifndef GBX_MEMORY_H_
 #define GBX_MEMORY_H_
 #include <Utix/Ints.h>
+#include "Common.h"
+
+
 
 namespace gbx {
 /*  
@@ -56,13 +59,16 @@ catridge's entry point is at 0x100
 
 //MEMORY AREAS SIZES:
 //constexpr const size_t OAM_RAM_SIZE = 256;
-//constexpr const size_t WORK_RAM_SIZE = 8 * 1024;
-//constexpr const size_t EXPANDED_WORK_RAM_SIZE = 8 * 1024;
-//constexpr const size_t BKG_DISP_DATA2_SIZE = 1024;
-//constexpr const size_t BKG_DISP_DATA1_SIZE = 1024;
-//constexpr const size_t CHAR_DATA_SIZE = 6 * 1024;
-constexpr const size_t HOME_SIZE = 16 * 1024;
-constexpr const size_t FIXED_HOME_SIZE = 16 * 1024;
+//constexpr const size_t WORK_RAM_SIZE = 8_Kib;
+//constexpr const size_t EXPANDED_WORK_RAM_SIZE = 8_Kib;
+//constexpr const size_t BKG_DISP_DATA2_SIZE = 1_Kib;
+//constexpr const size_t BKG_DISP_DATA1_SIZE = 1_Kib;
+//constexpr const size_t CHAR_DATA_SIZE = 6_Kib;
+constexpr const size_t HOME_SIZE = 16_Kib;
+constexpr const size_t FIXED_HOME_SIZE = 16_Kib;
+constexpr const size_t TOTAL_RAM_SIZE = 64_Kib;
+constexpr const size_t MAX_CARTRIDGE_SIZE = 32_Kib;
+
 
 //MEMORY AREAS OFFSETS:
 //constexpr const size_t OAM_RAM_MAX_OFFSET = 0xFEFF;
@@ -84,10 +90,6 @@ constexpr const size_t FIXED_HOME_OFFSET = 0;
 constexpr const size_t CARTRIDGE_ENTRY_POINT = 0x100;
 
 
-constexpr const size_t TOTAL_RAM_SIZE = 0x10000;
-constexpr const size_t MAX_CARTRIDGE_SIZE = 32 * 1024;
-
-
 class Memory {
 public:
 	Memory()=delete;
@@ -97,7 +99,7 @@ public:
 	Memory&operator=(Memory&)=delete;
 	Memory&operator=(Memory&&)=delete;
 
-	bool Initialize(const size_t ram_size = TOTAL_RAM_SIZE);
+	bool Initialize();
 	void Dispose();
 
 	uint8_t* Data();

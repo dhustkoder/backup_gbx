@@ -5,6 +5,8 @@
 
 namespace gbx {
 
+constexpr size_t operator""_Kib(unsigned long long kb) { return static_cast<size_t>(kb * 1024); }
+constexpr size_t operator""_Mib(unsigned long long mb) { return static_cast<size_t>(mb * 1024 * 1024); }
 
 
 
