@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-
+#include <Utix/Alloc_t.h>
 #include <Utix/Assert.h>
 #include <Utix/ScopeExit.h>
 
@@ -167,7 +166,7 @@ uint8_t* Cartridge::Data() {
 
 inline uint8_t* AllocateCartridgeData(size_t bytes) {
 	// alloc enough bytes for rom_file and for a size_t variable
-	const auto size = (sizeof(uint8_t) * bytes);
+	const size_t size = (sizeof(uint8_t) * bytes);
 	size_t* const ptr = static_cast<size_t*>(malloc(size + sizeof(size_t)));
 	
 	if(ptr) {

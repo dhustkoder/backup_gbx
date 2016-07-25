@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <Utix/Alloc_t.h>
 #include "Common.h"
 #include "Memory.h"
 
@@ -9,7 +9,7 @@ namespace gbx {
 
 bool Memory::Initialize() {
 	
-	const_cast<uint8_t*&>(m_data) = static_cast<uint8_t*>( malloc(sizeof(uint8_t) * TOTAL_RAM_SIZE) );
+	const_cast<uint8_t*&>(m_data) = utix::malloc_t<uint8_t>(TOTAL_RAM_SIZE);
 	
 	if(!m_data) {
 		perror("Memory::Initialize: Couldn't allocate memory");

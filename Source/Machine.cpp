@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <Utix/Alloc_t.h>
 #include <Utix/ScopeExit.h>
 #include "Instructions.h"
 #include "Machine.h"
@@ -12,7 +12,7 @@ namespace gbx {
 
 
 Machine* CreateMachine() {	
-	auto* const mach = static_cast<Machine*>(malloc(sizeof(Machine)));
+	auto* const mach = utix::malloc_t<Machine>();
 
 	if(!mach) {
 		perror("can't allocate memory for Machine");
@@ -53,12 +53,13 @@ bool Machine::Reset() {
 	printf("Internal ROM name: %s\n", cartridge.GetName());
 	printf("Gameboy type:   %x\n", static_cast<unsigned int>(cartridge_gb_type));
 	printf("Cartridge type: %x\n", static_cast<unsigned int>(cartridge_type));
-	printf("Cartridge Size: %zu Kib\n", cartridge.GetSize());
+	printf("Cartridge size: %zu Kib\n", cartridge.GetSize());
 
 	if (cartridge_type != CartridgeType::ROM_ONLY) {
-		fprintf(stderr, "Cartridge type supported type!\n");
+		fprintf(stderr, "Cartridge type not supported!\n");
 		return false;
 	}
+
 
 	memcpy(memory.Data(), cartridge.Data(), (FIXED_HOME_SIZE + HOME_SIZE));
 	cpu.SetPC(CARTRIDGE_ENTRY_POINT);
