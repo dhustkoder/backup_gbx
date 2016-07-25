@@ -1,21 +1,24 @@
 
-
+BUILD_MODE :=
 INCLUDE_DIRS := -I./Dependencies/Utix/Utix/include/
 SOURCE_FILES := ./Source/*.cpp
-LINK_PATHS := 
+LINK_PATHS :=
 LINK_LIBS := -lc
 CXX_FLAGS := $(SOURCE_FILES) \
              $(INCLUDE_DIRS) \
              -std=c++11 -pedantic -pedantic-errors -Wall -Wextra -Werror -fno-exceptions -fno-rtti
-LINK_FLAGS :=
+LINK_FLAGS := $(LINK_PATHS) \
+              $(LINK_LIBS)
 
 all: debug
 
+debug: BUILD_MODE := Debug
 debug: CXX_FLAGS += -D_DEBUG -g -O0
 debug: compile
 
-release: CXX_FLAGS += -DNDEBUG -O3 -flto -s -Wl,--gc-sections -fdata-sections -ffunction-sections -fomit-frame-pointer -fno-unwind-tables 
-release: LINK_FLAGS +=  -nodefaultlibs -Wl,--gc-sections -flto -s -static-libgcc $(LINK_PATHS) $(LINK_LIBS)
+release: BUILD_MODE := Release
+release: CXX_FLAGS += -DNDEBUG -O3 -flto -fdata-sections -ffunction-sections -fomit-frame-pointer -fno-unwind-tables 
+release: LINK_FLAGS += -nodefaultlibs -flto -s
 release: compile
 
 

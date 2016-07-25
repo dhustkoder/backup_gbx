@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <Utix/ScopeExit.h>
 #include "Machine.h"
 

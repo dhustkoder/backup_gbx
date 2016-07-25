@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include <Utix/Assert.h>
-#include <Utix/Alloc.h>
 #include <Utix/ScopeExit.h>
 
 #include "Memory.h"
@@ -33,15 +32,17 @@ bool Cartridge::Load(const char* file_name) {
 	const auto rom_size = static_cast<size_t>(ftell(rom_file));
 	fseek(rom_file, 0, SEEK_SET);
 
-	if (rom_size > MAX_CARTRIDGE_SIZE) {
-		fprintf(stderr, "\'%s\' size is too big\n", file_name);
+	if (rom_size > MAX_CARTRIDGE_SIZE || rom_size < MIN_CARTRIDGE_SIZE) {
+		fprintf(stderr, "\'%s\' size not compatible\n", file_name);
 		return false;
 	}
 
-	if (m_data)
-		this->Dispose();
+	
+	this->Dispose();
 
-	const_cast<uint8_t*&>(m_data) = utix::alloc_arr<uint8_t>(rom_size);
+	// alloc enough bytes for rom_file and for a size_t variable
+	const size_t m_data_size = (sizeof(uint8_t) * rom_size) + sizeof(size_t);
+	const_cast<uint8_t*&>(m_data) = static_cast<uint8_t*>(malloc(m_data_size));
 
 	if (m_data == nullptr) {
 		perror("Couldn't allocate memory for ROM");
@@ -52,6 +53,11 @@ bool Cartridge::Load(const char* file_name) {
 		this->Dispose();
 	});
 
+	// store Cartridge's size into first bytes of m_data, then
+	// increment m_data pointer to not erase it
+	*reinterpret_cast<size_t*>(m_data) = rom_size;
+	const_cast<uint8_t*&>(m_data) = reinterpret_cast<uint8_t*>(reinterpret_cast<size_t*>(m_data) + 1);
+		
 	fread(m_data, sizeof(uint8_t), rom_size, rom_file);
 
 	if (ferror(rom_file)) {
@@ -59,7 +65,8 @@ bool Cartridge::Load(const char* file_name) {
 		return false;
 	}
 
-	// null the last name character just in case!
+	// null the last byte of Cartridge's internal name -
+	// just in case.
 	if (m_data[0x142] != 0)
 		m_data[0x142] = 0;
 
@@ -67,6 +74,17 @@ bool Cartridge::Load(const char* file_name) {
 	return true;
 }
 
+
+
+
+void Cartridge::Dispose() {
+	if(m_data) {
+		// gives free the original pointer address
+		// m_data - sizeof size_t  bytes
+		free(reinterpret_cast<size_t*>(m_data) - 1);
+		const_cast<uint8_t*&>(m_data) = nullptr;
+	}
+}
 
 
 
@@ -94,6 +112,11 @@ const char* Cartridge::GetName() const {
 }
 
 
+
+
+size_t Cartridge::GetSize() const {
+	return *(reinterpret_cast<size_t*>(m_data) - 1);
+}
 
 
 

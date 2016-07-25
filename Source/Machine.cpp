@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <Utix/ScopeExit.h>
 #include "Instructions.h"
@@ -11,7 +12,6 @@ namespace gbx {
 
 
 Machine* CreateMachine() {	
-
 	auto* const mach = static_cast<Machine*>(malloc(sizeof(Machine)));
 
 	if(!mach) {
@@ -46,8 +46,9 @@ bool Machine::Reset() {
 	const auto cartridge_gb_type = cartridge.GetGameBoyType();
 	const auto cartridge_type = cartridge.GetType();
 	printf("Internal ROM name: %s\n", cartridge.GetName());
-	printf("Gameboy type:   %x\n", cartridge_gb_type);
-	printf("Cartridge type: %x\n", cartridge_type);
+	printf("Gameboy type:   %x\n", static_cast<unsigned int>(cartridge_gb_type));
+	printf("Cartridge type: %x\n", static_cast<unsigned int>(cartridge_type));
+	printf("Cartridge Size: %zu Kib\n", cartridge.GetSize());
 
 	if (cartridge_type != CartridgeType::ROM_ONLY) {
 		fprintf(stderr, "Cartridge type supported type!\n");
@@ -116,8 +117,7 @@ bool Machine::LoadRom(const char* file_name) {
 
 
 bool Machine::Step() {
-	// boot code seems to expected the value in this area
-	// to keep changing
+	// boot code seems to expect values from this addr
 	memory.AddU8(0xff44, 1);
 
 	// fetch Opcode and execute instruction

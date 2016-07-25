@@ -46,7 +46,7 @@ endif()
 #directories
 set(GBX_SRC_DIR "./Source")
 
-#using headers only utitlites from utix
+#include utix
 include_directories("./Dependencies/Utix/Utix/include/")
 
 #files

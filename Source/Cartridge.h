@@ -1,28 +1,9 @@
 #ifndef GBX_CARTRIDGE_H_
 #define GBX_CARTRIDGE_H_
-#include <Utix/Alloc.h>
 #include <Utix/Ints.h>
 
 namespace gbx {
-	/*
-	0147       Cartridge type:
-           0 - ROM ONLY                12 - ROM+MBC3+RAM
-           1 - ROM+MBC1                13 - ROM+MBC3+RAM+BATT
-           2 - ROM+MBC1+RAM            19 - ROM+MBC5
-           3 - ROM+MBC1+RAM+BATT       1A - ROM+MBC5+RAM
-           5 - ROM+MBC                 1B - ROM+MBC5+RAM+BATT
-           6 - ROM+MBC2+BATTERY        1C - ROM+MBC5+RUMBLE
-           8 - ROM+RAM                 1D - ROM+MBC5+RUMBLE+SRAM
-           9 - ROM+RAM+BATTERY         1E - ROM+MBC5+RUMBLE+SRAM+BATT
-           B - ROM+MMM01               1F - Pocket Camera
-           C - ROM+MMM01+SRAM          FD - Bandai TAMA5
-           D - ROM+MMM01+SRAM+BATT     FE - Hudson HuC-3
-           F - ROM+MBC3+TIMER+BATT     FF - Hudson HuC-1
-          10 - ROM+MBC3+TIMER+RAM+BATT
-          11 - ROM+MBC3
-	
-	
-	*/
+
 
 
 enum class CartridgeType {
@@ -96,25 +77,17 @@ inline void Cartridge::Initialize() {
 }
 
 
-inline void Cartridge::Dispose() {
-	utix::free_arr(m_data);
-	const_cast<uint8_t*&>(m_data) = nullptr;
+
+inline CartridgeType Cartridge::GetType() const {
+	return static_cast<CartridgeType>(m_data[0x147]);
 }
 
 
-inline size_t Cartridge::GetSize() const {
-	return utix::arr_size(m_data);
-}
+
 
 
 inline const uint8_t* Cartridge::Data() const {
 	return m_data;
-}
-
-
-
-inline CartridgeType Cartridge::GetType() const {
-	return static_cast<CartridgeType>(m_data[0x147]);
 }
 
 

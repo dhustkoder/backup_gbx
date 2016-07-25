@@ -68,6 +68,7 @@ constexpr const size_t HOME_SIZE = 16_Kib;
 constexpr const size_t FIXED_HOME_SIZE = 16_Kib;
 constexpr const size_t TOTAL_RAM_SIZE = 64_Kib;
 constexpr const size_t MAX_CARTRIDGE_SIZE = 32_Kib;
+constexpr const size_t MIN_CARTRIDGE_SIZE = 32_Kib;
 
 
 //MEMORY AREAS OFFSETS:
