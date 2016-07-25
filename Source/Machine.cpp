@@ -42,6 +42,11 @@ void DestroyMachine(Machine* const mach) {
 
 
 
+
+
+
+
+
 bool Machine::Reset() {
 	const auto cartridge_gb_type = cartridge.GetGameBoyType();
 	const auto cartridge_type = cartridge.GetType();
@@ -138,6 +143,71 @@ bool Machine::Step() {
 
 	return true;
 }
+
+
+
+
+
+
+
+
+void Machine::PushStack8(const uint8_t value) {
+	const uint16_t sp = cpu.GetSP() - 1;
+	memory.WriteU8(sp, value);
+	cpu.SetSP(sp);
+
+}
+
+
+
+
+
+
+
+void Machine::PushStack16(const uint16_t value) {
+	const uint16_t sp = cpu.GetSP() - 2;
+	memory.WriteU16(sp, value);
+	cpu.SetSP(sp);
+}
+
+
+
+
+
+
+
+uint8_t Machine::PopStack8() {
+	const auto sp = cpu.GetSP();
+	const auto val = memory.ReadU8(sp);
+	cpu.SetSP(sp + 1);
+	return val;
+}
+
+
+
+
+
+
+
+
+uint16_t Machine::PopStack16() {
+	const auto sp = cpu.GetSP();
+	const auto val = memory.ReadU16(sp);
+	cpu.SetSP(sp + 2);
+	return val;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

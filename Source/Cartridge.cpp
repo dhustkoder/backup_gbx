@@ -21,6 +21,10 @@ inline size_t GetCartridgeDataSize(uint8_t* ptr);
 
 
 
+void Cartridge::Initialize() {
+	const_cast<uint8_t*&>(m_data) = nullptr;
+}
+
 
 
 bool Cartridge::Load(const char* file_name) {
@@ -85,6 +89,23 @@ void Cartridge::Dispose() {
 
 
 
+CartridgeType Cartridge::GetType() const {
+	return static_cast<CartridgeType>(m_data[0x147]);
+}
+
+
+
+
+
+const uint8_t* Cartridge::Data() const {
+	return m_data;
+}
+
+
+
+
+
+
 GameBoyType Cartridge::GetGameBoyType() const {
 	const uint8_t sgb = m_data[0x146];
 	const uint8_t col = m_data[0x143];
@@ -100,6 +121,7 @@ GameBoyType Cartridge::GetGameBoyType() const {
 
 
 
+
 const char* Cartridge::GetName() const {
 	return reinterpret_cast<const char*>(m_data + 0x134);
 }
@@ -111,6 +133,26 @@ const char* Cartridge::GetName() const {
 size_t Cartridge::GetSize() const {
 	return GetCartridgeDataSize(m_data);
 }
+
+
+
+
+
+uint8_t* Cartridge::Data() {
+	return m_data;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

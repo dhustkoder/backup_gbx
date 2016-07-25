@@ -132,20 +132,7 @@ private:
 
 
 
-inline const uint8_t* Memory::Data() const {
-	return m_data;
-}
 
-
-inline int8_t Memory::ReadS8(const uint16_t pointer) const {
-	// TODO: this might not be totally portable 
-	return static_cast<int8_t>(ReadU8(pointer));
-}
-
-
-inline uint8_t* Memory::Data() {
-	return m_data;
-}
 
 
 

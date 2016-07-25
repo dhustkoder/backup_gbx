@@ -30,6 +30,16 @@ void Memory::Dispose() {
 
 
 
+
+
+
+int8_t Memory::ReadS8(const uint16_t pointer) const {
+	// TODO: this might not be totally portable 
+	return static_cast<int8_t>(ReadU8(pointer));
+}
+
+
+
 uint8_t Memory::ReadU8(const uint16_t pointer) const {
 	return m_data[pointer];
 }
@@ -94,7 +104,17 @@ void Memory::SubU8(const uint16_t pointer, const uint8_t value) {
 
 
 
+const uint8_t* Memory::Data() const {
+	return m_data;
+}
 
+
+
+
+
+uint8_t* Memory::Data() {
+	return m_data;
+}
 
 
 
