@@ -75,14 +75,40 @@ private:
 
 
 
+inline void Cartridge::Initialize() {
+	const_cast<uint8_t*&>(m_data) = nullptr;
+}
 
 
 
 
 
+inline CartridgeType Cartridge::GetType() const {
+	return static_cast<CartridgeType>(m_data[0x147]);
+}
 
 
 
+
+inline const char* Cartridge::GetName() const {
+	return reinterpret_cast<const char*>(m_data + 0x134);
+}
+
+
+
+
+
+inline const uint8_t* Cartridge::Data() const {
+	return m_data;
+}
+
+
+
+
+
+inline uint8_t* Cartridge::Data() {
+	return m_data;
+}
 
 
 

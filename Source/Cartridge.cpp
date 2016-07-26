@@ -1,6 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <Utix/Alloc_t.h>
 #include <Utix/Assert.h>
 #include <Utix/ScopeExit.h>
 
@@ -20,9 +20,7 @@ inline size_t GetCartridgeDataSize(uint8_t* ptr);
 
 
 
-void Cartridge::Initialize() {
-	const_cast<uint8_t*&>(m_data) = nullptr;
-}
+
 
 
 
@@ -88,30 +86,15 @@ void Cartridge::Dispose() {
 
 
 
-CartridgeType Cartridge::GetType() const {
-	return static_cast<CartridgeType>(m_data[0x147]);
-}
-
-
-
-
-
-const uint8_t* Cartridge::Data() const {
-	return m_data;
-}
-
-
-
-
 
 
 GameBoyType Cartridge::GetGameBoyType() const {
-	const uint8_t sgb = m_data[0x146];
-	const uint8_t col = m_data[0x143];
+	const uint8_t super_gb_check = m_data[0x146];
+	const uint8_t color_gb_check = m_data[0x143];
 	
-	if (sgb == 0x3)
+	if (super_gb_check == 0x3)
 		return GameBoyType::SUPER_GAMEBOY;
-	else if (col == 0x80)
+	else if (color_gb_check == 0x80)
 		return GameBoyType::GAMEBOY_COLOR;
 	
 	return GameBoyType::GAMEBOY;
@@ -121,24 +104,8 @@ GameBoyType Cartridge::GetGameBoyType() const {
 
 
 
-const char* Cartridge::GetName() const {
-	return reinterpret_cast<const char*>(m_data + 0x134);
-}
-
-
-
-
-
 size_t Cartridge::GetSize() const {
 	return GetCartridgeDataSize(m_data);
-}
-
-
-
-
-
-uint8_t* Cartridge::Data() {
-	return m_data;
 }
 
 
