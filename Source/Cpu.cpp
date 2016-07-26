@@ -23,6 +23,8 @@ void Cpu::ShowFlags() const {
 
 
 
+
+
 void Cpu::ShowRegisters() const {
 	printf("PC: %4x\n" \
 	       "OP: %4x\n" \
@@ -33,6 +35,7 @@ void Cpu::ShowRegisters() const {
 	       "HL: %4x\n", GetPC(), GetOP(), GetSP(), 
 	       GetAF(), GetBC(), GetDE(), GetHL());
 }
+
 
 
 
@@ -54,9 +57,9 @@ void Cpu::ADDHL(const uint16_t second) {
 
 uint8_t Cpu::ADC(uint8_t first, const uint8_t second) {
 	// flags effect: Z 0 H C
-	if(GetFlags(FLAG_C))
+	if (GetFlags(FLAG_C))
 		++first;
-	
+
 	return ADD(first, second);
 }
 
@@ -68,9 +71,9 @@ uint8_t Cpu::ADC(uint8_t first, const uint8_t second) {
 
 uint8_t Cpu::SBC(uint8_t first, const uint8_t second) {
 	// flags effect: Z 1 H C
-	if(GetFlags(FLAG_C))
+	if (GetFlags(FLAG_C))
 		--first;
-		
+
 	return SUB(first, second);
 }
 
@@ -84,9 +87,9 @@ uint8_t Cpu::SBC(uint8_t first, const uint8_t second) {
 uint8_t Cpu::ADD(const uint8_t first, const uint8_t second) {
 	// flags effect Z 0 H C
 	const uint16_t result = first + second;
-	
+
 	const uint8_t f = CheckZ(result) | CheckH_3th_bit(first, second) | CheckC_11th_bit(result);
-	
+
 	SetF(f);
 	return static_cast<uint8_t>(result);
 }
@@ -102,7 +105,7 @@ uint8_t Cpu::ADD(const uint8_t first, const uint8_t second) {
 uint8_t Cpu::SUB(const uint8_t first, const uint8_t second) {
 	// flags effect: Z 1 H C
 	const uint16_t result = first - second;
-	
+
 	const uint8_t f = CheckZ(result) | CheckH_borrow(first, second) | CheckC_borrow(first, second);
 
 	SetF(f | FLAG_N);
