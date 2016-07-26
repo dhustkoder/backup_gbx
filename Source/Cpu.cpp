@@ -23,6 +23,25 @@ void Cpu::ShowFlags() const {
 
 
 
+void Cpu::ShowRegisters() const {
+	const auto pc = GetPC();
+	const auto sp = GetSP();
+	const auto op = GetOP();
+	const auto af = GetAF();
+	const auto bc = GetBC();
+	const auto de = GetDE();
+	const auto hl = GetHL();
+	printf("PC: %4x\n" \
+	       "OP: %4x\n"
+	       "SP: %4x\n"
+	       "AF: %4x\n"
+	       "BC: %4x\n"
+	       "DE: %4x\n"
+	       "HL: %4x\n", pc, op, sp, af, bc, de, hl);
+}
+
+
+
 
 
 void Cpu::ADDHL(const uint16_t second) {

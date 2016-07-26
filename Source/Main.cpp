@@ -76,15 +76,7 @@ int Debug(gbx::Machine* const machine) {
 			break;
 
 		case 'r': 
-			printf("AF: %4x\n" \
-			       "BC: %4x\n" \
-			       "DE: %4x\n" \
-			       "HL: %4x\n" \
-			       "SP: %4x\n" \
-			       "PC: %4x\n", machine->cpu.GetAF(),
-			       machine->cpu.GetBC(), machine->cpu.GetDE(),
-			       machine->cpu.GetHL(), machine->cpu.GetSP(),
-			       machine->cpu.GetPC());
+			machine->cpu.ShowRegisters();
 			break;
 
 		case 'q':

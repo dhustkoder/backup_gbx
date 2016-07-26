@@ -181,6 +181,7 @@ inline uint8_t* AllocateCartridgeData(size_t bytes) {
 
 
 inline void DeallocateCartridgeData(uint8_t* ptr) {
+	ASSERT_MSG(ptr!=nullptr,"Trying to free nullptr");
 	// free the original pointer address
 	free(reinterpret_cast<size_t*>(ptr) - 1);
 }

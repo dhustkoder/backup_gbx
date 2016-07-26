@@ -36,7 +36,7 @@ public:
 
 	Flags GetFlags(const Cpu::Flags flags) const;
 	void ShowFlags() const;
-
+	void ShowRegisters() const;
 
 	void SetA(const uint8_t val);
 	void SetF(const uint8_t val);

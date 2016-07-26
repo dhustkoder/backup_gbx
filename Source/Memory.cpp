@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <Utix/Assert.h>
 #include <Utix/Alloc_t.h>
 #include "Common.h"
 #include "Memory.h"
@@ -22,6 +23,7 @@ bool Memory::Initialize() {
 
 
 void Memory::Dispose() {
+	ASSERT_MSG(m_data!=nullptr, "attempt to free nullptr");
 	free(m_data);
 }
 
