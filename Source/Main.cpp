@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
 
 
 int Debug(gbx::Machine* const machine) {
-	printf("Select an option:\n"              \
+	puts("Select an option:\n"                \
 	       "q - quit\n"                       \
 	       "s - 1 step\n"                     \
 	       "c - step until sig or pc break\n" \
