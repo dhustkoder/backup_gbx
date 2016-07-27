@@ -119,7 +119,7 @@ uint8_t Cpu::INC(uint8_t first) {
 	const uint8_t result = first + 1;
 	const uint8_t f = CheckZ(result) | CheckH_3th_bit(first, 1) | GetFlags(FLAG_C);
 	SetF(f);
-	return first;
+	return result;
 }
 
 

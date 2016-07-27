@@ -215,7 +215,18 @@ void dec_0B(Machine* const mach) {
 
 
 
-void inc_0C(Machine* const) { ASSERT_INSTR_IMPL();  }
+void inc_0C(Machine* const mach) { 
+	// INC C
+	// increment C
+	// operands: 0
+	// clock cycles: 4
+	// flags affected: Z 0 H -
+	const auto c = mach->cpu.GetC();
+	const auto result = mach->cpu.INC(c);
+	mach->cpu.SetC(result);
+	printf("INC C; C(%x), Result(%x) | ", c, result);
+	mach->cpu.ShowFlags();
+}
 
 
 
@@ -734,7 +745,28 @@ void ld_32(Machine* const mach) {
 
 
 void inc_33(Machine* const){ ASSERT_INSTR_IMPL();  }
-void inc_34(Machine* const){ ASSERT_INSTR_IMPL();  }
+
+
+
+
+
+void inc_34(Machine* const mach) {
+	// INC (HL)
+	// increment value pointed by hl in memory
+	// operands: 0
+	// clock cycles: 12
+	const auto hl = mach->cpu.GetHL();
+	const auto value = mach->memory.ReadU8(hl);
+	const auto result = mach->cpu.INC(value);
+	mach->memory.WriteU8(hl, result);
+
+	printf("INC (HL); -> HL(%X), (HL)(%x), Result(%x) | ", hl, value, result);
+	mach->cpu.ShowFlags();
+}
+
+
+
+
 void dec_35(Machine* const){ ASSERT_INSTR_IMPL();  }
 
 
@@ -793,8 +825,40 @@ void jr_38(Machine* const mach) {
 void add_39(Machine* const){ ASSERT_INSTR_IMPL();  }
 void ld_3A(Machine* const) { ASSERT_INSTR_IMPL();  }
 void dec_3B(Machine* const){ ASSERT_INSTR_IMPL();  }
-void inc_3C(Machine* const){ ASSERT_INSTR_IMPL();  }
-void dec_3D(Machine* const){ ASSERT_INSTR_IMPL();  }
+
+
+
+
+void inc_3C(Machine* const mach) {
+	// INC A
+	// increment A
+	// operands: 0
+	// clock cycles: 4
+	// flags affected: Z 0 H -
+	const auto a = mach->cpu.GetA();
+	const auto result = mach->cpu.INC(a);
+	mach->cpu.SetA(result);
+
+	printf("INC A; -> A(%x), Result(%x) | ", a, result);
+	mach->cpu.ShowFlags();
+}
+
+
+
+
+void dec_3D(Machine* const mach) { 
+	// DEC A
+	// decrement A
+	// operands: 0
+	// clock cycles: 4
+	// flags affected: Z 1 H -
+	const auto a = mach->cpu.GetA();
+	const auto result = mach->cpu.DEC(a);
+	mach->cpu.SetA(result);
+
+	printf("DEC A; -> A(%x), Result(%x) | ", a, result);
+	mach->cpu.ShowFlags();
+}
 
 
 
@@ -1837,7 +1901,23 @@ void push_D5(Machine* const mach) {
 void sub_D6(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 void rst_D7(Machine* const)  { ASSERT_INSTR_IMPL();  }
 void ret_D8(Machine* const)  { ASSERT_INSTR_IMPL();  }
-void reti_D9(Machine* const) { ASSERT_INSTR_IMPL();  }
+
+
+void reti_D9(Machine* const mach) {
+	// RETI
+	// return from interrupt/subroutine - 
+	// pop 2 bytes of the stack, jump to that address, enable interrupts
+	// operands: 0
+	// clock cycles: 16
+	const auto addr = mach->PopStack16();
+	mach->cpu.SetPC(addr);
+	mach->SetIME(true);
+}
+
+
+
+
+
 void jp_DA(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
 // MISSING DB -----
 void call_DC(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(2); }
