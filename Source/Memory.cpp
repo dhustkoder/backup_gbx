@@ -9,7 +9,6 @@ namespace gbx {
 
 
 bool Memory::Initialize() {
-	
 	const_cast<uint8_t*&>(m_data) = utix::malloc_t<uint8_t>(TOTAL_RAM_SIZE);
 	
 	if(!m_data) {

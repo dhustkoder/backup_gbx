@@ -14,7 +14,7 @@ public:
 	Cpu&operator=(Cpu&&)=delete;
 	
 	enum Flags : uint8_t {
-		FLAG_Z = 0x80, FLAG_N = 0x40, FLAG_H = 0x20, FLAG_C = 0x10
+		FLAG_Z = 0x80, FLAG_N = 0x40, FLAG_H = 0x20, FLAG_C = 0x10, FLAG_NONE = 0x00
 	};
 
 	uint8_t GetA() const;
@@ -57,11 +57,8 @@ public:
 
 	void AddPC(const uint16_t val);
 
-
-
 	void SetFlags(const Cpu::Flags flags);
 	void UnsetFlags(const Cpu::Flags flags);
-
 
 	void ADDHL(const uint16_t reg_pair);
 
@@ -119,56 +116,63 @@ private:
 
 
 
-
-
-
-
-
-inline uint8_t CheckZ(uint32_t result) {
-	return result ? 0 : Cpu::FLAG_Z;
+constexpr Cpu::Flags operator|(const Cpu::Flags f1, const Cpu::Flags f2) {
+	return static_cast<Cpu::Flags>(static_cast<uint8_t>(f1) | static_cast<uint8_t>(f2));
 }
 
-
-
-
-inline uint8_t CheckH_3th_bit(uint8_t first, uint8_t second) {
-	return (((first&0x0f) + (second&0x0f)) & 0x10) ? Cpu::FLAG_H : 0;
-}
-
-
-
-
-inline uint8_t CheckH_11th_bit(uint16_t first, uint16_t second) {
-	return (((first&0xf00) + (second&0xf00)) & 0x1000) ? Cpu::FLAG_H : 0;
-}
-
-
-
-
-inline uint8_t CheckC_11th_bit(uint16_t result) {
-	return (result & 0xff00) ? Cpu::FLAG_C : 0;
-}
-
-
-
-
-inline uint8_t CheckC_15th_bit(uint32_t result) {
-	return (result & 0xffff0000) ? Cpu::FLAG_C : 0;
+constexpr Cpu::Flags operator&(const Cpu::Flags f1, const Cpu::Flags f2) {
+	return static_cast<Cpu::Flags>(static_cast<uint8_t>(f1) & static_cast<uint8_t>(f2));
 }
 
 
 
 
 
-inline uint8_t CheckC_borrow(uint8_t first, uint8_t second) {
-	return first < second ? Cpu::FLAG_C : 0;
+inline Cpu::Flags CheckZ(uint32_t result) {
+	return result ? Cpu::FLAG_NONE : Cpu::FLAG_Z;
 }
 
 
 
 
-inline uint8_t CheckH_borrow(uint8_t first, uint8_t second) {
-	return (((first&0xf) - (second&0xf)) & 0x10) ? Cpu::FLAG_H : 0;
+inline Cpu::Flags CheckH_3th_bit(uint8_t first, uint8_t second) {
+	return (((first&0x0f) + (second&0x0f)) & 0x10) ? Cpu::FLAG_H : Cpu::FLAG_NONE;
+}
+
+
+
+
+inline Cpu::Flags CheckH_11th_bit(uint16_t first, uint16_t second) {
+	return (((first&0xf00) + (second&0xf00)) & 0x1000) ? Cpu::FLAG_H : Cpu::FLAG_NONE;
+}
+
+
+
+
+inline Cpu::Flags CheckC_11th_bit(uint16_t result) {
+	return (result & 0xff00) ? Cpu::FLAG_C : Cpu::FLAG_NONE;
+}
+
+
+
+
+inline Cpu::Flags CheckC_15th_bit(uint32_t result) {
+	return (result & 0xffff0000) ? Cpu::FLAG_C : Cpu::FLAG_NONE;
+}
+
+
+
+
+
+inline Cpu::Flags CheckC_borrow(uint8_t first, uint8_t second) {
+	return first < second ? Cpu::FLAG_C : Cpu::FLAG_NONE;
+}
+
+
+
+
+inline Cpu::Flags CheckH_borrow(uint8_t first, uint8_t second) {
+	return (((first&0xf) - (second&0xf)) & 0x10) ? Cpu::FLAG_H : Cpu::FLAG_NONE;
 }
 
 
@@ -225,6 +229,9 @@ inline void Cpu::SetAF(const uint16_t val) { af.pair = val; }
 inline void Cpu::SetBC(const uint16_t val) { bc.pair = val; }
 inline void Cpu::SetDE(const uint16_t val) { de.pair = val; }
 inline void Cpu::SetHL(const uint16_t val) { hl.pair = val; }
+
+
+
 
 inline void Cpu::SetFlags(const Cpu::Flags flags) {
 	SetF(GetF() | flags);

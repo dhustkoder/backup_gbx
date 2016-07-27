@@ -57,6 +57,10 @@ fixed home and home goes the cartridge's user program data
 catridge's entry point is at 0x100
 */
 
+// SPECIAL MEMORY OFFSETS:
+constexpr const uint16_t INTERRUPT_ENABLED_OFFSET = 0xffff;
+constexpr const uint16_t INTERRUPT_FLAGS_OFFSET = 0xff0f;
+
 //MEMORY AREAS SIZES:
 //constexpr const size_t OAM_RAM_SIZE = 256;
 //constexpr const size_t WORK_RAM_SIZE = 8_Kib;

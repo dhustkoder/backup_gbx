@@ -74,6 +74,7 @@ bool Machine::Reset() {
 	cpu.SetDE(0x00D8);
 	cpu.SetHL(0x014D);
 
+	
 	memory.WriteU8(0xFF05, 0x00); // TIMA
 	memory.WriteU8(0xFF06, 0x00); // TMA
 	memory.WriteU8(0xFF07, 0x00); // TAC
@@ -104,7 +105,7 @@ bool Machine::Reset() {
 	memory.WriteU8(0xFF49, 0xFF); // OBP1
 	memory.WriteU8(0xFF4A, 0x00); // WY
 	memory.WriteU8(0xFF4B, 0x00); // WX
-	memory.WriteU8(0xFFFF, 0x00); // IE
+	memory.WriteU8(INTERRUPT_ENABLED_OFFSET, 0x00);
 
 	return true;
 }
@@ -132,15 +133,14 @@ bool Machine::Step() {
 	// fetch Opcode and execute instruction
 	// uint8_t variable can't overflow main_instruction array
 	const uint16_t pc = cpu.GetPC();
+	const uint8_t opcode = memory.ReadU8(pc);
+	cpu.AddPC(1);
+	
+	// info
 	printf("PC: %4x | ", pc);
-
-	if (pc > HOME_MAX_OFFSET)
-		fprintf(stderr, "warning: PC overflows program memory\n");
-
-	const auto op = memory.ReadU8(pc);
-	printf("OPCODE: %2x | ", op);
-	main_instructions[op](this);
-
+	printf("OPCODE: %2x | ", opcode);
+	
+	main_instructions[opcode](this);
 	return true;
 }
 
@@ -149,16 +149,23 @@ bool Machine::Step() {
 
 void Machine::UpdateInterrupts() {
 	// TODO: test vblank
-	static clock_t interrupt_time = clock();
-	if (false) {
-		const auto interrupt_enabled = memory.ReadU8(0xffff);
-		const auto interrupt_flags = memory.ReadU8(0xff0f);
+	static clock_t interrupt_time = 0;
+	if (GetIME()) {
+
+		if (interrupt_time == 0) {
+			interrupt_time = 1;
+			return;
+		}
+
+		const auto interrupt_enabled = GetIE();
+		const auto interrupt_flags = GetIF();
 		// check if a interrupt is enabled
 		if (interrupt_enabled) {
 			// check if v-blank is enabled and the elapsed time
 			if ((interrupt_flags & 0x01)) {
 				const auto ms_elapsed = ((double)(clock() - interrupt_time) / CLOCKS_PER_SEC) * 1000;
 				if (ms_elapsed >= 14.6) {
+					SetIME(false);
 					PushStack16(cpu.GetPC());
 					cpu.SetPC(0x40);
 					interrupt_time = clock();
@@ -167,6 +174,21 @@ void Machine::UpdateInterrupts() {
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
