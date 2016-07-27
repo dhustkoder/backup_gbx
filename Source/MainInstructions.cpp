@@ -41,7 +41,7 @@ const InstructionFunction main_instructions[0x100] = {
 // a16: 16 bit address
 // r8: means 8 bit signed data, which are added to program counter
 // note: on gameboy PC appears to be incremented before the instruction is executed -
-// so relative jump instructions (jr) here still need to add 2 to pc, or to r8 itself 
+// so relative jump instructions (jr) here still need to add its operand length to pc, or to r8 itself 
 
 
 
