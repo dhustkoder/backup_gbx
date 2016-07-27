@@ -1548,7 +1548,22 @@ void cp_BF(Machine* const mach) { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
 
 
 // 0xC0
-void ret_C0(Machine* const mach)  { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(1); }
+void ret_C0(Machine* const mach) { 
+	// RET NZ
+	// return if zero flag is reset
+	// bytes: 1
+	// clock cycles: 20 if return, 8 if not
+	const auto zero_flag = mach->cpu.GetFlags(Cpu::FLAG_Z);
+	if (!zero_flag) {
+		const auto addr = mach->PopStack16();
+		mach->cpu.SetPC(addr);
+	}
+	else {
+		mach->cpu.AddPC(1);
+	}
+
+	printf("RET NZ\n");
+}
 
 
 
@@ -1582,7 +1597,7 @@ void jp_C2(Machine* const mach)   { ASSERT_INSTR_IMPL(); mach->cpu.AddPC(3); }
 
 
 
-void jp_C3(Machine* const mach)   { 
+void jp_C3(Machine* const mach) {
 	// JP a16
 	// 16 bit address is copied to PC
 	// bytes: 3
@@ -1700,9 +1715,9 @@ void PREFIX_CB(Machine* const mach) {
 	// PREFIX_CB will call a CB instruction
 	const auto pc = mach->cpu.GetPC();
 	const auto op = mach->memory.ReadU8(pc + 1);
-	mach->cpu.SetOP(op);
-	
+
 	printf("CB INSTRUCTION: %x | ", op);
+	
 	cb_instructions[op](mach);
 	mach->cpu.AddPC(2);
 }
@@ -2129,7 +2144,6 @@ void di_F3(Machine* const mach) {
 	// clock cycles: 4
 	// TODO: back here when interrupts are implemented
 	mach->cpu.AddPC(1);
-
 	printf("DI\n");
 }
 
@@ -2205,11 +2219,9 @@ void ei_FB(Machine* const mach) {
 	// interrupts are enabled after the next instructions is executed
 	// bytes: 1
 	// clock cycles: 4
-	// TODO: back here when interrupts are implemented
-
-	mach->cpu.AddPC(1); 
-
+	// TODO: back here when interrupts are implement
 	printf("EI\n");
+	mach->cpu.AddPC(1);
 }
 
 

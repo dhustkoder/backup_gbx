@@ -20,6 +20,7 @@ public:
 	bool LoadRom(const char* filename);
 	bool Reset();
 	bool Step();
+	void UpdateInterrupts();
 
 	void PushStack8(const uint8_t value);
 	void PushStack16(const uint16_t value);

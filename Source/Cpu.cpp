@@ -27,12 +27,11 @@ void Cpu::ShowFlags() const {
 
 void Cpu::ShowRegisters() const {
 	printf("PC: %4x\n" \
-	       "OP: %4x\n" \
 	       "SP: %4x\n" \
 	       "AF: %4x\n" \
 	       "BC: %4x\n" \
 	       "DE: %4x\n" \
-	       "HL: %4x\n", GetPC(), GetOP(), GetSP(), 
+	       "HL: %4x\n", GetPC(), GetSP(), 
 	       GetAF(), GetBC(), GetDE(), GetHL());
 }
 

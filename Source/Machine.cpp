@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <Utix/Assert.h>
 #include <Utix/Alloc_t.h>
 #include <Utix/ScopeExit.h>
@@ -133,18 +134,38 @@ bool Machine::Step() {
 	const uint16_t pc = cpu.GetPC();
 	printf("PC: %4x | ", pc);
 
-	if (pc <= HOME_MAX_OFFSET) {
-		const auto op = memory.ReadU8(pc);
-		cpu.SetOP(op);
-		printf("OPCODE: %2x | ", op);
-		main_instructions[op](this);
-	}
-	else {
-		fprintf(stderr, "PC overflows program memory\n");
-		return false;
-	}
+	if (pc > HOME_MAX_OFFSET)
+		fprintf(stderr, "warning: PC overflows program memory\n");
+
+	const auto op = memory.ReadU8(pc);
+	printf("OPCODE: %2x | ", op);
+	main_instructions[op](this);
 
 	return true;
+}
+
+
+
+
+void Machine::UpdateInterrupts() {
+	// TODO: test vblank
+	static clock_t interrupt_time = clock();
+	if (false) {
+		const auto interrupt_enabled = memory.ReadU8(0xffff);
+		const auto interrupt_flags = memory.ReadU8(0xff0f);
+		// check if a interrupt is enabled
+		if (interrupt_enabled) {
+			// check if v-blank is enabled and the elapsed time
+			if ((interrupt_flags & 0x01)) {
+				const auto ms_elapsed = ((double)(clock() - interrupt_time) / CLOCKS_PER_SEC) * 1000;
+				if (ms_elapsed >= 14.6) {
+					PushStack16(cpu.GetPC());
+					cpu.SetPC(0x40);
+					interrupt_time = clock();
+				}
+			}
+		}
+	}
 }
 
 

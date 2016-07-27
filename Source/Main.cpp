@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <inttypes.h>
 #include <Utix/ScopeExit.h>
+#include "Instructions.h"
 #include "Machine.h"
 
 
@@ -45,30 +45,37 @@ int Debug(gbx::Machine* const machine) {
 	       "c - step until sig or pc break\n" \
 	       "b - set pc break\n"               \
 	       "r - print registers\n");
-
 	char opt = 0;
 	unsigned int pc_wanted = 0;
-	
-	while(true) {
+	bool running = true;
+
+	const auto machine_full_step = [=] {
+		if (!machine->Step())
+			return false;
+		machine->UpdateInterrupts();
+		return true;
+	};
+
+	while(running) {
 		scanf(" %c", &opt);
 		
 		switch(opt)
 		{
 		
 		case 's':
-			if(!machine->Step()) 
+			if (!machine_full_step())
 				return EXIT_FAILURE;
 			break;
 			
 		case 'c':
 			while(machine->cpu.GetPC() != pc_wanted) {
-				if(!machine->Step()) 
+				if (!machine_full_step())
 					return EXIT_FAILURE;
 			}
 			break;
 		
 		case 'b':
-			printf("selected desired pc value (hex): ");
+			printf("type the desired pc value (hex): ");
 			scanf(" %x", &pc_wanted);
 			printf("selected: 0x%x\n", pc_wanted);
 			if(pc_wanted > gbx::HOME_MAX_OFFSET)
@@ -80,7 +87,8 @@ int Debug(gbx::Machine* const machine) {
 			break;
 
 		case 'q':
-			goto break_while;
+			running = false;
+			break;
 		
 		default:
 			fprintf(stderr, "error, not opt \'%c\'\n", opt);
@@ -88,8 +96,6 @@ int Debug(gbx::Machine* const machine) {
 		}
 
 	}
-
-break_while:
 
 	return EXIT_SUCCESS;
 }

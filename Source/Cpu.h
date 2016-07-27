@@ -26,7 +26,7 @@ public:
 	uint8_t GetH() const;
 	uint8_t GetL() const;
 
-	uint8_t GetOP() const;
+
 	uint16_t GetPC() const;
 	uint16_t GetSP() const;
 	uint16_t GetAF() const;
@@ -47,7 +47,6 @@ public:
 	void SetH(const uint8_t val);
 	void SetL(const uint8_t val);
 
-	void SetOP(const uint8_t val);
 	void SetPC(const uint16_t val);
 	void SetSP(const uint16_t val);
 	void SetAF(const uint16_t val);
@@ -86,8 +85,6 @@ public:
 private:
 	uint16_t pc;
 	uint16_t sp;
-	uint8_t op;
-
 	// TODO: check endianess, this is only compatible with little endian
 	union {
 		struct {
@@ -118,8 +115,6 @@ private:
 	}hl;
 	
 };
-
-
 
 
 
@@ -198,7 +193,7 @@ inline uint8_t Cpu::GetE() const { return de.bytes.e; }
 inline uint8_t Cpu::GetH() const { return hl.bytes.h; }
 inline uint8_t Cpu::GetL() const { return hl.bytes.l; }
 
-inline uint8_t Cpu::GetOP() const  { return op; }
+
 inline uint16_t Cpu::GetPC() const { return pc; }
 inline uint16_t Cpu::GetSP() const { return sp; }
 inline uint16_t Cpu::GetAF() const { return af.pair; } 
@@ -223,7 +218,7 @@ inline void Cpu::SetE(const uint8_t val) { de.bytes.e = val; }
 inline void Cpu::SetH(const uint8_t val) { hl.bytes.h = val; }
 inline void Cpu::SetL(const uint8_t val) { hl.bytes.l = val; }
 
-inline void Cpu::SetOP(const uint8_t val)  { op = val; }
+
 inline void Cpu::SetPC(const uint16_t val) { pc = val; }
 inline void Cpu::SetSP(const uint16_t val) { sp = val; }
 inline void Cpu::SetAF(const uint16_t val) { af.pair = val; } 
