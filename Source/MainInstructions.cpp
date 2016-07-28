@@ -5,7 +5,7 @@ namespace gbx {
 
 
 
-const InstructionFunction main_instructions[0x100] = {
+const MainInstrFunc main_instructions[0x100] = {
 /*        0        1        2        3        4        5        6        7        8        9        A        B        C        D        E        F      */
 /*0*/  nop_00,   ld_01,   ld_02,  inc_03,  inc_04,  dec_05,   ld_06, rlca_07,   ld_08,  add_09,   ld_0A,  dec_0B,  inc_0C,  dec_0D,   ld_0E, rrca_0F,
 /*1*/ stop_10,   ld_11,   ld_12,  inc_13,  inc_14,  dec_15,   ld_16,  rla_17,   jr_18,  add_19,   ld_1A,  dec_1B,  inc_1C,  dec_1D,   ld_1E,  rra_1F,
@@ -181,7 +181,7 @@ void ld_06(Machine* const mach) {
 	mach->cpu.AddPC(1);
 
 
-	printf("LD B, %x\n", d8); 
+	printf("LD B, %x\n", d8);
 }
 
 
@@ -274,6 +274,9 @@ void ld_0E(Machine* const mach) {
 
 
 void rrca_0F(Machine* const){ ASSERT_INSTR_IMPL();  }
+
+
+
 
 
 
@@ -488,9 +491,12 @@ void rra_1F(Machine* const) { ASSERT_INSTR_IMPL();  }
 
 
 
+
+
+
+
+
 // 0x20
-
-
 void jr_20(Machine* const mach) {
 	// JR NZ, r8
 	// jump if Z flags is reset
@@ -675,6 +681,10 @@ void cpl_2F(Machine* const mach) {
 	
 	printf("CPL ; -> A(%x), Result(%x)\n", a, result);
 }
+
+
+
+
 
 
 
@@ -1137,12 +1147,6 @@ void ld_6F(Machine* const) { ASSERT_INSTR_IMPL();  }
 
 
 // 0x70
-
-
-
-
-
-
 void ld_70(Machine* const mach) {
 	// LD (HL), B
 	// value in B is stored into address pointed by HL
@@ -1312,6 +1316,9 @@ void ld_7F(Machine* const) { ASSERT_INSTR_IMPL();  }
 
 
 
+
+
+
 // 0x90
 void add_80(Machine* const) { ASSERT_INSTR_IMPL();  }
 void add_81(Machine* const) { ASSERT_INSTR_IMPL();  }
@@ -1378,6 +1385,8 @@ void sbc_9C(Machine* const) { ASSERT_INSTR_IMPL();  }
 void sbc_9D(Machine* const) { ASSERT_INSTR_IMPL();  }
 void sbc_9E(Machine* const) { ASSERT_INSTR_IMPL();  }
 void sbc_9F(Machine* const) { ASSERT_INSTR_IMPL();  }
+
+
 
 
 
@@ -1605,6 +1614,9 @@ void cp_BF(Machine* const) { ASSERT_INSTR_IMPL();  }
 
 
 
+
+
+
 // 0xC0
 void ret_C0(Machine* const mach) { 
 	// RET NZ
@@ -1775,7 +1787,7 @@ void PREFIX_CB(Machine* const mach) {
 	const auto op = mach->memory.ReadU8(pc);
 	mach->cpu.AddPC(1);
 	printf("CB INSTRUCTION: %x | ", op);
-	cb_instructions[op](mach);
+	cb_instructions[op](&mach->cpu);
 }
 
 
@@ -2142,6 +2154,9 @@ void rst_EF(Machine* const mach) {
 	
 	printf("RST 28H\n");
 }
+
+
+
 
 
 
