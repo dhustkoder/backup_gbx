@@ -2228,6 +2228,8 @@ void di_F3(Machine* const mach) {
 	// clock cycles: 4
 	// TODO: back here when interrupts are implemented
 	mach->SetIME(false);
+	const auto interrupt_enabled = mach->memory.GetIE();
+	mach->memory.SetIE(interrupt_enabled & ~INTERRUPT_IMA);
 	
 	printf("DI\n");
 }

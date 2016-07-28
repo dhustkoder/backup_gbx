@@ -13,6 +13,7 @@ namespace gbx {
 
 
 
+
 Machine* CreateMachine() {	
 	auto* const mach = utix::malloc_t<Machine>();
 
@@ -147,28 +148,38 @@ bool Machine::Step() {
 
 
 
+
+
+
+
+
+
 void Machine::StepInterrupts() {
 	// TODO: test vblank
 	static clock_t interrupt_time = 0;
 
 	if (GetIME()) {
-		// give it a break for next instruction
-		if (interrupt_time == 0) {
-			++interrupt_time;
+		const auto interrupt_enabled = memory.GetIE();
+		// give a break for next instruction execute before
+		// the interrupt triggers, if its after a EI instruction
+		if (!(interrupt_enabled & INTERRUPT_IMA)) {
+			memory.SetIE(interrupt_enabled | INTERRUPT_IMA);
 			return;
 		}
 
-		// get the requested interrupts
 		const uint8_t interrupt_flags = memory.GetIF();
-		const uint8_t requests = interrupt_flags & memory.GetIE();
+		const uint8_t requests = interrupt_flags & interrupt_enabled;
 
 		if (requests & INTERRUPT_VBLANK) {
 			const auto ms_elapsed = ((double)(clock() - interrupt_time) / CLOCKS_PER_SEC) * 1000;
 			if (ms_elapsed >= 14.6) {
+				// unset vblank bit
 				memory.SetIF(interrupt_flags & ~INTERRUPT_VBLANK);
+
+				// unset IME and call interrupt
 				SetIME(false);
 				PushStack16(cpu.GetPC());
-				cpu.SetPC(0x40);
+				cpu.SetPC(INTERRUPT_VBLANK_ADDR);
 				interrupt_time = clock();
 			}
 		}

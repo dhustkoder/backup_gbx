@@ -9,6 +9,33 @@ namespace gbx {
 
 
 
+enum InterruptMasks : uint8_t {
+	INTERRUPT_VBLANK = 0x01,
+	INTERRUPT_LCDC = 0x02,
+	INTERRUPT_TIMER = 0x40,
+	INTERRUPT_SERIAL = 0x80,
+	INTERRUPT_THLP = 0x10,
+	// extra mask for emulator information
+	INTERRUPT_IME = 0x80, // used as IME flag on INTERRUPT_ENABLED_OFFSET (in memory)
+	INTERRUPT_IMA = 0x40  // used as aux flag on INTERRUPT_ENABLED_OFFSET (in memory)
+};
+
+
+enum InterruptAddrs : uint16_t {
+	INTERRUPT_VBLANK_ADDR = 0x40
+};
+
+
+
+
+
+
+
+
+
+
+
+
 class Machine {
 public:
 	Machine()=delete;
@@ -17,7 +44,6 @@ public:
 	Machine(Machine&&)=delete;
 	Machine&operator=(Machine&)=delete;
 	Machine&operator=(Machine&&)=delete;
-
 
 	bool GetIME() const;
 	void SetIME(bool val);
@@ -49,17 +75,23 @@ void DestroyMachine(Machine* const mach);
 
 
 
-// here, I'm using the highest bit of IE, as the IME
+
 inline bool Machine::GetIME() const {
-	return (memory.GetIE() & 0x80) != 0;
+	return (memory.GetIE() & INTERRUPT_IME) != 0;
 }
+
+
 
 inline void Machine::SetIME(bool val) {
 	uint8_t ie = memory.GetIE();
-	if (val) ie |= 0x80;
-	else ie &= ~0x80;
+	if (val) ie |= INTERRUPT_IME;
+	else ie &= ~INTERRUPT_IME;
 	memory.SetIE(ie);
 }
+
+
+
+
 
 
 

@@ -98,18 +98,6 @@ constexpr const size_t CARTRIDGE_ENTRY_POINT = 0x100;
 
 
 
-enum INTERRUPT_MASKS : uint8_t {
-	INTERRUPT_VBLANK = 0x01, 
-	INTERRUPT_LCDC = 0x02,
-	INTERRUPT_TIMER = 0x40,
-	INTERRUPT_SERIAL = 0x80,
-	INTERRUPT_THLP = 0x10
-};
-
-
-
-
-
 
 
 
@@ -134,11 +122,12 @@ public:
 	uint8_t GetIF() const;
 
 
-
 	int8_t ReadS8(const uint16_t pointer) const;
 	uint8_t ReadU8(const uint16_t pointer) const;
 	uint16_t ReadU16(const uint16_t pointer) const;
 	void ReadU16(const uint16_t pointer, uint8_t* const high_byte, uint8_t* const low_byte) const;
+
+
 	void WriteU8(const uint16_t pointer, const uint8_t value);
 	void WriteU16(const uint16_t pointer, const uint16_t value);
 	void WriteU16(const uint16_t pointer, const uint8_t high_byte, const uint8_t low_byte);
