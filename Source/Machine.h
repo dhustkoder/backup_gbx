@@ -18,23 +18,20 @@ public:
 	Machine&operator=(Machine&)=delete;
 	Machine&operator=(Machine&&)=delete;
 
-	bool GetIME() const;
-	uint8_t GetIE() const;
-	uint8_t GetIF() const;
 
+	bool GetIME() const;
+	void SetIME(bool val);
 
 	bool LoadRom(const char* filename);
 	bool Reset();
 	bool Step();
-	void UpdateInterrupts();
+	void StepInterrupts();
 
 
 	void PushStack8(const uint8_t value);
 	void PushStack16(const uint16_t value);
 	uint8_t PopStack8();
 	uint16_t PopStack16();
-	
-	void SetIME(bool val);
 
 
 
@@ -51,18 +48,17 @@ void DestroyMachine(Machine* const mach);
 
 
 
+
+// here, I'm using the highest bit of IE, as the IME
 inline bool Machine::GetIME() const {
-	return (memory.ReadU8(INTERRUPT_ENABLED_OFFSET) & 0x80) != 0;
+	return (memory.GetIE() & 0x80) != 0;
 }
 
-
-inline uint8_t Machine::GetIE() const {
-	return memory.ReadU8(INTERRUPT_ENABLED_OFFSET) & 0x0f;
-}
-
-
-inline uint8_t Machine::GetIF() const {
-	return memory.ReadU8(INTERRUPT_FLAGS_OFFSET);
+inline void Machine::SetIME(bool val) {
+	uint8_t ie = memory.GetIE();
+	if (val) ie |= 0x80;
+	else ie &= ~0x80;
+	memory.SetIE(ie);
 }
 
 
@@ -123,10 +119,6 @@ inline uint16_t Machine::PopStack16() {
 
 
 
-inline void Machine::SetIME(bool val) {
-	uint8_t ie = memory.ReadU8(INTERRUPT_ENABLED_OFFSET);
-	memory.WriteU8(INTERRUPT_ENABLED_OFFSET, val ? ie | 0x80 : ie & 0x0f);
-}
 
 
 

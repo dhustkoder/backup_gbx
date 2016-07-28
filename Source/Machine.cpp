@@ -147,29 +147,29 @@ bool Machine::Step() {
 
 
 
-void Machine::UpdateInterrupts() {
+void Machine::StepInterrupts() {
 	// TODO: test vblank
 	static clock_t interrupt_time = 0;
-	if (GetIME()) {
 
+	if (GetIME()) {
+		// give it a break for next instruction
 		if (interrupt_time == 0) {
-			interrupt_time = 1;
+			++interrupt_time;
 			return;
 		}
 
-		const auto interrupt_enabled = GetIE();
-		const auto interrupt_flags = GetIF();
-		// check if a interrupt is enabled
-		if (interrupt_enabled) {
-			// check if v-blank is enabled and the elapsed time
-			if ((interrupt_flags & 0x01)) {
-				const auto ms_elapsed = ((double)(clock() - interrupt_time) / CLOCKS_PER_SEC) * 1000;
-				if (ms_elapsed >= 14.6) {
-					SetIME(false);
-					PushStack16(cpu.GetPC());
-					cpu.SetPC(0x40);
-					interrupt_time = clock();
-				}
+		// get the requested interrupts
+		const uint8_t interrupt_flags = memory.GetIF();
+		const uint8_t requests = interrupt_flags & memory.GetIE();
+
+		if (requests & INTERRUPT_VBLANK) {
+			const auto ms_elapsed = ((double)(clock() - interrupt_time) / CLOCKS_PER_SEC) * 1000;
+			if (ms_elapsed >= 14.6) {
+				memory.SetIF(interrupt_flags & ~INTERRUPT_VBLANK);
+				SetIME(false);
+				PushStack16(cpu.GetPC());
+				cpu.SetPC(0x40);
+				interrupt_time = clock();
 			}
 		}
 	}

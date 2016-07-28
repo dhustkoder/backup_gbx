@@ -95,6 +95,25 @@ constexpr const size_t FIXED_HOME_OFFSET = 0;
 constexpr const size_t CARTRIDGE_ENTRY_POINT = 0x100;
 
 
+
+
+
+enum INTERRUPT_MASKS : uint8_t {
+	INTERRUPT_VBLANK = 0x01, 
+	INTERRUPT_LCDC = 0x02,
+	INTERRUPT_TIMER = 0x40,
+	INTERRUPT_SERIAL = 0x80,
+	INTERRUPT_THLP = 0x10
+};
+
+
+
+
+
+
+
+
+
 class Memory {
 public:
 	Memory()=delete;
@@ -110,6 +129,12 @@ public:
 	uint8_t* Data();
 	const uint8_t* Data() const;
 
+	
+	uint8_t GetIE() const;
+	uint8_t GetIF() const;
+
+
+
 	int8_t ReadS8(const uint16_t pointer) const;
 	uint8_t ReadU8(const uint16_t pointer) const;
 	uint16_t ReadU16(const uint16_t pointer) const;
@@ -120,6 +145,10 @@ public:
 	
 	void AddU8(const uint16_t pointer, const uint8_t value);
 	void SubU8(const uint16_t pointer, const uint8_t value);
+
+	void SetIE(uint8_t value);
+	void SetIF(uint8_t value);
+	
 
 private:
 	uint8_t* const m_data;
@@ -134,11 +163,28 @@ inline const uint8_t* Memory::Data() const {
 }
 
 
-
-
 inline uint8_t* Memory::Data() {
 	return m_data;
 }
+
+
+
+
+
+
+
+
+inline uint8_t Memory::GetIE() const {
+	return ReadU8(INTERRUPT_ENABLED_OFFSET);
+}
+
+
+
+inline uint8_t Memory::GetIF() const {
+	return ReadU8(INTERRUPT_FLAGS_OFFSET);
+}
+
+
 
 
 
@@ -206,6 +252,14 @@ inline void Memory::WriteU16(const uint16_t pointer, const uint8_t high_byte, co
 
 
 
+inline void Memory::SetIE(uint8_t value) {
+	WriteU8(INTERRUPT_ENABLED_OFFSET, value);
+}
+
+
+inline void Memory::SetIF(uint8_t value) {
+	WriteU8(INTERRUPT_FLAGS_OFFSET, value);
+}
 
 
 

@@ -52,7 +52,7 @@ int Debug(gbx::Machine* const machine) {
 	const auto machine_full_step = [=] {
 		if (!machine->Step())
 			return false;
-		machine->UpdateInterrupts();
+		machine->StepInterrupts();
 		return true;
 	};
 
