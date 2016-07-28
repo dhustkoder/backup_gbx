@@ -1,5 +1,6 @@
 #include "Machine.h"
-#include "Instructions.h"
+#include "CBInstructions.h"
+#include "MainInstructions.h"
 
 namespace gbx {
 

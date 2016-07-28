@@ -4,7 +4,7 @@
 #include <Utix/Assert.h>
 #include <Utix/Alloc_t.h>
 #include <Utix/ScopeExit.h>
-#include "Instructions.h"
+#include "MainInstructions.h"
 #include "Machine.h"
 
 
